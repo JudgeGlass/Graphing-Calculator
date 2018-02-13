@@ -11,6 +11,9 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class CalculatorWindow {
@@ -21,6 +24,7 @@ public class CalculatorWindow {
     private JPanel graphControlPanel;
     private JButton btnSolve;
     private JButton btnOptions;
+    private JTextArea output;
     private GraphWindow window;
     private Graph graph;
 
@@ -52,10 +56,14 @@ public class CalculatorWindow {
 
         graphPanel = graph;
 
+        output = new JTextArea();
+        output.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
+        output.setEditable(false);
+
         tabs = new JTabbedPane();
         tabs.setBounds(5, 100, 770, 450);
 
-        tabs.addTab("Calculator", calculaorPanel);
+        tabs.addTab("Calculator", output);
         tabs.addTab("Graph", null,graphPanel,null);
 
         type = new JComboBox();
@@ -69,6 +77,9 @@ public class CalculatorWindow {
 
         expression = new JTextField();
         expression.setBounds(175, 27, 300, 25);
+        expression.setFont(fontWide);
+        expression.setActionCommand("SOLVE");
+        expression.addActionListener(new Listener());
 
         btnSolve = new JButton("Solve");
         btnSolve.setBounds(670, 90, 100, 20);
@@ -108,9 +119,14 @@ public class CalculatorWindow {
 
         Function f = TokenizedFunctionFactory.createFunction(expression.getText(), null);
         double[] a = new double[2];
-        
 
-        System.out.println(f.evaluate(new FunctionArguments(null)));
+        writeText(expression.getText());
+        writeText("ANS: " + Double.toString(f.evaluate(new FunctionArguments(null))));
+        expression.setText("");
+    }
+
+    private void writeText(final String text){
+        output.append(text + "\n");
     }
 
     class Listener implements ActionListener{
