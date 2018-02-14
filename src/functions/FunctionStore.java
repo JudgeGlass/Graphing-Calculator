@@ -59,6 +59,9 @@ public class FunctionStore {
         storeFunction("acos", new ACosineFunction());
         storeFunction("atan", new ATangentFunction());
         storeFunction("atan2", new ATangent2Function());
+        storeFunction("cbrt", new CubeRootFunction()); // Added by Hunter Wilcox
+        storeFunction("!", new FactorialFunction()); // Added by Hunter Wilcox
+        storeFunction("abs", new AbsFunction()); // Added by Hunter Wilcox
     }
 
     public static FunctionStore getStore() {

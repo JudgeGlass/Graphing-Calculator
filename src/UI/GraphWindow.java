@@ -12,6 +12,7 @@ public class GraphWindow {
     public double xScale;
     public double yScale;
     public double resolution = 0.001;
+    public boolean drawLines;
 
     public GraphWindow(int xMin, int xMax, int yMin, int yMax, int pixelWidth, int pixelHeight){
         this.xMin = xMin;
@@ -22,6 +23,7 @@ public class GraphWindow {
         this.pixelHeight = pixelHeight;
         this.xScale = (this.xMax-this.xMin) /(double) pixelWidth;
         this.yScale = (this.yMax-this.yMin) / (double)pixelHeight;
+        drawLines = true;
     }
 
     public void rescale() {

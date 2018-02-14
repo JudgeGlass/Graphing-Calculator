@@ -21,7 +21,7 @@ public class GraphOptions {
     private JTextField txtXMin;
     private JTextField txtYMax;
     private JTextField txtYMin;
-    private JSlider slider;
+    private JCheckBox chkDrawLines;
 
     private JButton btnSave;
     private JButton btnCancel;
@@ -89,25 +89,22 @@ public class GraphOptions {
 
         frame.getContentPane().add(txtYMin);
 
-        lblResolution = new JLabel("Resolution:");
-        lblResolution.setBounds(5, 220, 70, 15);
+        //lblResolution = new JLabel("Resolution:");
+        //lblResolution.setBounds(5, 220, 70, 15);
 
-        frame.getContentPane().add(lblResolution);
+        //frame.getContentPane().add(lblResolution);
 
-        slider = new JSlider();
-        slider.setMaximum(10);
-        slider.setMinimum(1);
-        slider.setBounds(5, 240, 246, 25);
-        slider.setValue((int)window.resolution * 1000);
-        slider.setEnabled(false);
+        chkDrawLines = new JCheckBox("Draw Grid");
+        chkDrawLines.setBounds(5, 220, 150, 15);
+        chkDrawLines.setSelected(window.drawLines);
 
-        frame.getContentPane().add(slider);
+        frame.getContentPane().add(chkDrawLines);
 
-        setResolution = new JLabel("High Quality                                 Low Quality");
-        setResolution.setBounds(5, 255, 240, 15);
+        //setResolution = new JLabel("High Quality                                 Low Quality");
+        //setResolution.setBounds(5, 255, 240, 15);
 
 
-        frame.getContentPane().add(setResolution);
+        //frame.getContentPane().add(setResolution);
 
         btnCancel = new JButton("Cancel");
         btnCancel.setBounds(40, 310, 90, 25);
@@ -135,8 +132,8 @@ public class GraphOptions {
                     window.xMax = xMax;
                     window.yMax = yMax;
                     window.yMin = yMin;
-                    System.out.println(slider.getValue());
                     //window.resolution = slider.getValue() / 1000;
+                    window.drawLines = chkDrawLines.isSelected();
 
                     frame.dispose();
                 }catch (Exception e1){

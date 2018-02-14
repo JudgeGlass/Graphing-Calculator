@@ -10,8 +10,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +25,7 @@ public class CalculatorWindow {
     private JButton btnAbout;
     private JButton btnClear;
     private JButton btnTabel;
+    private JButton btnScatter;
     private JTextArea output;
     private GraphWindow window;
     private Graph graph;
@@ -63,18 +63,18 @@ public class CalculatorWindow {
         output.setEditable(false);
 
         tabs = new JTabbedPane();
-        tabs.setBounds(5, 100, 770, 450);
+        tabs.setBounds(5, 110, 770, 450);
 
-        tabs.addTab("Calculator", output);
+        tabs.addTab("Calculator", new JScrollPane(output));
         tabs.addTab("Graph", null,graphPanel,null);
 
         lblMode = new JLabel("Mode:");
         lblMode.setBounds(5, 5, 60, 15);
 
-        type = new JComboBox();
-        type.setBounds(5, 23, 150, 25);
-        type.addItem("Calculator");
-        type.addItem("Graph");
+        btnScatter = new JButton("Scatter Plot");
+        btnScatter.setBounds(335, 85, 120, 25);
+        btnScatter.setActionCommand("SCATTER");
+        btnScatter.addActionListener(new Listener());
 
         lblExpression = new JLabel("Expression:");
         lblExpression.setBounds(175, 5, 150, 15);
@@ -116,6 +116,13 @@ public class CalculatorWindow {
         btnTabel.setActionCommand("TABLE");
         btnTabel.addActionListener(new Listener());
 
+        type = new JComboBox();
+        type.setBounds(5, 23, 150, 25);
+        type.addItemListener(new ModeChange());
+        type.addItem("Calculator");
+        type.addItem("Graph");
+        type.addItem("Scatter Plot");
+
         frame.getContentPane().add(tabs);
         frame.getContentPane().add(lblMode);
         frame.getContentPane().add(type);
@@ -126,6 +133,7 @@ public class CalculatorWindow {
         frame.getContentPane().add(btnAbout);
         frame.getContentPane().add(btnClear);
         frame.getContentPane().add(btnTabel);
+        frame.getContentPane().add(btnScatter);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -157,20 +165,24 @@ public class CalculatorWindow {
         output.append(text + "\n");
     }
 
-    class Listener implements ActionListener{
+    private class Listener implements ActionListener{
         public void actionPerformed(ActionEvent e){
             final String command = e.getActionCommand();
+            if(expression.getText().equals("help")){
+                help();
+                return;
+            }
 
             if(command.equals("SOLVE")){
                 if(type.getSelectedIndex() == 0){
                     calculate();
-                }else if(type.getSelectedIndex() == 1){
+                }else if(type.getSelectedIndex() == 1 || type.getSelectedIndex() == 2){
                     graph.function = expression.getText();
                 }
             }else if(command.equals("OPTIONS")){
                 new GraphOptions(window);
             }else if(command.equals("ABOUT")){
-                JOptionPane.showMessageDialog(frame, "Copyright (c) 2018 Hunter Wilcox\nLibraries:\n- Java AWT API\n- Functions (https://github.com/Nitori-/GraphingCalculator)");
+                JOptionPane.showMessageDialog(frame, "Copyright (c) 2018 Hunter Wilcox\nLibraries:\n- Java AWT API\n- (Modified)Functions (https://github.com/Nitori-/GraphingCalculator)", "About", JOptionPane.INFORMATION_MESSAGE);
             }else if(command.equals("CLEAR")){
                 if(type.getSelectedIndex() == 0){
                     int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the calculator output?", "Clear?", JOptionPane.YES_NO_OPTION);
@@ -186,6 +198,47 @@ public class CalculatorWindow {
                     new Table(window, graph.getFunction());
                 else
                     JOptionPane.showMessageDialog(null, "A graph has not been set.", "Error", JOptionPane.ERROR_MESSAGE);
+            }else if(command.equals("SCATTER")){
+                new ScatterPlot(graph.points);
+            }
+        }
+    }
+
+    private void help(){
+        String[] actions = {
+                "(sqrt(x))",
+                "(cbrt(x))",
+                "(sin(x))",
+                "(cos(x))",
+                "(tan(x))",
+                "(asin(x))",
+                "(acos(x))",
+                "(atan(x))",
+                "(!(x))",
+                "(ln(x))",
+                "(exp(x))"
+        };
+        writeText("########");
+        writeText("Help");
+        for(int i = 0; i<actions.length;i++){
+            writeText(actions[i]);
+        }
+        writeText("########");
+    }
+
+    private class ModeChange implements ItemListener{
+        public void itemStateChanged(ItemEvent e){
+            if(type.getSelectedIndex() == 2){
+                btnScatter.setVisible(true);
+            }else{
+                btnScatter.setVisible(false);
+            }
+
+            if(type.getSelectedIndex() == 1){
+                lblExpression.setText("f(x)=");
+                tabs.setSelectedIndex(1);
+            }else{
+                lblExpression.setText("Expression");
             }
         }
     }

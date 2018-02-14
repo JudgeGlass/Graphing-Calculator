@@ -14,22 +14,24 @@ public class Graph extends JPanel {
     private double mouseX = 0;
     private double mouseY = 0;
     private Function f;
+    public ArrayList<PointD> points;
 
    // private ArrayList<Line> lines;
 
     public Graph(final String function, GraphWindow window){
         this.function = function;
         graphWindow = window;
+        points = new ArrayList<>();
 
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
+                //repaint();
                 mouseX = e.getX() * graphWindow.xScale + graphWindow.xMin;
                 mouseY = (graphWindow.pixelHeight - e.getY()) * graphWindow.yScale + graphWindow.yMin;
                 System.out.println(e.getX());
             }
         });
-
     }
 
     public void paintComponent(Graphics g){
@@ -44,7 +46,8 @@ public class Graph extends JPanel {
 
         g.setColor(Color.BLACK);
         g.drawOval(0, 0, 10, 10);
-        drawGrid(g);
+        if(graphWindow.drawLines)
+            drawGrid(g);
         makeAxis(g);
         function(g);
         drawCoords(g);
@@ -63,13 +66,13 @@ public class Graph extends JPanel {
         g.drawLine(0, y, graphWindow.pixelWidth, y);
     }
 
-    private void circle(Graphics g, Color color, boolean filled, double x1, double y1){
+    private void circle(Graphics g, Color color, boolean filled, double x1, double y1, int size){
         int x = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
         int y = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
         g.setColor(color);
-        g.drawOval(x-2, y-2, 5, 5);
+        g.drawOval(x-(size/2), y-(size/2), size, size);
         if(filled)
-            g.fillOval(x-2, y-2, 5, 5);
+            g.fillOval(x-(size/2), y-(size/2), size, size);
     }
 
     private void drawLine(Graphics g, double x1, double y1){
@@ -82,10 +85,10 @@ public class Graph extends JPanel {
 
     private void drawCoords(Graphics g){
         g.setColor(Color.RED);
-        g.drawString("X: " + Double.toString(mouseX), 0, graphWindow.pixelHeight - 12);
-        g.drawString("Y: " + Double.toString(mouseY), 0, graphWindow.pixelHeight);
+        g.drawString("X: " + String.format("%.2f", mouseX), 0, graphWindow.pixelHeight - 12);
+        g.drawString("Y: " + String.format("%.2f", mouseY), 0, graphWindow.pixelHeight);
 
-        circle(g, Color.BLUE, false, mouseX, mouseY);
+        circle(g, Color.BLUE, false, mouseX, mouseY, 5);
     }
 
     private void makeAxis(Graphics g){
@@ -157,6 +160,12 @@ public class Graph extends JPanel {
                 }catch (RuntimeException e){
                     continue;
                 }
+            }
+        }
+
+        if(points.size() != 0){
+            for(int i = 0; i<points.size();i++){
+                circle(g, Color.RED, true, points.get(i).x, points.get(i).y, 7);
             }
         }
     }
