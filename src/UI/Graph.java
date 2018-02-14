@@ -94,7 +94,7 @@ public class Graph extends JPanel {
 
         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
         // From "GraphingCalculator" by Justin Wilcox https://github.com/Nitori-/GraphingCalculator
-        g.drawString((float) graphWindow.yMax + "", graphWindow.pixelWidth / 2, 8);
+        g.drawString((float) graphWindow.yMax + "", graphWindow.pixelWidth / 2, 11);
         g.drawString((float) graphWindow.yMin + "", graphWindow.pixelWidth / 2,
                 graphWindow.pixelHeight);
         g.drawString((float) graphWindow.xMin + "", 0, graphWindow.pixelHeight / 2);
@@ -144,7 +144,8 @@ public class Graph extends JPanel {
             double lastX = graphWindow.xMin;
             arg[1] = lastX;
             double lastY = f.evaluate(new FunctionArguments(arg));
-            for (double i = graphWindow.xMin; i <= graphWindow.xMax; i += .001) {
+            double adder = graphWindow.resolution;
+            for (double i = graphWindow.xMin; i <= graphWindow.xMax; i += adder) {
                 try {
                     arg[1] = i;
 

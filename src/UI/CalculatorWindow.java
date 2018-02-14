@@ -4,6 +4,7 @@ import functions.Function;
 import functions.FunctionArguments;
 import functions.TokenizedFunction;
 import functions.TokenizedFunctionFactory;
+import jdk.nashorn.internal.scripts.JO;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -19,11 +20,12 @@ import java.util.ArrayList;
 public class CalculatorWindow {
     private JFrame frame;
     private JTabbedPane tabs;
-    private JPanel calculaorPanel;
     private JPanel graphPanel;
-    private JPanel graphControlPanel;
     private JButton btnSolve;
     private JButton btnOptions;
+    private JButton btnAbout;
+    private JButton btnClear;
+    private JButton btnTabel;
     private JTextArea output;
     private GraphWindow window;
     private Graph graph;
@@ -32,6 +34,7 @@ public class CalculatorWindow {
 
     private JTextField expression;
     private JLabel lblExpression;
+    private JLabel lblMode;
     private JComboBox type;
 
     public CalculatorWindow(){
@@ -46,11 +49,10 @@ public class CalculatorWindow {
 
         preInit();
         frame.setVisible(true);
+        writeText("Ready");
     }
 
     private void preInit(){
-        calculaorPanel = new JPanel();
-
         window = new GraphWindow(-10, 10, -10, 10, 770, 450);
         graph = new Graph("", window);
 
@@ -66,8 +68,11 @@ public class CalculatorWindow {
         tabs.addTab("Calculator", output);
         tabs.addTab("Graph", null,graphPanel,null);
 
+        lblMode = new JLabel("Mode:");
+        lblMode.setBounds(5, 5, 60, 15);
+
         type = new JComboBox();
-        type.setBounds(5, 5, 150, 25);
+        type.setBounds(5, 23, 150, 25);
         type.addItem("Calculator");
         type.addItem("Graph");
 
@@ -76,27 +81,51 @@ public class CalculatorWindow {
         lblExpression.setFont(fontWide);
 
         expression = new JTextField();
-        expression.setBounds(175, 27, 300, 25);
+        expression.setBounds(175, 27, 470, 25);
         expression.setFont(fontWide);
         expression.setActionCommand("SOLVE");
         expression.addActionListener(new Listener());
 
         btnSolve = new JButton("Solve");
-        btnSolve.setBounds(670, 90, 100, 20);
+        btnSolve.setBounds(670, 85, 100, 25);
         btnSolve.setFont(fontWide);
         btnSolve.setActionCommand("SOLVE");
         btnSolve.addActionListener(new Listener());
 
-        btnOptions = new JButton("Graph Options");
-        btnOptions.setBounds(670, 60, 100, 20);
+        btnOptions = new JButton("Options");
+        btnOptions.setBounds(670, 50, 100, 25);
         btnOptions.setFont(fontWide);
+        btnOptions.setActionCommand("OPTIONS");
+        btnOptions.addActionListener(new Listener());
+
+        btnAbout = new JButton("About");
+        btnAbout.setBounds(670, 15, 100, 25);
+        btnAbout.setFont(fontWide);
+        btnAbout.setActionCommand("ABOUT");
+        btnAbout.addActionListener(new Listener());
+
+        btnClear = new JButton("Clear");
+        btnClear.setBounds(565, 85, 100, 25);
+        btnClear.setFont(fontWide);
+        btnClear.setActionCommand("CLEAR");
+        btnClear.addActionListener(new Listener());
+
+        btnTabel = new JButton("Table");
+        btnTabel.setBounds(465, 85, 100, 25);
+        btnTabel.setFont(fontWide);
+        btnTabel.setActionCommand("TABLE");
+        btnTabel.addActionListener(new Listener());
 
         frame.getContentPane().add(tabs);
+        frame.getContentPane().add(lblMode);
         frame.getContentPane().add(type);
-        frame.add(lblExpression);
-        frame.add(expression);
-        frame.add(btnSolve);
-        frame.add(btnOptions);
+        frame.getContentPane().add(lblExpression);
+        frame.getContentPane().add(expression);
+        frame.getContentPane().add(btnSolve);
+        frame.getContentPane().add(btnOptions);
+        frame.getContentPane().add(btnAbout);
+        frame.getContentPane().add(btnClear);
+        frame.getContentPane().add(btnTabel);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -114,14 +143,13 @@ public class CalculatorWindow {
     }
 
     private void calculate(){
-        ArrayList<String> vars = new ArrayList<>();
-        vars.add("y");
-
-        Function f = TokenizedFunctionFactory.createFunction(expression.getText(), null);
-        double[] a = new double[2];
-
         writeText(expression.getText());
-        writeText("ANS: " + Double.toString(f.evaluate(new FunctionArguments(null))));
+        try {
+            Function f = TokenizedFunctionFactory.createFunction(expression.getText(), null);
+            writeText("ANS: " + Double.toString(f.evaluate(new FunctionArguments(null))));
+        }catch (RuntimeException e){
+            writeText("Syntax Error: " + e.getMessage());
+        }
         expression.setText("");
     }
 
@@ -139,6 +167,25 @@ public class CalculatorWindow {
                 }else if(type.getSelectedIndex() == 1){
                     graph.function = expression.getText();
                 }
+            }else if(command.equals("OPTIONS")){
+                new GraphOptions(window);
+            }else if(command.equals("ABOUT")){
+                JOptionPane.showMessageDialog(frame, "Copyright (c) 2018 Hunter Wilcox\nLibraries:\n- Java AWT API\n- Functions (https://github.com/Nitori-/GraphingCalculator)");
+            }else if(command.equals("CLEAR")){
+                if(type.getSelectedIndex() == 0){
+                    int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the calculator output?", "Clear?", JOptionPane.YES_NO_OPTION);
+                    if(clear == JOptionPane.YES_OPTION)
+                        output.setText("");
+                }else if(type.getSelectedIndex() == 1){
+                    int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the graph?", "Clear?", JOptionPane.YES_NO_OPTION);
+                    if(clear == JOptionPane.YES_OPTION)
+                        graph.function = "";
+                }
+            }else if(command.equals("TABLE")){
+                if(graph.getFunction() != null || !graph.function.isEmpty())
+                    new Table(window, graph.getFunction());
+                else
+                    JOptionPane.showMessageDialog(null, "A graph has not been set.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

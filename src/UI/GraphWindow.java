@@ -11,6 +11,7 @@ public class GraphWindow {
     public int height;
     public double xScale;
     public double yScale;
+    public double resolution = 0.001;
 
     public GraphWindow(int xMin, int xMax, int yMin, int yMax, int pixelWidth, int pixelHeight){
         this.xMin = xMin;
