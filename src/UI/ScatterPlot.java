@@ -133,7 +133,7 @@ public class ScatterPlot {
                 for(int i = 0; i<xModel.size();i++){
                     points.add(new PointD(Double.parseDouble(xModel.get(i).toString()), Double.parseDouble(yModel.get(i).toString())));
                 }
-
+                
                 frame.dispose();
             }
         });

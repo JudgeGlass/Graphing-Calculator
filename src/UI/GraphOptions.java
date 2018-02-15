@@ -31,7 +31,7 @@ public class GraphOptions {
         frame = new JFrame();
         frame.setTitle("Options");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(270, 380);
+        frame.setSize(270, 360);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
@@ -115,7 +115,7 @@ public class GraphOptions {
         frame.getContentPane().add(btnDefaults);
 
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(40, 310, 90, 25);
+        btnCancel.setBounds(40, 290, 90, 25);
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,7 +125,7 @@ public class GraphOptions {
         frame.getContentPane().add(btnCancel);
 
         btnSave = new JButton("Save");
-        btnSave.setBounds(145, 310, 90, 25);
+        btnSave.setBounds(145, 290, 90, 25);
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

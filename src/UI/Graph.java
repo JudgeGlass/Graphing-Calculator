@@ -25,6 +25,7 @@ public class Graph extends JPanel {
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
+                repaint2();
                 mouseX = e.getX() * graphWindow.xScale + graphWindow.xMin; // Gets the mouse X
                 mouseY = (graphWindow.pixelHeight - e.getY()) * graphWindow.yScale + graphWindow.yMin; // Gets the mouse Y
             }
@@ -47,7 +48,7 @@ public class Graph extends JPanel {
         makeAxis(g);
         function(g);
         drawCoords(g);
-        repaint();
+        //repaint();
     }
 
     private void verticalLine(Graphics g, Color color, double x1){
@@ -187,5 +188,9 @@ public class Graph extends JPanel {
 
     public Function getFunction(){
         return f;
+    }
+
+    public void repaint2(){
+        repaint();
     }
 }

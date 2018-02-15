@@ -50,8 +50,7 @@ public class CalculatorWindow {
 
         preInit();
         frame.setVisible(true);
-        writeText("Copyright (c) 2018 Hunter Wilcox");
-        writeText("Ready");
+        writeText("Ready. Type \"help\" for a list of operators.");
     }
 
     private void preInit(){
@@ -124,8 +123,9 @@ public class CalculatorWindow {
 
         txtVar = new JTextField();
         txtVar.setBounds(200, 55, 50, 25);
-        txtVar.setFont(fontWide);
+        //txtVar.setFont(fontWide);
         txtVar.setText("x");
+        txtVar.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 11));
         //txtVar.setVisible(false);
 
         type = new JComboBox();
@@ -181,6 +181,7 @@ public class CalculatorWindow {
                     graph.vars.add("y");
                     graph.vars.add(txtVar.getText());
                     graph.function = expression.getText();
+                    graph.repaint2();
                 }
             }else if(command.equals("OPTIONS")){
                 new GraphOptions(window);
@@ -235,6 +236,7 @@ public class CalculatorWindow {
         public void itemStateChanged(ItemEvent e){
             if(type.getSelectedIndex() == 1){
                 lblExpression.setText("f(x)=");
+                lblExpression.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 12));
                 lblVar.setVisible(true);
                 txtVar.setVisible(true);
                 tabs.setSelectedIndex(1);
@@ -242,6 +244,7 @@ public class CalculatorWindow {
                 return;
             }else if(type.getSelectedIndex() != 1){
                 lblExpression.setText("Expression");
+                lblExpression.setFont(fontWide);
                 lblVar.setVisible(false);
                 txtVar.setVisible(false);
             }
