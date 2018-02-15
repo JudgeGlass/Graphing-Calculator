@@ -2,18 +2,14 @@ package UI;
 
 import functions.Function;
 import functions.FunctionArguments;
-import functions.TokenizedFunction;
 import functions.TokenizedFunctionFactory;
-import jdk.nashorn.internal.scripts.JO;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 public class CalculatorWindow {
@@ -33,6 +29,8 @@ public class CalculatorWindow {
     private Font fontWide;
 
     private JTextField expression;
+    private JTextField txtVar;
+    private JLabel lblVar;
     private JLabel lblExpression;
     private JLabel lblMode;
     private JComboBox type;
@@ -49,6 +47,7 @@ public class CalculatorWindow {
 
         preInit();
         frame.setVisible(true);
+        writeText("Copyright (c) 2018 Hunter Wilcox");
         writeText("Ready");
     }
 
@@ -116,6 +115,16 @@ public class CalculatorWindow {
         btnTabel.setActionCommand("TABLE");
         btnTabel.addActionListener(new Listener());
 
+        lblVar = new JLabel("Var:");
+        lblVar.setBounds(175, 60, 50, 15);
+        //lblVar.setVisible(false);
+
+        txtVar = new JTextField();
+        txtVar.setBounds(200, 55, 50, 25);
+        txtVar.setFont(fontWide);
+        txtVar.setText("x");
+        //txtVar.setVisible(false);
+
         type = new JComboBox();
         type.setBounds(5, 23, 150, 25);
         type.addItemListener(new ModeChange());
@@ -134,24 +143,14 @@ public class CalculatorWindow {
         frame.getContentPane().add(btnClear);
         frame.getContentPane().add(btnTabel);
         frame.getContentPane().add(btnScatter);
+        frame.getContentPane().add(lblVar);
+        frame.getContentPane().add(txtVar);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                tabs.repaint();
-            }
-        });
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                frame.repaint();
-            }
-        });
     }
 
     private void calculate(){
-        writeText(expression.getText());
+        writeText("> "+expression.getText());
         try {
             Function f = TokenizedFunctionFactory.createFunction(expression.getText(), null);
             writeText("ANS: " + Double.toString(f.evaluate(new FunctionArguments(null))));
@@ -177,6 +176,9 @@ public class CalculatorWindow {
                 if(type.getSelectedIndex() == 0){
                     calculate();
                 }else if(type.getSelectedIndex() == 1 || type.getSelectedIndex() == 2){
+                    graph.vars = new ArrayList<>();
+                    graph.vars.add("y");
+                    graph.vars.add(txtVar.getText());
                     graph.function = expression.getText();
                 }
             }else if(command.equals("OPTIONS")){
@@ -188,10 +190,12 @@ public class CalculatorWindow {
                     int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the calculator output?", "Clear?", JOptionPane.YES_NO_OPTION);
                     if(clear == JOptionPane.YES_OPTION)
                         output.setText("");
-                }else if(type.getSelectedIndex() == 1){
+                }else if(type.getSelectedIndex() == 1 || type.getSelectedIndex() == 2){
                     int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the graph?", "Clear?", JOptionPane.YES_NO_OPTION);
-                    if(clear == JOptionPane.YES_OPTION)
+                    if(clear == JOptionPane.YES_OPTION) {
                         graph.function = "";
+                        graph.points.clear();
+                    }
                 }
             }else if(command.equals("TABLE")){
                 if(graph.getFunction() != null || !graph.function.isEmpty())
@@ -228,17 +232,27 @@ public class CalculatorWindow {
 
     private class ModeChange implements ItemListener{
         public void itemStateChanged(ItemEvent e){
-            if(type.getSelectedIndex() == 2){
-                btnScatter.setVisible(true);
-            }else{
-                btnScatter.setVisible(false);
-            }
-
             if(type.getSelectedIndex() == 1){
                 lblExpression.setText("f(x)=");
+                lblVar.setVisible(true);
+                txtVar.setVisible(true);
                 tabs.setSelectedIndex(1);
-            }else{
+                btnScatter.setVisible(false);
+                return;
+            }else if(type.getSelectedIndex() != 1){
                 lblExpression.setText("Expression");
+                lblVar.setVisible(false);
+                txtVar.setVisible(false);
+            }
+
+            if(type.getSelectedIndex() == 2){
+                lblVar.setVisible(true);
+                txtVar.setVisible(true);
+                btnScatter.setVisible(true);
+            }else if(type.getSelectedIndex() != 2){
+                btnScatter.setVisible(false);
+                lblVar.setVisible(false);
+                txtVar.setVisible(false);
             }
         }
     }

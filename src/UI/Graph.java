@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import functions.*;
+import jdk.nashorn.internal.scripts.JO;
 
 public class Graph extends JPanel {
     public String function;
@@ -15,6 +16,7 @@ public class Graph extends JPanel {
     private double mouseY = 0;
     private Function f;
     public ArrayList<PointD> points;
+    public ArrayList<String> vars;
 
    // private ArrayList<Line> lines;
 
@@ -133,10 +135,8 @@ public class Graph extends JPanel {
     }
 
     private void function(Graphics g){
-        ArrayList<String>vars = new ArrayList<>();
-        vars.add("y");
-        vars.add("x");
         f = TokenizedFunctionFactory.createFunction(function, vars);
+
 
         double[] arg = new double[2];
         arg[0] = 1.0;

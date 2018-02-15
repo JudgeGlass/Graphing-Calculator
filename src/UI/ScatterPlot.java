@@ -1,8 +1,5 @@
 package UI;
 
-import functions.Function;
-import oracle.jrockit.jfr.JFR;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -25,6 +25,7 @@ public class GraphOptions {
 
     private JButton btnSave;
     private JButton btnCancel;
+    private JButton btnDefaults;
 
     public GraphOptions(GraphWindow window){
         this.window = window;
@@ -99,6 +100,21 @@ public class GraphOptions {
         chkDrawLines.setSelected(window.drawLines);
 
         frame.getContentPane().add(chkDrawLines);
+
+        btnDefaults = new JButton("Defaults");
+        btnDefaults.setBounds(5, 240, 100, 25);
+        btnDefaults.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtXMax.setText("10");
+                txtXMin.setText("-10");
+                txtYMax.setText("10");
+                txtYMin.setText("-10");
+
+                chkDrawLines.setSelected(true);
+            }
+        });
+        frame.getContentPane().add(btnDefaults);
 
         //setResolution = new JLabel("High Quality                                 Low Quality");
         //setResolution.setBounds(5, 255, 240, 15);
