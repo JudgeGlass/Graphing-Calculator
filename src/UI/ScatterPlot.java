@@ -28,9 +28,12 @@ public class ScatterPlot {
     private JButton btnOK;
 
     private ArrayList<PointD> points;
+    private Graph graph;
 
-    public ScatterPlot(ArrayList<PointD> points){
+    public ScatterPlot(ArrayList<PointD> points, Graph graph){
         this.points = points;
+        this.graph = graph;
+
         frame = new JFrame();
         frame.setTitle("Scatter Plot");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -133,7 +136,9 @@ public class ScatterPlot {
                 for(int i = 0; i<xModel.size();i++){
                     points.add(new PointD(Double.parseDouble(xModel.get(i).toString()), Double.parseDouble(yModel.get(i).toString())));
                 }
-                
+
+                graph.repaint2();
+
                 frame.dispose();
             }
         });

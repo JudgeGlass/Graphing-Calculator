@@ -26,8 +26,12 @@ public class GraphOptions {
 
     private JCheckBox chkDrawLines;
 
-    public GraphOptions(GraphWindow window){
+    private Graph graph;
+
+    public GraphOptions(GraphWindow window, Graph graph){
         this.window = window;
+        this.graph = graph;
+
         frame = new JFrame();
         frame.setTitle("Options");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -140,6 +144,8 @@ public class GraphOptions {
                     window.yMax = yMax;
                     window.yMin = yMin;
                     window.drawLines = chkDrawLines.isSelected();
+
+                    graph.repaint2();
 
                     frame.dispose();
                 }catch (Exception e1){

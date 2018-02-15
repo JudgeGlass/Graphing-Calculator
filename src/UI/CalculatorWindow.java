@@ -184,7 +184,7 @@ public class CalculatorWindow {
                     graph.repaint2();
                 }
             }else if(command.equals("OPTIONS")){
-                new GraphOptions(window);
+                new GraphOptions(window, graph);
             }else if(command.equals("ABOUT")){
                 JOptionPane.showMessageDialog(frame, "Copyright (c) 2018 Hunter Wilcox\nLibraries:\n- Java AWT API\n- (Modified)Functions (https://github.com/Nitori-/GraphingCalculator)", "About", JOptionPane.INFORMATION_MESSAGE);
             }else if(command.equals("CLEAR")){
@@ -205,7 +205,7 @@ public class CalculatorWindow {
                 else
                     JOptionPane.showMessageDialog(null, "A graph has not been set.", "Error", JOptionPane.ERROR_MESSAGE);
             }else if(command.equals("SCATTER")){
-                new ScatterPlot(graph.points);
+                new ScatterPlot(graph.points, graph);
             }
         }
     }
