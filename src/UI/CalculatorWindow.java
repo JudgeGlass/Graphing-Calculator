@@ -16,13 +16,16 @@ public class CalculatorWindow {
     private JFrame frame;
     private JTabbedPane tabs;
     private JPanel graphPanel;
+
     private JButton btnSolve;
     private JButton btnOptions;
     private JButton btnAbout;
     private JButton btnClear;
     private JButton btnTabel;
     private JButton btnScatter;
+
     private JTextArea output;
+
     private GraphWindow window;
     private Graph graph;
 
@@ -145,8 +148,6 @@ public class CalculatorWindow {
         frame.getContentPane().add(btnScatter);
         frame.getContentPane().add(lblVar);
         frame.getContentPane().add(txtVar);
-
-
     }
 
     private void calculate(){

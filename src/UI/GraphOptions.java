@@ -14,25 +14,24 @@ public class GraphOptions {
     private JLabel lblXMin;
     private JLabel lblYMax;
     private JLabel lblYMin;
-    private JLabel lblResolution;
-    private JLabel setResolution;
 
     private JTextField txtXMax;
     private JTextField txtXMin;
     private JTextField txtYMax;
     private JTextField txtYMin;
-    private JCheckBox chkDrawLines;
 
     private JButton btnSave;
     private JButton btnCancel;
     private JButton btnDefaults;
+
+    private JCheckBox chkDrawLines;
 
     public GraphOptions(GraphWindow window){
         this.window = window;
         frame = new JFrame();
         frame.setTitle("Options");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(300, 380);
+        frame.setSize(270, 380);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
@@ -40,10 +39,14 @@ public class GraphOptions {
         panel = new JPanel();
         frame.add(panel);
 
-        frame.setVisible(true);
-
         init();
+
+        frame.setVisible(true);
     }
+
+    /**
+     * Set everything up
+     * */
 
     private void init(){
         lblXMax = new JLabel("X Max:");
@@ -90,11 +93,6 @@ public class GraphOptions {
 
         frame.getContentPane().add(txtYMin);
 
-        //lblResolution = new JLabel("Resolution:");
-        //lblResolution.setBounds(5, 220, 70, 15);
-
-        //frame.getContentPane().add(lblResolution);
-
         chkDrawLines = new JCheckBox("Draw Grid");
         chkDrawLines.setBounds(5, 220, 150, 15);
         chkDrawLines.setSelected(window.drawLines);
@@ -116,12 +114,6 @@ public class GraphOptions {
         });
         frame.getContentPane().add(btnDefaults);
 
-        //setResolution = new JLabel("High Quality                                 Low Quality");
-        //setResolution.setBounds(5, 255, 240, 15);
-
-
-        //frame.getContentPane().add(setResolution);
-
         btnCancel = new JButton("Cancel");
         btnCancel.setBounds(40, 310, 90, 25);
         btnCancel.addActionListener(new ActionListener() {
@@ -130,7 +122,6 @@ public class GraphOptions {
                 frame.dispose();
             }
         });
-
         frame.getContentPane().add(btnCancel);
 
         btnSave = new JButton("Save");
@@ -148,7 +139,6 @@ public class GraphOptions {
                     window.xMax = xMax;
                     window.yMax = yMax;
                     window.yMin = yMin;
-                    //window.resolution = slider.getValue() / 1000;
                     window.drawLines = chkDrawLines.isSelected();
 
                     frame.dispose();
@@ -157,7 +147,6 @@ public class GraphOptions {
                 }
             }
         });
-
         frame.getContentPane().add(btnSave);
     }
 }

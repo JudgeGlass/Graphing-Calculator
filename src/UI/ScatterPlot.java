@@ -8,16 +8,21 @@ import java.util.ArrayList;
 public class ScatterPlot {
     private JFrame frame;
     private JPanel panel;
+
     private JList xList;
     private JList yList;
+
     private DefaultListModel xModel;
     private DefaultListModel yModel;
+
     private JTextField txtX;
     private JTextField txtY;
+
     private JLabel lblX;
     private JLabel lblY;
     private JLabel lblTX;
     private JLabel lblTY;
+
     private JButton btnAdd;
     private JButton btnDelete;
     private JButton btnOK;
@@ -129,8 +134,6 @@ public class ScatterPlot {
                     points.add(new PointD(Double.parseDouble(xModel.get(i).toString()), Double.parseDouble(yModel.get(i).toString())));
                 }
 
-                //points = xy;
-
                 frame.dispose();
             }
         });
@@ -138,7 +141,7 @@ public class ScatterPlot {
     }
 
     private void addToList(PointD point, DefaultListModel xModel, DefaultListModel yModel){
-        this.xModel.addElement(point.x);
-        this.yModel.addElement(point.y);
+        xModel.addElement(point.x);
+        yModel.addElement(point.y);
     }
 }
