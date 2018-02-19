@@ -50,6 +50,12 @@ public class Table {
             if(i == 0.0){
                 orginIndex = (int)i;
             }
+
+            if(Double.isNaN(function.evaluate(new FunctionArguments(arg)))){
+                model.addElement(i + "      Error");
+                continue;
+            }
+
             model.addElement(i + "     " + function.evaluate(new FunctionArguments(arg)));
         }
     }

@@ -165,10 +165,17 @@ public class Graph extends JPanel {
                 try {
                     arg[1] = i; // Makes arg[1] the value of i
 
-                    sLine(g, lastX, lastY, i, f.evaluate(new FunctionArguments(arg))); // Draws the line
+                    double y = f.evaluate(new FunctionArguments(arg));
+                    if(Double.isNaN(y)){
+                        sLine(g, i, y, i, y);
+                        lastX = 0;
+                        lastY = 0;
+                        continue;
+                    }
+                    sLine(g, lastX, lastY, i, y); // Draws the line
 
                     lastX = i; // Sets lastX as i
-                    lastY = f.evaluate(new FunctionArguments(arg)); // Sets lastY as the function of i
+                    lastY = y; // Sets lastY as the function of i
                 }catch (RuntimeException e){
                     continue;
                 }

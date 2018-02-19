@@ -62,6 +62,7 @@ public class FunctionStore {
         storeFunction("cbrt", new CubeRootFunction()); // Added by Hunter Wilcox
         storeFunction("!", new FactorialFunction()); // Added by Hunter Wilcox
         storeFunction("abs", new AbsFunction()); // Added by Hunter Wilcox
+        storeFunction("π", new PiFunction());
     }
 
     public static FunctionStore getStore() {

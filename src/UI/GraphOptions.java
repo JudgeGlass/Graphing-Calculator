@@ -25,6 +25,7 @@ public class GraphOptions {
     private JButton btnDefaults;
 
     private JCheckBox chkDrawLines;
+    private JSlider slider;
 
     private Graph graph;
 
@@ -97,6 +98,11 @@ public class GraphOptions {
 
         frame.getContentPane().add(txtYMin);
 
+        /*slider = new JSlider(1, 10);
+        slider.setBounds(5, 220, 240, 15);
+        slider.setValue((int)(window.resolution * 15));
+        frame.getContentPane().add(slider);*/
+
         chkDrawLines = new JCheckBox("Draw Grid");
         chkDrawLines.setBounds(5, 220, 150, 15);
         chkDrawLines.setSelected(window.drawLines);
@@ -144,6 +150,7 @@ public class GraphOptions {
                     window.yMax = yMax;
                     window.yMin = yMin;
                     window.drawLines = chkDrawLines.isSelected();
+                    //window.resolution = (double) slider.getValue() / 15;
 
                     graph.repaint2();
 

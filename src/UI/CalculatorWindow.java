@@ -23,6 +23,8 @@ public class CalculatorWindow {
     private JButton btnClear;
     private JButton btnTabel;
     private JButton btnScatter;
+    private JButton btnZoomIn;
+    private JButton btnZoomOut;
 
     private JTextArea output;
 
@@ -82,7 +84,7 @@ public class CalculatorWindow {
         lblExpression.setFont(fontWide);
 
         expression = new JTextField();
-        expression.setBounds(175, 27, 470, 25);
+        expression.setBounds(175, 25, 470, 25);
         expression.setFont(fontWide);
         expression.setActionCommand("SOLVE");
         expression.addActionListener(new Listener());
@@ -119,14 +121,23 @@ public class CalculatorWindow {
 
         lblVar = new JLabel("Var:");
         lblVar.setBounds(175, 60, 50, 15);
-        //lblVar.setVisible(false);
 
         txtVar = new JTextField();
         txtVar.setBounds(200, 55, 50, 25);
-        //txtVar.setFont(fontWide);
         txtVar.setText("x");
         txtVar.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 11));
-        //txtVar.setVisible(false);
+
+        btnZoomIn = new JButton("Zoom +");
+        btnZoomIn.setBounds(565, 50, 100, 25);
+        btnZoomIn.setFont(fontWide);
+        btnZoomIn.setActionCommand("ZOOM_IN");
+        btnZoomIn.addActionListener(new Listener());
+
+        btnZoomOut = new JButton("Zoom -");
+        btnZoomOut.setBounds(465, 50, 100, 25);
+        btnZoomOut.setFont(fontWide);
+        btnZoomOut.setActionCommand("ZOOM_OUT");
+        btnZoomOut.addActionListener(new Listener());
 
         type = new JComboBox();
         type.setBounds(5, 23, 150, 25);
@@ -148,6 +159,8 @@ public class CalculatorWindow {
         frame.getContentPane().add(btnScatter);
         frame.getContentPane().add(lblVar);
         frame.getContentPane().add(txtVar);
+        frame.getContentPane().add(btnZoomIn);
+        frame.getContentPane().add(btnZoomOut);
     }
 
     private void calculate(){
@@ -206,6 +219,21 @@ public class CalculatorWindow {
                     JOptionPane.showMessageDialog(null, "A graph has not been set.", "Error", JOptionPane.ERROR_MESSAGE);
             }else if(command.equals("SCATTER")){
                 new ScatterPlot(graph.points, graph);
+            }else if(command.equals("ZOOM_IN")){
+                if(window.xMax - 1 < 1)
+                    return;
+
+                window.xMin++;
+                window.xMax--;
+                window.yMin++;
+                window.yMax--;
+                graph.repaint2();
+            }else if(command.equals("ZOOM_OUT")){
+                window.xMin--;
+                window.xMax++;
+                window.yMin--;
+                window.yMax++;
+                graph.repaint2();
             }
         }
     }
@@ -222,7 +250,8 @@ public class CalculatorWindow {
                 "(atan(x))",
                 "(!(x))",
                 "(ln(x))",
-                "(exp(x))"
+                "(exp(x))",
+                "π"
         };
         writeText("########");
         writeText("Help");
