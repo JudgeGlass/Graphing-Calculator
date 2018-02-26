@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import functions.*;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 public class Graph extends JPanel {
     public String function;
@@ -48,7 +49,6 @@ public class Graph extends JPanel {
         makeAxis(g);
         function(g);
         drawCoords(g);
-        //repaint();
     }
 
     private void verticalLine(Graphics g, Color color, double x1){
@@ -133,7 +133,7 @@ public class Graph extends JPanel {
      * Used for drawing the line
      * */
 
-    private void sLine(Graphics g, double x1, double y1, double x2, double y2){
+    private void drawLine(Graphics g, double x1, double y1, double x2, double y2){
         int xG = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
         int yG = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
 
@@ -147,7 +147,12 @@ public class Graph extends JPanel {
      * */
 
     private void function(Graphics g){
-        f = TokenizedFunctionFactory.createFunction(function, vars); // Initializes the function
+        try {
+            f = TokenizedFunctionFactory.createFunction(function, vars); // Initializes the function
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            function = "";
+        }
 
         double[] arg = new double[2]; // Sets the first arguments
         arg[0] = 1.0;
@@ -167,12 +172,12 @@ public class Graph extends JPanel {
 
                     double y = f.evaluate(new FunctionArguments(arg));
                     if(Double.isNaN(y)){
-                        sLine(g, i, y, i, y);
+                        drawLine(g, i, y, i, y);
                         lastX = 0;
                         lastY = 0;
                         continue;
                     }
-                    sLine(g, lastX, lastY, i, y); // Draws the line
+                    drawLine(g, lastX, lastY, i, y); // Draws the line
 
                     lastX = i; // Sets lastX as i
                     lastY = y; // Sets lastY as the function of i
@@ -184,6 +189,7 @@ public class Graph extends JPanel {
 
         if(points.size() != 0){
             for(int i = 0; i < points.size(); i++){
+                System.out.println(points.get(i).toString());
                 circle(g, Color.RED, true, points.get(i).x, points.get(i).y, 7);
             }
         }

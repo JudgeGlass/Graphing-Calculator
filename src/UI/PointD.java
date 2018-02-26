@@ -28,4 +28,11 @@ public class PointD {
         this.x = x;
         this.y = y;
     }
+
+    /**
+     * By Hunter Wilcox
+     * */
+    public String toString(){
+        return String.format("X:%f Y:%f", x, y);
+    }
 }

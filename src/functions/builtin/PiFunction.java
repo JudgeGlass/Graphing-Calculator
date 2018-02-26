@@ -1,5 +1,7 @@
 package functions.builtin;
 
+// BY HUNTER WILCOX
+
 import functions.Function;
 import functions.FunctionArguments;
 

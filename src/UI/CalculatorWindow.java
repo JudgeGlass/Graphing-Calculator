@@ -21,7 +21,7 @@ public class CalculatorWindow {
     private JButton btnOptions;
     private JButton btnAbout;
     private JButton btnClear;
-    private JButton btnTabel;
+    private JButton btnTable;
     private JButton btnScatter;
     private JButton btnZoomIn;
     private JButton btnZoomOut;
@@ -113,11 +113,11 @@ public class CalculatorWindow {
         btnClear.setActionCommand("CLEAR");
         btnClear.addActionListener(new Listener());
 
-        btnTabel = new JButton("Table");
-        btnTabel.setBounds(465, 85, 100, 25);
-        btnTabel.setFont(fontWide);
-        btnTabel.setActionCommand("TABLE");
-        btnTabel.addActionListener(new Listener());
+        btnTable = new JButton("Table");
+        btnTable.setBounds(465, 85, 100, 25);
+        btnTable.setFont(fontWide);
+        btnTable.setActionCommand("TABLE");
+        btnTable.addActionListener(new Listener());
 
         lblVar = new JLabel("Var:");
         lblVar.setBounds(175, 60, 50, 15);
@@ -146,6 +146,10 @@ public class CalculatorWindow {
         type.addItem("Graph");
         type.addItem("Scatter Plot");
 
+        addToFrame();
+    }
+
+    private void addToFrame(){
         frame.getContentPane().add(tabs);
         frame.getContentPane().add(lblMode);
         frame.getContentPane().add(type);
@@ -155,7 +159,7 @@ public class CalculatorWindow {
         frame.getContentPane().add(btnOptions);
         frame.getContentPane().add(btnAbout);
         frame.getContentPane().add(btnClear);
-        frame.getContentPane().add(btnTabel);
+        frame.getContentPane().add(btnTable);
         frame.getContentPane().add(btnScatter);
         frame.getContentPane().add(lblVar);
         frame.getContentPane().add(txtVar);
@@ -240,25 +244,27 @@ public class CalculatorWindow {
 
     private void help(){
         String[] actions = {
-                "(sqrt(x))",
-                "(cbrt(x))",
-                "(sin(x))",
-                "(cos(x))",
-                "(tan(x))",
-                "(asin(x))",
-                "(acos(x))",
-                "(atan(x))",
-                "(!(x))",
-                "(ln(x))",
+                "'(' and ')' are required",
+                "(sqrt(x)) - Square root",
+                "(cbrt(x)) - Cube root",
+                "(sin(x)) - Sine",
+                "(cos(x)) - Cosine",
+                "(tan(x)) - Tangent",
+                "(asin(x)) - ASine",
+                "(acos(x)) - ACosine",
+                "(atan(x)) - ATangent",
+                "(!(x)) - Factorial",
+                "(ln(x)) - log",
                 "(exp(x))",
-                "π"
+                "(abs(x)) - Absolute value",
+                "(π) - Pi"
         };
-        writeText("########");
+        writeText("<~~~~~~~~>");
         writeText("Help");
-        for(int i = 0; i<actions.length;i++){
-            writeText(actions[i]);
+        for(String x: actions){
+            writeText(x);
         }
-        writeText("########");
+        writeText("<~~~~~~~~>");
     }
 
     private class ModeChange implements ItemListener{

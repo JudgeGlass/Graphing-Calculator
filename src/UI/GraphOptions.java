@@ -14,11 +14,13 @@ public class GraphOptions {
     private JLabel lblXMin;
     private JLabel lblYMax;
     private JLabel lblYMin;
+    private JLabel lblTableInc;
 
     private JTextField txtXMax;
     private JTextField txtXMin;
     private JTextField txtYMax;
     private JTextField txtYMin;
+    private JTextField txtTableInc;
 
     private JButton btnSave;
     private JButton btnCancel;
@@ -36,7 +38,7 @@ public class GraphOptions {
         frame = new JFrame();
         frame.setTitle("Options");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(270, 360);
+        frame.setSize(270, 415);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
@@ -98,19 +100,25 @@ public class GraphOptions {
 
         frame.getContentPane().add(txtYMin);
 
-        /*slider = new JSlider(1, 10);
-        slider.setBounds(5, 220, 240, 15);
-        slider.setValue((int)(window.resolution * 15));
-        frame.getContentPane().add(slider);*/
+        lblTableInc = new JLabel("Table X increment");
+        lblTableInc.setBounds(5, 220, 200, 15);
+
+        frame.getContentPane().add(lblTableInc);
+
+        txtTableInc = new JTextField();
+        txtTableInc.setBounds(4, 240, 240, 25);
+        txtTableInc.setText(Double.toString(window.tableInc));
+
+        frame.getContentPane().add(txtTableInc);
 
         chkDrawLines = new JCheckBox("Draw Grid");
-        chkDrawLines.setBounds(5, 220, 150, 15);
+        chkDrawLines.setBounds(5, 275, 150, 15);
         chkDrawLines.setSelected(window.drawLines);
 
         frame.getContentPane().add(chkDrawLines);
 
         btnDefaults = new JButton("Defaults");
-        btnDefaults.setBounds(5, 240, 100, 25);
+        btnDefaults.setBounds(5, 295, 100, 25);
         btnDefaults.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,6 +126,7 @@ public class GraphOptions {
                 txtXMin.setText("-10");
                 txtYMax.setText("10");
                 txtYMin.setText("-10");
+                txtTableInc.setText("1");
 
                 chkDrawLines.setSelected(true);
             }
@@ -125,7 +134,7 @@ public class GraphOptions {
         frame.getContentPane().add(btnDefaults);
 
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(40, 290, 90, 25);
+        btnCancel.setBounds(40, 345, 90, 25);
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -135,7 +144,7 @@ public class GraphOptions {
         frame.getContentPane().add(btnCancel);
 
         btnSave = new JButton("Save");
-        btnSave.setBounds(145, 290, 90, 25);
+        btnSave.setBounds(145, 345, 90, 25);
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -150,6 +159,7 @@ public class GraphOptions {
                     window.yMax = yMax;
                     window.yMin = yMin;
                     window.drawLines = chkDrawLines.isSelected();
+                    window.tableInc = Double.parseDouble(txtTableInc.getText());
                     //window.resolution = (double) slider.getValue() / 15;
 
                     graph.repaint2();

@@ -9,13 +9,14 @@ import java.awt.*;
 public class Table {
     private JFrame frame;
     private DefaultListModel model;
+    private JScrollPane scroll;
     private JList list;
-    private int orginIndex = 0;
+    private double orginIndex;
 
     private Function function;
     private GraphWindow window;
 
-    public Table(GraphWindow window, Function f){
+    public Table(final GraphWindow window, final Function f){
         this.window = window;
         function = f;
 
@@ -26,9 +27,10 @@ public class Table {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
+
         init();
         frame.setVisible(true);
-        list.setSelectedIndex(orginIndex);
+        list.ensureIndexIsVisible((int)orginIndex);
     }
 
     private void init(){
@@ -38,25 +40,28 @@ public class Table {
         list.setFixedCellWidth(frame.getWidth());
 
         makeLists(model);
-
-        frame.getContentPane().add(new JScrollPane(list), BorderLayout.CENTER);
+        scroll = new JScrollPane(list);
+        frame.getContentPane().add(scroll, BorderLayout.CENTER);
     }
 
     private void makeLists(DefaultListModel model){
         double[] arg = new double[2];
         model.addElement("X          Y");
-        for(double i = window.xMin; i<=window.xMax;i++){
+        for(double i = -1000; i<=1000;i+=window.tableInc){
             arg[1] = i;
             if(i == 0.0){
-                orginIndex = (int)i;
+                System.out.println("Orgin is at: " + i);
+                orginIndex = i;
             }
 
-            if(Double.isNaN(function.evaluate(new FunctionArguments(arg)))){
+            double y = function.evaluate(new FunctionArguments(arg));
+
+            if(Double.isNaN(y)){
                 model.addElement(i + "      Error");
                 continue;
             }
 
-            model.addElement(i + "     " + function.evaluate(new FunctionArguments(arg)));
+            model.addElement(i + "     " + y);
         }
     }
 }
