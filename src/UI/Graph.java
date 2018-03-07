@@ -88,6 +88,11 @@ public class Graph extends JPanel {
         circle(g, Color.BLUE, false, mouseX, mouseY, 5);
     }
 
+    private void drawText(Graphics g, final String txt, int x, int y){
+        g.setColor(Color.BLUE);
+        g.drawString(txt, x, y);
+    }
+
     /**
      * Draws the dark x and y axis lines (0, 0);
      * */
@@ -134,6 +139,7 @@ public class Graph extends JPanel {
      * */
 
     private void drawLine(Graphics g, double x1, double y1, double x2, double y2){
+        g.setColor(Color.BLACK);
         int xG = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
         int yG = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
 
@@ -155,16 +161,18 @@ public class Graph extends JPanel {
         }
 
         double[] arg = new double[2]; // Sets the first arguments
-        arg[0] = 1.0;
+        arg[0] = 0.0;
         arg[1] = 4.0;
 
         if(!function.isEmpty()) { // Checks to see if a function is entered
             double lastX = graphWindow.xMin; // The first x is the first point of the line
 
-            arg[1] = lastX;
+            arg[1] = 0;
             double lastY = f.evaluate(new FunctionArguments(arg)); // The first y is the first point of the line
 
             double adder = graphWindow.resolution; // How many is incremented
+
+            drawText(g, "Y-Intercept: " + Double.toString(f.evaluate(new FunctionArguments(arg))), 5, 15);
 
             for (double i = graphWindow.xMin; i <= graphWindow.xMax; i += adder) {
                 try {
@@ -172,11 +180,12 @@ public class Graph extends JPanel {
 
                     double y = f.evaluate(new FunctionArguments(arg));
                     if(Double.isNaN(y)){
-                        drawLine(g, i, y, i, y);
-                        lastX = 0;
-                        lastY = 0;
+                        lastX = i;
+                        arg[1] = i + adder;
+                        lastY = f.evaluate(new FunctionArguments(arg));
                         continue;
                     }
+
                     drawLine(g, lastX, lastY, i, y); // Draws the line
 
                     lastX = i; // Sets lastX as i
