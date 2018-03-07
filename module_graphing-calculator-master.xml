@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_graphing-calculator-master" default="compile.module.graphing-calculator-master">
+  <dirname property="module.graphing-calculator-master.basedir" file="${ant.file.module_graphing-calculator-master}"/>
+  
+  <property name="module.jdk.home.graphing-calculator-master" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.graphing-calculator-master" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.graphing-calculator-master" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.graphing-calculator-master" value="-encoding UTF-8 -source 1.8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="graphing-calculator-master.output.dir" value="${module.graphing-calculator-master.basedir}/out/production/Graphing-Calculator-master"/>
+  <property name="graphing-calculator-master.testoutput.dir" value="${module.graphing-calculator-master.basedir}/out/test/Graphing-Calculator-master"/>
+  
+  <path id="graphing-calculator-master.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="graphing-calculator-master.module.production.classpath">
+    <path refid="${module.jdk.classpath.graphing-calculator-master}"/>
+  </path>
+  
+  <path id="graphing-calculator-master.runtime.production.module.classpath">
+    <pathelement location="${graphing-calculator-master.output.dir}"/>
+  </path>
+  
+  <path id="graphing-calculator-master.module.classpath">
+    <path refid="${module.jdk.classpath.graphing-calculator-master}"/>
+    <pathelement location="${graphing-calculator-master.output.dir}"/>
+  </path>
+  
+  <path id="graphing-calculator-master.runtime.module.classpath">
+    <pathelement location="${graphing-calculator-master.testoutput.dir}"/>
+    <pathelement location="${graphing-calculator-master.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.graphing-calculator-master">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.graphing-calculator-master">
+    <patternset refid="excluded.from.module.graphing-calculator-master"/>
+  </patternset>
+  
+  <path id="graphing-calculator-master.module.sourcepath">
+    <dirset dir="${module.graphing-calculator-master.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.graphing-calculator-master" depends="compile.module.graphing-calculator-master.production,compile.module.graphing-calculator-master.tests" description="Compile module Graphing-Calculator-master"/>
+  
+  <target name="compile.module.graphing-calculator-master.production" depends="register.custom.compilers" description="Compile module Graphing-Calculator-master; production classes">
+    <mkdir dir="${graphing-calculator-master.output.dir}"/>
+    <javac2 destdir="${graphing-calculator-master.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.graphing-calculator-master}/javac">
+      <compilerarg line="${compiler.args.graphing-calculator-master}"/>
+      <bootclasspath refid="graphing-calculator-master.module.bootclasspath"/>
+      <classpath refid="graphing-calculator-master.module.production.classpath"/>
+      <src refid="graphing-calculator-master.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.graphing-calculator-master"/>
+    </javac2>
+    
+    <copy todir="${graphing-calculator-master.output.dir}">
+      <fileset dir="${module.graphing-calculator-master.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.graphing-calculator-master.tests" depends="register.custom.compilers,compile.module.graphing-calculator-master.production" description="compile module Graphing-Calculator-master; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.graphing-calculator-master" description="cleanup module">
+    <delete dir="${graphing-calculator-master.output.dir}"/>
+    <delete dir="${graphing-calculator-master.testoutput.dir}"/>
+  </target>
+</project>
