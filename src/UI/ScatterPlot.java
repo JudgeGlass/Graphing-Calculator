@@ -68,6 +68,7 @@ public class ScatterPlot {
         frame.getContentPane().add(lblY);
 
         yList.setBounds(110, 25, 100, 200);
+        yList.setEnabled(false);
         frame.getContentPane().add(yList);
 
         lblTX = new JLabel("X");

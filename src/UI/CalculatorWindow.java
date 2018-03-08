@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import Math.SigmaNotation;
 
 public class CalculatorWindow {
     private JFrame frame;
@@ -222,7 +223,7 @@ public class CalculatorWindow {
             }else if(command.equals("OPTIONS")){
                 new GraphOptions(window, graph);
             }else if(command.equals("ABOUT")){
-                JOptionPane.showMessageDialog(frame, "Copyright (c) 2018 Hunter Wilcox\nLibraries:\n- Java SWING API\n- (Modified)Functions (https://github.com/Nitori-/GraphingCalculator)", "About", JOptionPane.INFORMATION_MESSAGE);
+                new About();
             }else if(command.equals("CLEAR")){
                 if(type.getSelectedIndex() == 0){
                     int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the calculator output?", "Clear?", JOptionPane.YES_NO_OPTION);
@@ -290,6 +291,7 @@ public class CalculatorWindow {
         public void itemStateChanged(ItemEvent e){
             if(type.getSelectedIndex() == 1){
                 lblExpression.setText("f(x)=");
+                lblVar.setText("Var:");
                 lblExpression.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 12));
                 lblVar.setVisible(true);
                 txtVar.setVisible(true);
@@ -325,7 +327,7 @@ public class CalculatorWindow {
 
             if(type.getSelectedIndex() == 3){
                 lblVar.setVisible(true);
-                lblVar.setText("i = ");
+                lblVar.setText("n = ");
                 lblSigmaEnd.setVisible(true);
                 txtVar.setVisible(true);
                 txtVar.setText("");

@@ -85,7 +85,7 @@ public class Graph extends JPanel {
         g.drawString("X: " + String.format("%.2f", mouseX), 0, graphWindow.pixelHeight - 12);
         g.drawString("Y: " + String.format("%.2f", mouseY), 0, graphWindow.pixelHeight);
 
-        circle(g, Color.BLUE, false, mouseX, mouseY, 5);
+        circle(g, Color.BLUE, false, mouseX, mouseY, 4);
     }
 
     private void drawText(Graphics g, final String txt, int x, int y){
@@ -179,6 +179,7 @@ public class Graph extends JPanel {
                     arg[1] = i; // Makes arg[1] the value of i
 
                     double y = f.evaluate(new FunctionArguments(arg));
+
                     if(Double.isNaN(y)){
                         lastX = i;
                         arg[1] = i + adder;

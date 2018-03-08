@@ -39,15 +39,16 @@ public class Table {
         list = new JList(model);
         list.setFixedCellWidth(frame.getWidth());
 
-        makeLists(model);
         scroll = new JScrollPane(list);
+        makeLists(model);
+
         frame.getContentPane().add(scroll, BorderLayout.CENTER);
     }
 
     private void makeLists(DefaultListModel model){
         double[] arg = new double[2];
         model.addElement("X          Y");
-        for(double i = -1000; i<=1000;i+=window.tableInc){
+        for(double i = window.xMin; i<=window.xMax;i+=window.tableInc){
             arg[1] = i;
             if(i == 0.0){
                 System.out.println("Orgin is at: " + i);
@@ -63,5 +64,6 @@ public class Table {
 
             model.addElement(i + "     " + y);
         }
+        list.setSelectedIndex(model.size()/2);
     }
 }
