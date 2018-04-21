@@ -42,6 +42,7 @@ public class Table {
     private void init(){
 
         functionIndex = new JComboBox();
+        functionIndex.addItem("Press arrow for function");
         if(window.fh != null){
             if(!window.fh.y1.isEmpty()){
                 functionIndex.addItem("Y1= " + window.fh.y1);

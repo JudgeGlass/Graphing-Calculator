@@ -53,7 +53,7 @@ public class FunctionHolder {
             return y2;
         }
 
-        if(a == 1){
+        if(a == 2){
             return y3;
         }
 

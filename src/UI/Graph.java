@@ -13,19 +13,26 @@ import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 public class Graph extends JPanel {
     private GraphWindow graphWindow;
 
-    private double mouseX = 0;
-    private double mouseY = 0;
+    public double mouseX = 0;
+    public double mouseY = 0;
+    public double realMouseX;
+    public double realMouseY;
 
     public ArrayList<PointD> points;
 
-    public Graph(GraphWindow window){
+    private JTextArea area;
+
+    public Graph(GraphWindow window, JTextArea area){
         graphWindow = window;
         points = new ArrayList<>();
+        this.area = area;
 
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 repaint2();
+                realMouseX = e.getX();
+                realMouseY = e.getY();
                 mouseX = e.getX() * graphWindow.xScale + graphWindow.xMin; // Gets the mouse X
                 mouseY = (graphWindow.pixelHeight - e.getY()) * graphWindow.yScale + graphWindow.yMin; // Gets the mouse Y
             }
@@ -123,6 +130,12 @@ public class Graph extends JPanel {
         //////////////
     }
 
+    private void drawText(Graphics g, Color c, double x, double y, String text){
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+        g.setColor(c);
+        g.drawString(text, (int)x, (int)y);
+    }
+
     /**
      * Draws a grid across the xMin to xMax and yMin to yMax
      * */
@@ -179,6 +192,13 @@ public class Graph extends JPanel {
                 TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars),
                 TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars)};
 
+        if(graphWindow.fh.y1 != null)
+            drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1);
+        if(graphWindow.fh.y2 != null)
+            drawText(g, Color.BLUE, 5, 25, "f2(x)= " + graphWindow.fh.y2);
+        if(graphWindow.fh.y3 != null)
+            drawText(g, Color.RED, 5, 38, "f3(x)= " + graphWindow.fh.y3);
+
         double[] arg = new double[2]; // Sets the first arguments
         arg[0] = 0.0;
         arg[1] = 4.0;
@@ -189,7 +209,7 @@ public class Graph extends JPanel {
             arg[1] = graphWindow.xMin;
             double lastY;
             double adder = graphWindow.resolution; // How many is incremented
-
+            g.setColor(Color.BLACK);
             for(int a = 0; a < f.length; ++a) {
                 try {
                     if (f[a] == null)
@@ -220,6 +240,8 @@ public class Graph extends JPanel {
                             lastX = i; // Sets lastX as i
                             lastY = y1; // Sets lastY as the function of i
                         }catch (RuntimeException e) {
+                            if(!area.getText().contains(e.getMessage()))
+                                area.append("Graph Error: " + e.getMessage() + "\n");
                             continue;
                         }
                     }

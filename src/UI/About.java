@@ -83,7 +83,7 @@ public class About {
         txtPane.setFont(new Font(Font.SANS_SERIF, 0, 12));
         txtPane.setEditable(false);
         txtPane.setBounds(5, 130, 295, 90);
-        txtPane.setText("This is a basic calculator with graphing functionality.");
+        txtPane.setText("This is a basic calculator with graphing functionality.\n\nSource:\n" + ApplicationInfo.SOURCE_URL);
         frame.getContentPane().add(txtPane);
 
         btnOk = new JButton("OK");

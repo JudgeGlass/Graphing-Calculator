@@ -3,6 +3,7 @@ package UI;
 import FileIO.SaveSettings;
 import FileIO.Utils;
 import Program.ApplicationInfo;
+import Program.CorrectFunction;
 import Program.GetScatterPlotSave;
 import functions.Function;
 import functions.FunctionArguments;
@@ -29,6 +30,7 @@ public class CalculatorWindow {
     private JButton btnZoomIn;
     private JButton btnZoomOut;
     private JButton btnYE;
+    private JButton btnQuadradic;
 
     private JTextArea output;
 
@@ -57,6 +59,8 @@ public class CalculatorWindow {
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setResizable(false);
+        ImageIcon image = new ImageIcon(getClass().getResource("/Program/icons8-square-root-50.png"));
+        frame.setIconImage(image.getImage());
 
         fontWide = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
 
@@ -64,13 +68,18 @@ public class CalculatorWindow {
         frame.setVisible(true);
         if(saveUsed)
             writeText("Save found! Using...");
+        writeText("Graphing-Calculator v" + ApplicationInfo.VERSION);
         writeText("Ready. Type \"help\" for a list of operators.");
         save = new SaveSettings("data.dat", window, graph);
     }
 
     private void preInit(){
+        output = new JTextArea();
+        output.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
+        output.setEditable(false);
+
         window = new GraphWindow(-10, 10, -10, 10, 770, 450);
-        graph = new Graph(window);
+        graph = new Graph(window, output);
 
         if(new File("data.dat").exists()){
             System.out.println("Save found! Using...");
@@ -122,10 +131,6 @@ public class CalculatorWindow {
                 }
             }
         });
-
-        output = new JTextArea();
-        output.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
-        output.setEditable(false);
 
         tabs = new JTabbedPane();
         tabs.setBounds(5, 110, frame.getWidth() - 20, 450);
@@ -188,6 +193,12 @@ public class CalculatorWindow {
         btnYE.setActionCommand("Y");
         btnYE.addActionListener(new Listener());
 
+        btnQuadradic = new JButton("Quadradic");
+        btnQuadradic.setBounds(245, 85, 100, 25);
+        btnQuadradic.setFont(fontWide);
+        btnQuadradic.setActionCommand("QU");
+        btnQuadradic.addActionListener(new Listener());
+
         lblVar = new JLabel("Var:");
         lblVar.setBounds(175, 60, 50, 15);
         lblVar.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
@@ -248,6 +259,7 @@ public class CalculatorWindow {
         frame.getContentPane().add(lblSigmaEnd);
         frame.getContentPane().add(txtSigmaEnd);
         frame.getContentPane().add(btnYE);
+        frame.getContentPane().add(btnQuadradic);
     }
 
     private void calculate(){
@@ -257,7 +269,7 @@ public class CalculatorWindow {
             if(eq.contains("ANS")){
                 eq = eq.replaceAll("ANS", "(" + Double.toString(ANS) + ")");
             }
-            Function f = TokenizedFunctionFactory.createFunction(eq, null);
+            Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(eq), null);
             double answer = f.evaluate(new FunctionArguments(null));
             writeText("ANS: " + Double.toString(answer));
             ANS = answer;
@@ -309,7 +321,6 @@ public class CalculatorWindow {
             }else if(command.equals("ZOOM_IN")){
                 if(window.xMax - 1 < 1)
                     return;
-
                 window.xMin++;
                 window.xMax--;
                 window.yMin++;
@@ -323,6 +334,8 @@ public class CalculatorWindow {
                 graph.repaint2();
             }else if(command.equals("Y")){
                 new YWindow(window, save);
+            }else if(command.equals("QU")){
+                writeText(new QuadraticFormulaDialog().getAns());
             }
         }
     }
@@ -364,15 +377,7 @@ public class CalculatorWindow {
                 txtSigmaEnd.setVisible(false);
             }
 
-            if(type.getSelectedIndex() == 2){
-                lblVar.setVisible(true);
-                txtVar.setVisible(true);
-                txtVar.setText("x");
-                btnScatter.setVisible(true);
-                lblSigmaEnd.setVisible(false);
-                txtSigmaEnd.setVisible(false);
-            }else if(type.getSelectedIndex() != 2){
-                btnScatter.setVisible(false);
+            if(type.getSelectedIndex() != 2){
                 lblVar.setVisible(false);
                 txtVar.setVisible(false);
                 lblSigmaEnd.setVisible(false);

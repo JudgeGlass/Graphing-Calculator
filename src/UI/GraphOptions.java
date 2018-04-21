@@ -93,7 +93,7 @@ public class GraphOptions {
 
         frame.getContentPane().add(txtYMax);
 
-        lblYMin = new JLabel("Y Min");
+        lblYMin = new JLabel("Y Min:");
         lblYMin.setBounds(5, 185, 50, 15);
 
         frame.getContentPane().add(lblYMin);

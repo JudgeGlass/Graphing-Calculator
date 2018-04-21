@@ -25,7 +25,7 @@ public class CorrectFunction {
     public static String addMul(String funtion){
         String nf1 = addMulLeft(funtion.replaceAll("\\s", ""));
 
-        return addMulRight(nf1);
+        return addZeros(addMulRight(nf1));
     }
 
     private static String addMulLeft(String function){
@@ -167,6 +167,70 @@ public class CorrectFunction {
                     nf.insert(xIndex+1, '*');
             }
             insert = false;
+        }
+
+        return nf.toString();
+    }
+
+
+    private static String addZeros(String function){
+        boolean continueF = false;
+        ArrayList<Integer> dotI = new ArrayList<>();
+        for(int i = 0; i<function.length();i++){
+            if(function.charAt(i) == '.'){
+                dotI.add(i);
+            }
+        }
+
+        StringBuilder nf = new StringBuilder(function);
+        int am = 0;
+        for(int i = 0; i<dotI.size();i++){
+            int dotP = dotI.get(i);
+            if(dotP == 0){
+                nf.insert(dotP, '0');
+                am++;
+                continue;
+            }
+
+            switch (function.charAt(dotP-1)){
+                case '1':
+                    continueF = true;
+                    break;
+                case '2':
+                    continueF = true;
+                    break;
+                case '3':
+                    continueF = true;
+                    break;
+                case '4':
+                    continueF = true;
+                    break;
+                case '5':
+                    continueF = true;
+                    break;
+                case '6':
+                    continueF = true;
+                    break;
+                case '7':
+                    continueF = true;
+                    break;
+                case '8':
+                    continueF = true;
+                    break;
+                case '9':
+                    continueF = true;
+                    break;
+                case '0':
+                    continueF = true;
+                    break;
+            }
+
+            if(continueF)continue;
+
+            if(dotP > 0){
+                nf.insert(dotP+am, '0');
+                am++;
+            }
         }
 
         return nf.toString();
