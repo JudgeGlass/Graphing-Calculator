@@ -5,21 +5,20 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import Program.CorrectFunction;
 import functions.*;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 public class Graph extends JPanel {
-    public String function;
-
     private GraphWindow graphWindow;
+
     private double mouseX = 0;
     private double mouseY = 0;
-    private Function f;
-    public ArrayList<PointD> points;
-    public ArrayList<String> vars;
 
-    public Graph(final String function, GraphWindow window){
-        this.function = function;
+    public ArrayList<PointD> points;
+
+    public Graph(GraphWindow window){
         graphWindow = window;
         points = new ArrayList<>();
 
@@ -74,6 +73,14 @@ public class Graph extends JPanel {
         g.drawOval(x-(size / 2), y-(size / 2), size, size);
         if(filled)
             g.fillOval(x-(size / 2), y-(size / 2), size, size);
+    }
+
+    private void box(Graphics g, double x1, double y1, int size){
+        int x = (int)((x1 - graphWindow.xMin) / graphWindow.xScale-3);
+        int y = graphWindow.pixelHeight-2 - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
+        g.setColor(Color.BLACK);
+
+        g.drawRect(x, y, size, size);
     }
 
     /**
@@ -139,7 +146,7 @@ public class Graph extends JPanel {
      * */
 
     private void drawLine(Graphics g, double x1, double y1, double x2, double y2){
-        g.setColor(Color.BLACK);
+        //g.setColor(Color.BLACK);
         int xG = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
         int yG = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
 
@@ -153,64 +160,77 @@ public class Graph extends JPanel {
      * */
 
     private void function(Graphics g){
-        try {
-            f = TokenizedFunctionFactory.createFunction(function, vars); // Initializes the function
-        }catch (RuntimeException e){
-            e.printStackTrace();
-            function = "";
+        if(points.size() != 0){
+            for(int i = 0; i < points.size(); i++){
+                //circle(g, Color.RED, true, points.get(i).x, points.get(i).y, 7);
+                box(g, points.get(i).x, points.get(i).y, 5);
+            }
         }
+
+        if(graphWindow.fh == null)
+            return;
+
+        ArrayList<String> vars = new ArrayList<>();
+        vars.add("y");
+        vars.add("x");
+
+        Function[] f = {TokenizedFunctionFactory.createFunction(
+                CorrectFunction.addMul(graphWindow.fh.y1), vars),
+                TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars),
+                TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars)};
 
         double[] arg = new double[2]; // Sets the first arguments
         arg[0] = 0.0;
         arg[1] = 4.0;
 
-        if(!function.isEmpty()) { // Checks to see if a function is entered
-            double lastX = graphWindow.xMin; // The first x is the first point of the line
+        if(graphWindow.fh != null) { // Checks to see if a function is entered
+            double lastX = 0;
 
             arg[1] = 0;
-            double lastY = f.evaluate(new FunctionArguments(arg)); // The first y is the first point of the line
+            double lastY = 0;
 
             double adder = graphWindow.resolution; // How many is incremented
 
-            drawText(g, "Y-Intercept: " + Double.toString(f.evaluate(new FunctionArguments(arg))), 5, 15);
-
-            for (double i = graphWindow.xMin; i <= graphWindow.xMax; i += adder) {
+            for(int a = 0; a < f.length; ++a) {
                 try {
-                    arg[1] = i; // Makes arg[1] the value of i
-
-                    double y = f.evaluate(new FunctionArguments(arg));
-
-                    if(Double.isNaN(y)){
-                        lastX = i;
-                        arg[1] = i + adder;
-                        lastY = f.evaluate(new FunctionArguments(arg));
+                    if (f[a] == null)
                         continue;
+                    if (a == 1) {
+                        g.setColor(Color.BLUE);
                     }
+                    if (a == 2) {
+                        g.setColor(Color.RED);
+                    }
+                    lastY = f[a].evaluate(new FunctionArguments(arg));
+                    lastX = graphWindow.xMin;
+                    for (double i = graphWindow.xMin; i <= graphWindow.xMax; i += adder) {
+                        try {
+                            arg[1] = i; // Makes arg[1] the value of i
 
-                    drawLine(g, lastX, lastY, i, y); // Draws the line
+                            double y1 = f[a].evaluate(new FunctionArguments(arg));
+                            if (Double.isNaN(y1)) {
+                                lastX = i;
+                                arg[1] = i + adder;
+                                lastY = f[a].evaluate(new FunctionArguments(arg));
+                                continue;
+                            }
 
-                    lastX = i; // Sets lastX as i
-                    lastY = y; // Sets lastY as the function of i
-                }catch (RuntimeException e){
+                            drawLine(g, lastX, lastY, i, y1); // Draws the line
+
+                            lastX = i; // Sets lastX as i
+                            lastY = y1; // Sets lastY as the function of i
+                        }catch (RuntimeException e) {
+                            continue;
+                        }
+                    }
+                    if (graphWindow.fh.y2.isEmpty())
+                        break;
+
+                }catch (Exception e){
                     continue;
                 }
             }
         }
-
-        if(points.size() != 0){
-            for(int i = 0; i < points.size(); i++){
-                System.out.println(points.get(i).toString());
-                circle(g, Color.RED, true, points.get(i).x, points.get(i).y, 7);
-            }
-        }
-    }
-
-    /**
-     * Returns the function
-     * */
-
-    public Function getFunction(){
-        return f;
     }
 
     public void repaint2(){

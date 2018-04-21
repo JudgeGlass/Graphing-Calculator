@@ -1,5 +1,7 @@
 package UI;
 
+import Math.FunctionHolder;
+
 public class GraphWindow {
     public double xMin;
     public double xMax;
@@ -12,6 +14,7 @@ public class GraphWindow {
     public double resolution = .01;
     public double tableInc;
     public boolean drawLines;
+    public FunctionHolder fh;
 
     public GraphWindow(int xMin, int xMax, int yMin, int yMax, int pixelWidth, int pixelHeight){
         this.xMin = xMin;
@@ -37,5 +40,9 @@ public class GraphWindow {
 
     public int windowToPixelX(double x) {
         return (int) ((x - xMin) / xScale);
+    }
+
+    public void setFunction(String[] function) {
+        fh = new FunctionHolder(function);
     }
 }

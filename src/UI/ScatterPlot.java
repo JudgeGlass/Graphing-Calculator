@@ -5,6 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import FileIO.SaveSettings;
+import Math.LinearRegression;
+import Math.FunctionHolder;
+
 public class ScatterPlot {
     private JFrame frame;
     private JPanel panel;
@@ -26,13 +30,22 @@ public class ScatterPlot {
     private JButton btnAdd;
     private JButton btnDelete;
     private JButton btnOK;
+    private JButton btnRegression;
+
+    private ArrayList<Double> x = new ArrayList<>();
+    private ArrayList<Double> y = new ArrayList<>();
 
     private ArrayList<PointD> points;
     private Graph graph;
 
-    public ScatterPlot(ArrayList<PointD> points, Graph graph){
+    private SaveSettings save;
+    private FunctionHolder holder;
+
+    public ScatterPlot(ArrayList<PointD> points, Graph graph, FunctionHolder holder, SaveSettings save){
         this.points = points;
         this.graph = graph;
+        this.save = save;
+        this.holder = holder;
 
         frame = new JFrame();
         frame.setTitle("Scatter Plot");
@@ -95,6 +108,8 @@ public class ScatterPlot {
                 try {
                     double x = Double.parseDouble(txtX.getText());
                     double y = Double.parseDouble(txtY.getText());
+                    addX(x);
+                    addY(y);
 
                     addToList(new PointD(x, y), xModel, yModel);
                     txtX.setText("");
@@ -106,6 +121,35 @@ public class ScatterPlot {
             }
         });
         frame.getContentPane().add(btnAdd);
+
+        btnRegression = new JButton("Regression");
+        btnRegression.setBounds(5, 300, 100, 25);
+        btnRegression.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String ans = JOptionPane.showInputDialog(null, "1. Linear Regression\2. Exit");
+
+                if(ans.equals("1")){
+                    double[] xx = new double[x.size()];
+                    double[] yy = new double[y.size()];
+
+                    for(int i = 0; i<x.size();i++){
+                        xx[i] = x.get(i);
+                        yy[i] = y.get(i);
+                    }
+
+                    LinearRegression lr = new LinearRegression(xx, yy);
+                    String formula = String.format("y= %.04fx%s%.04f", lr.slope(), (lr.intercept() > 0) ? "+" : "", lr.intercept());
+                    String rs = String.format("r^2= %.04f", lr.R2());
+                    String r = String.format("r= %.04f", Math.sqrt(lr.R2()));
+                    JOptionPane.showMessageDialog(null, formula + "\n" + rs + "\n" + r);
+
+                    String function = String.format("%.04fx%s%.04f", lr.slope(), (lr.intercept() > 0) ? "+" : "", lr.intercept());
+                    graphRegression(function);
+                }
+            }
+        });
+        frame.getContentPane().add(btnRegression);
 
         btnDelete = new JButton("Delete");
         btnDelete.setBounds(110, 300, 100, 25);
@@ -132,22 +176,52 @@ public class ScatterPlot {
         btnOK.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<PointD> xy = new ArrayList<>();
-
+                points.clear();
                 for(int i = 0; i<xModel.size();i++){
                     points.add(new PointD(Double.parseDouble(xModel.get(i).toString()), Double.parseDouble(yModel.get(i).toString())));
                 }
 
                 graph.repaint2();
-
+                save.update();
                 frame.dispose();
             }
         });
         frame.getContentPane().add(btnOK);
+
+        if(graph.points.size() != 0 || graph.points != null)
+            for(PointD d: graph.points){
+                addToList(d, xModel, yModel);
+                x.add(d.x);
+                y.add(d.y);
+            }
+    }
+
+    private void graphRegression(String function){
+        if(holder.y1Empty() || holder.y2Empty() || holder.y3Empty()){
+            int ans = JOptionPane.showConfirmDialog(null, "Would you like to graph?", "Graph", JOptionPane.YES_NO_OPTION);
+            if(ans == JOptionPane.YES_OPTION){
+                if(holder.y1Empty()){
+                    holder.y1 = function;
+                }else if(holder.y2Empty()){
+                    holder.y2 = function;
+                }else if(holder.y3Empty()){
+                    holder.y3 = function;
+                }
+            }
+        }
+        graph.repaint2();
     }
 
     private void addToList(PointD point, DefaultListModel xModel, DefaultListModel yModel){
         xModel.addElement(point.x);
         yModel.addElement(point.y);
+    }
+
+    private void addX(double x){
+        this.x.add(x);
+    }
+
+    private void addY(double y){
+        this.y.add(y);
     }
 }

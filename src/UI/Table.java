@@ -1,24 +1,30 @@
 package UI;
 
+import Program.CorrectFunction;
 import functions.Function;
 import functions.FunctionArguments;
+import functions.TokenizedFunctionFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
 public class Table {
     private JFrame frame;
     private DefaultListModel model;
     private JScrollPane scroll;
     private JList list;
+    private JComboBox functionIndex;
     private double orginIndex;
 
     private Function function;
     private GraphWindow window;
 
-    public Table(final GraphWindow window, final Function f){
+    public Table(final GraphWindow window){
         this.window = window;
-        function = f;
+        //function = f;
 
         frame = new JFrame();
         frame.setTitle("Table");
@@ -34,13 +40,30 @@ public class Table {
     }
 
     private void init(){
+
+        functionIndex = new JComboBox();
+        if(window.fh != null){
+            if(!window.fh.y1.isEmpty()){
+                functionIndex.addItem("Y1= " + window.fh.y1);
+            }
+            if(!window.fh.y2.isEmpty()){
+                functionIndex.addItem("Y2= " + window.fh.y2);
+            }
+            if(!window.fh.y3.isEmpty()){
+                functionIndex.addItem("Y3= " + window.fh.y3);
+            }
+        }
+        functionIndex.addItemListener(new ModeChange());
+
+        frame.getContentPane().add(functionIndex, BorderLayout.PAGE_START);
+
         model = new DefaultListModel();
 
         list = new JList(model);
         list.setFixedCellWidth(frame.getWidth());
 
         scroll = new JScrollPane(list);
-        makeLists(model);
+        //makeLists(model);
 
         frame.getContentPane().add(scroll, BorderLayout.CENTER);
     }
@@ -65,5 +88,27 @@ public class Table {
             model.addElement(i + "     " + y);
         }
         list.setSelectedIndex(model.size()/2);
+    }
+
+    private class ModeChange implements ItemListener{
+        public void itemStateChanged(ItemEvent e){
+            ArrayList<String> vars = new ArrayList<>();
+            vars.add("y");
+            vars.add("x");
+            String at = functionIndex.getItemAt(functionIndex.getSelectedIndex()).toString();
+            if(at.contains("Y1")){
+                model.clear();
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y1), vars);
+                makeLists(model);
+            }else if(at.contains("Y2")){
+                model.clear();
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y2), vars);
+                makeLists(model);
+            }else if(at.contains("Y3")){
+                model.clear();
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y3), vars);
+                makeLists(model);
+            }
+        }
     }
 }

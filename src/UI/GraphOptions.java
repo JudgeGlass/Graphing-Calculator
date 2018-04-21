@@ -1,5 +1,7 @@
 package UI;
 
+import FileIO.SaveSettings;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,10 +32,12 @@ public class GraphOptions {
     private JSlider slider;
 
     private Graph graph;
+    private SaveSettings save;
 
-    public GraphOptions(GraphWindow window, Graph graph){
+    public GraphOptions(GraphWindow window, Graph graph, SaveSettings save){
         this.window = window;
         this.graph = graph;
+        this.save = save;
 
         frame = new JFrame();
         frame.setTitle("Options");
@@ -100,7 +104,7 @@ public class GraphOptions {
 
         frame.getContentPane().add(txtYMin);
 
-        lblTableInc = new JLabel("Table X increment");
+        lblTableInc = new JLabel("Table Delta X");
         lblTableInc.setBounds(5, 220, 200, 15);
 
         frame.getContentPane().add(lblTableInc);
@@ -122,11 +126,11 @@ public class GraphOptions {
         btnDefaults.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtXMax.setText("10");
-                txtXMin.setText("-10");
-                txtYMax.setText("10");
-                txtYMin.setText("-10");
-                txtTableInc.setText("1");
+                txtXMax.setText("10.0");
+                txtXMin.setText("-10.0");
+                txtYMax.setText("10.0");
+                txtYMin.setText("-10.0");
+                txtTableInc.setText("1.0");
 
                 chkDrawLines.setSelected(true);
             }
@@ -165,6 +169,8 @@ public class GraphOptions {
                     graph.repaint2();
 
                     frame.dispose();
+
+                    save.update();
                 }catch (Exception e1){
                     JOptionPane.showMessageDialog(null, "Error: " + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
