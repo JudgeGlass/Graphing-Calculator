@@ -186,9 +186,8 @@ public class Graph extends JPanel {
         if(graphWindow.fh != null) { // Checks to see if a function is entered
             double lastX = 0;
 
-            arg[1] = 0;
-            double lastY = 0;
-
+            arg[1] = graphWindow.xMin;
+            double lastY;
             double adder = graphWindow.resolution; // How many is incremented
 
             for(int a = 0; a < f.length; ++a) {
@@ -201,6 +200,7 @@ public class Graph extends JPanel {
                     if (a == 2) {
                         g.setColor(Color.RED);
                     }
+                    arg[1] = graphWindow.xMin;
                     lastY = f[a].evaluate(new FunctionArguments(arg));
                     lastX = graphWindow.xMin;
                     for (double i = graphWindow.xMin; i <= graphWindow.xMax; i += adder) {

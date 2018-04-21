@@ -48,6 +48,7 @@ public class CalculatorWindow {
     private SaveSettings save;
 
     private boolean saveUsed = false;
+    private double ANS = 0.0;
 
     public CalculatorWindow(){
         frame = new JFrame("Calculator [" + ApplicationInfo.VERSION + "]");
@@ -252,8 +253,15 @@ public class CalculatorWindow {
     private void calculate(){
         writeText("> "+expression.getText());
         try {
-            Function f = TokenizedFunctionFactory.createFunction(expression.getText(), null);
-            writeText("ANS: " + Double.toString(f.evaluate(new FunctionArguments(null))));
+            String eq = expression.getText();
+            if(eq.contains("ANS")){
+                eq = eq.replaceAll("ANS", "(" + Double.toString(ANS) + ")");
+            }
+            Function f = TokenizedFunctionFactory.createFunction(eq, null);
+            double answer = f.evaluate(new FunctionArguments(null));
+            writeText("ANS: " + Double.toString(answer));
+            ANS = answer;
+
         }catch (RuntimeException e){
             writeText("Syntax Error: " + e.getMessage());
         }
@@ -334,6 +342,7 @@ public class CalculatorWindow {
                 "(ln(x)) - log",
                 "(exp(x))",
                 "(abs(x)) - Absolute value",
+                "ANS - Previous answer",
                 "(π) - Pi"
         };
         writeText("<~~~~~~~~>");
