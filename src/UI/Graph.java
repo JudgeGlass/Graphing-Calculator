@@ -237,7 +237,6 @@ public class Graph extends JPanel {
                             }
 
                             drawLine(g, lastX, lastY, i, y1); // Draws the line
-
                             lastX = i; // Sets lastX as i
                             lastY = y1; // Sets lastY as the function of i
 

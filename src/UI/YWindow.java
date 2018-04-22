@@ -61,7 +61,7 @@ public class YWindow {
     }
 
     private void init(){
-        lblY1 = new JLabel("(Black)Y1= ");
+        lblY1 = new JLabel("Y1= ");
         lblY1.setBounds(5, 5, 70, 15);
         frame.getContentPane().add(lblY1);
 
@@ -69,7 +69,7 @@ public class YWindow {
         txtY1.setBounds(5, 25, 215, 25);
         frame.getContentPane().add(txtY1);
 
-        lblY2 = new JLabel("(Blue)Y2= ");
+        lblY2 = new JLabel("Y2= ");
         lblY2.setBounds(5, 55, 60, 15);
         frame.getContentPane().add(lblY2);
 
@@ -77,7 +77,7 @@ public class YWindow {
         txtY2.setBounds(5, 75, 215, 25);
         frame.getContentPane().add(txtY2);
 
-        lblY3 = new JLabel("(Red)Y3= ");
+        lblY3 = new JLabel("Y3= ");
         lblY3.setBounds(5, 105, 60, 15);
         frame.getContentPane().add(lblY3);
 

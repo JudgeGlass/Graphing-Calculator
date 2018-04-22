@@ -9,6 +9,7 @@ import FileIO.SaveSettings;
 import Math.LinearRegression;
 import Math.FunctionHolder;
 import Math.PolynomialRegression;
+import Math.ExpRegression;
 
 public class ScatterPlot {
     private JFrame frame;
@@ -128,9 +129,10 @@ public class ScatterPlot {
         btnRegression.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String ans = JOptionPane.showInputDialog(null, "1. Linear Regression y=ax+b" +
-                                                                                      "\n2. Quadratic         y=ax^2+b+c" +
-                                                                                      "\n3. Cubic             y=ax^3+bx^2+cx+d");
+                String ans = JOptionPane.showInputDialog(null, "1. Linear  y=ax+b" +
+                                                                                      "\n2. Quadratic  y=ax^2+b+c" +
+                                                                                      "\n3. Cubic     y=ax^3+bx^2+cx+d" +
+                                                                                      "\n4. Exp y=a*(b)^x");
 
                 double[] xx = new double[x.size()];
                 double[] yy = new double[y.size()];
@@ -168,6 +170,13 @@ public class ScatterPlot {
                     String function = String.format("%.06fx^3%s%.06fx^2%s%.06fx%s%.06f", pr.beta(3), (pr.beta(2) > 0) ? "+" : "", pr.beta(2), (pr.beta(1) > 0) ? "+" : "", pr.beta(1),
                             (pr.beta(0) > 0) ? "+" : "", pr.beta(0));
                     graphRegression(function);
+                }else if(ans.equals("4")){
+                    ExpRegression ep = new ExpRegression(xx, yy);
+                    String formula = "y=" + ep.getFunction();
+                    String rs = String.format("r^2= %.06f", ep.getR());
+                    JOptionPane.showMessageDialog(null, formula + "\n" + rs, "Exp Regression", JOptionPane.INFORMATION_MESSAGE);
+
+                    graphRegression(ep.getFunction());
                 }
             }
         });
