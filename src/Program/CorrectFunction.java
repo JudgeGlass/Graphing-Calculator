@@ -112,9 +112,10 @@ public class CorrectFunction {
         StringBuilder nf = new StringBuilder(function);
         int am = 0;
         for(int i = 0; i<dotI.size();i++){
+            continueF = false;
             int dotP = dotI.get(i);
             if(dotP == 0){
-                am++;
+                //am++;
                 continue;
             }
 
