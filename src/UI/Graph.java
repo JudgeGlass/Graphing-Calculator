@@ -83,7 +83,7 @@ public class Graph extends JPanel {
     }
 
     private void box(Graphics g, double x1, double y1, int size){
-        int x = (int)((x1 - graphWindow.xMin) / graphWindow.xScale-3);
+        int x = (int)((x1 - graphWindow.xMin) / graphWindow.xScale-2.5);
         int y = graphWindow.pixelHeight-2 - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
         g.setColor(Color.BLACK);
 
@@ -192,6 +192,7 @@ public class Graph extends JPanel {
                 TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars),
                 TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars)};
 
+
         if(graphWindow.fh.y1 != null)
             drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1);
         if(graphWindow.fh.y2 != null)
@@ -239,6 +240,7 @@ public class Graph extends JPanel {
 
                             lastX = i; // Sets lastX as i
                             lastY = y1; // Sets lastY as the function of i
+
                         }catch (RuntimeException e) {
                             if(!area.getText().contains(e.getMessage()))
                                 area.append("Graph Error: " + e.getMessage() + "\n");

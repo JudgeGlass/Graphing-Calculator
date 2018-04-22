@@ -1,7 +1,11 @@
+import Program.CorrectFunction;
 import UI.CalculatorWindow;
+import functions.Function;
+import functions.FunctionArguments;
+import functions.TokenizedFunctionFactory;
 
 import javax.swing.*;
-import java.util.ArrayList;
+
 
 public class Main {
     public static void main(String args[]){

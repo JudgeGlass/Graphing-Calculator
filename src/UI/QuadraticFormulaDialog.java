@@ -20,12 +20,20 @@
 package UI;
 
 import Math.QuadraticFormula;
+import Program.CorrectFunction;
+import functions.Function;
+import functions.FunctionArguments;
+import functions.TokenizedFunctionFactory;
 
 import javax.swing.*;
 
 public class QuadraticFormulaDialog {
     private double x1;
     private double x2;
+
+    private double a = 0;
+    private double b = 0;
+    private double c = 0;
 
     QuadraticFormulaDialog(){
         JTextField aField = new JTextField(5);
@@ -46,14 +54,33 @@ public class QuadraticFormulaDialog {
         myPanel.add(cField);
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Quadradic Formula", JOptionPane.OK_CANCEL_OPTION);
+                "Quadratic Formula", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
+            a = Double.parseDouble(aField.getText());
+            b = Double.parseDouble(bField.getText());
+            c = Double.parseDouble(cField.getText());
+
             x1 = QuadraticFormula.plus(Double.parseDouble(aField.getText()), Double.parseDouble(bField.getText()), Double.parseDouble(cField.getText()));
             x2 = QuadraticFormula.minus(Double.parseDouble(aField.getText()), Double.parseDouble(bField.getText()), Double.parseDouble(cField.getText()));
         }
     }
 
-    public String getAns(){
+    public String getZeros(){
         return String.format("x={%.03f,%.03f}", x1, x2);
+    }
+    public String getLineOfSem(){return String.format("Middle: x=%.04f", -b/(2*a));}
+    public String getMinMax(){
+        double lineOfSem = -b/(2*a);
+        String function = String.format("%.04fx^2%s%.04fx%s%.04f", a, (b > 0) ? "+" : "", b, (c > 0) ? "+" : "", c);
+
+        function = function.replaceAll("x", "*(" + lineOfSem + ")");
+
+        Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(function), null);
+        double ans = f.evaluate(new FunctionArguments(null));
+
+        if(a > 0){
+            return String.format("Minimum: y=%.04f", ans);
+        }
+        return String.format("Maximum: y=%.04f", ans);
     }
 }

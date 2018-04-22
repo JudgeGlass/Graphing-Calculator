@@ -125,6 +125,10 @@ public class YWindow {
     }
 
     private boolean isOrder(){
+        if(txtY1.getText().isEmpty() && txtY2.getText().isEmpty() && txtY3.getText().isEmpty()){
+            return true;
+        }
+
         if(!txtY1.getText().isEmpty() && txtY2.getText().isEmpty() && txtY3.getText().isEmpty()){
             return true;
         }else if(!txtY1.getText().isEmpty() && !txtY2.getText().isEmpty() && txtY3.getText().isEmpty()){

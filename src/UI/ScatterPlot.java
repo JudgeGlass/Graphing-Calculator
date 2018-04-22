@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import FileIO.SaveSettings;
 import Math.LinearRegression;
 import Math.FunctionHolder;
+import Math.PolynomialRegression;
 
 public class ScatterPlot {
     private JFrame frame;
@@ -127,17 +128,19 @@ public class ScatterPlot {
         btnRegression.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String ans = JOptionPane.showInputDialog(null, "1. Linear Regression\2. Exit");
+                String ans = JOptionPane.showInputDialog(null, "1. Linear Regression y=ax+b" +
+                                                                                      "\n2. Quadratic         y=ax^2+b+c" +
+                                                                                      "\n3. Cubic             y=ax^3+bx^2+cx+d");
+
+                double[] xx = new double[x.size()];
+                double[] yy = new double[y.size()];
+
+                for(int i = 0; i<x.size();i++){
+                    xx[i] = x.get(i);
+                    yy[i] = y.get(i);
+                }
 
                 if(ans.equals("1")){
-                    double[] xx = new double[x.size()];
-                    double[] yy = new double[y.size()];
-
-                    for(int i = 0; i<x.size();i++){
-                        xx[i] = x.get(i);
-                        yy[i] = y.get(i);
-                    }
-
                     LinearRegression lr = new LinearRegression(xx, yy);
                     String formula = String.format("y= %.04fx%s%.04f", lr.slope(), (lr.intercept() > 0) ? "+" : "", lr.intercept());
                     String rs = String.format("r^2= %.04f", lr.R2());
@@ -145,6 +148,25 @@ public class ScatterPlot {
                     JOptionPane.showMessageDialog(null, formula + "\n" + rs + "\n" + r);
 
                     String function = String.format("%.04fx%s%.04f", lr.slope(), (lr.intercept() > 0) ? "+" : "", lr.intercept());
+                    graphRegression(function);
+                }else if(ans.equals("2")){
+                    PolynomialRegression pr = new PolynomialRegression(xx, yy, 2);
+                    String formula = String.format("y=%.06fx^2%s%.06fx%s%.06f", pr.beta(2), (pr.beta(1) > 0) ? "+" : "", pr.beta(1), (pr.beta(0) > 0) ? "+" : "", pr.beta(0));
+                    String rs = String.format("r^2= %.06f", pr.R2());
+                    JOptionPane.showMessageDialog(null, formula + "\n" + rs, "Quadratic Regression", JOptionPane.INFORMATION_MESSAGE);
+
+                    String function = String.format("%.06fx^2%s%.06fx%s%.06f", pr.beta(2), (pr.beta(1) > 0) ? "+" : "", pr.beta(1), (pr.beta(0) > 0) ? "+" : "", pr.beta(0));
+                    graphRegression(function);
+                }else if(ans.equals("3")){
+                    PolynomialRegression pr = new PolynomialRegression(xx, yy, 3);
+                    String formula = String.format("y=%.06fx^3%s%.06fx^2%s%.06fx%s%.06f", pr.beta(3), (pr.beta(2) > 0) ? "+" : "", pr.beta(2), (pr.beta(1) > 0) ? "+" : "", pr.beta(1),
+                            (pr.beta(0) > 0) ? "+" : "", pr.beta(0));
+                    String rs = String.format("r^2= %.06f", pr.R2());
+
+                    JOptionPane.showMessageDialog(null, formula + "\n" + rs, "Cubic Regression", JOptionPane.INFORMATION_MESSAGE);
+
+                    String function = String.format("%.06fx^3%s%.06fx^2%s%.06fx%s%.06f", pr.beta(3), (pr.beta(2) > 0) ? "+" : "", pr.beta(2), (pr.beta(1) > 0) ? "+" : "", pr.beta(1),
+                            (pr.beta(0) > 0) ? "+" : "", pr.beta(0));
                     graphRegression(function);
                 }
             }

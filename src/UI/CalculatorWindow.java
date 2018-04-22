@@ -65,6 +65,7 @@ public class CalculatorWindow {
         fontWide = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
 
         preInit();
+        graph.repaint2();
         frame.setVisible(true);
         if(saveUsed)
             writeText("Save found! Using...");
@@ -193,7 +194,7 @@ public class CalculatorWindow {
         btnYE.setActionCommand("Y");
         btnYE.addActionListener(new Listener());
 
-        btnQuadradic = new JButton("Quadradic");
+        btnQuadradic = new JButton("Quadratic");
         btnQuadradic.setBounds(245, 85, 100, 25);
         btnQuadradic.setFont(fontWide);
         btnQuadradic.setActionCommand("QU");
@@ -235,7 +236,7 @@ public class CalculatorWindow {
         type.addItem("Calculator");
         type.addItem("Graph");
         type.addItem("Scatter Plot");
-        type.addItem("Sigma");
+        type.addItem("Sigma \u03A3");
 
         addToFrame();
     }
@@ -335,7 +336,10 @@ public class CalculatorWindow {
             }else if(command.equals("Y")){
                 new YWindow(window, save);
             }else if(command.equals("QU")){
-                writeText(new QuadraticFormulaDialog().getAns());
+                QuadraticFormulaDialog qf = new QuadraticFormulaDialog();
+                writeText(qf.getZeros());
+                writeText(qf.getLineOfSem());
+                writeText(qf.getMinMax());
             }
         }
     }

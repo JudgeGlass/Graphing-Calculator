@@ -28,7 +28,7 @@ public class CorrectFunction {
         return addZeros(addMulRight(nf1));
     }
 
-    private static String addMulLeft(String function){
+    /*private static String addMulLeft(String function){
         ArrayList<Integer> posXs = new ArrayList<>();
         for(int i = 0; i < function.length(); i++){
             if(!posXs.contains(function.indexOf('x', i)) && function.indexOf('x', i) >= 0)
@@ -98,7 +98,58 @@ public class CorrectFunction {
         }
 
         return nf.toString();
+    }*/
+
+    private static String addMulLeft(String function){
+        boolean continueF = false;
+        ArrayList<Integer> dotI = new ArrayList<>();
+        for(int i = 0; i<function.length();i++){
+            if(function.charAt(i) == 'x'){
+                dotI.add(i);
+            }
+        }
+
+        StringBuilder nf = new StringBuilder(function);
+        int am = 0;
+        for(int i = 0; i<dotI.size();i++){
+            int dotP = dotI.get(i);
+            if(dotP == 0){
+                am++;
+                continue;
+            }
+
+            switch (function.charAt(dotP-1)){
+                case '*':
+                    continueF = true;
+                    break;
+                case '+':
+                    continueF = true;
+                    break;
+                case '-':
+                    continueF = true;
+                    break;
+                case '/':
+                    continueF = true;
+                    break;
+                case '^':
+                    continueF = true;
+                    break;
+                case '(':
+                    continueF = true;
+                    break;
+            }
+
+            if(continueF)continue;
+
+            if(dotP > 0){
+                nf.insert(dotP+am, '*');
+                am++;
+            }
+        }
+
+        return nf.toString();
     }
+
 
     private static String addMulRight(String function){
         ArrayList<Integer> posXs = new ArrayList<>();
@@ -171,7 +222,6 @@ public class CorrectFunction {
 
         return nf.toString();
     }
-
 
     private static String addZeros(String function){
         boolean continueF = false;
