@@ -24,6 +24,7 @@ import UI.GraphWindow;
 import UI.PointD;
 
 import java.io.File;
+import java.io.IOException;
 
 public class SaveSettings {
     private String filename;
@@ -39,6 +40,7 @@ public class SaveSettings {
 
     public void update(){
         conf = "";
+        addToConf("qal="  + window.resolution);
        addToConf("xmin=" + window.xMin);
        addToConf("xmax=" + window.xMax);
        addToConf("ymin=" + window.yMin);
@@ -49,8 +51,12 @@ public class SaveSettings {
            addToConf("Y1=" + window.fh.y1);
            addToConf("Y2=" + window.fh.y2);
            addToConf("Y3=" + window.fh.y3);
-       }else
-            addToConf("YVal=false");
+       }else {
+           addToConf("YVal=false");
+           addToConf("Y1=");
+           addToConf("Y2=");
+           addToConf("Y3=");
+       }
 
        if(graph.points.size() != 0 || graph.points != null){
            addToConf("## PLOT ##");

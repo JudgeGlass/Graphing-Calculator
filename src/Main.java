@@ -1,16 +1,17 @@
+import FileIO.Utils;
+import Program.CorrectFunction;
 import UI.CalculatorWindow;
+import functions.Function;
+import functions.FunctionStore;
+import jdk.jshell.execution.Util;
 
 import javax.swing.*;
-import Math.ExpRegression;
+import java.util.ArrayList;
 
 
 public class Main {
     public static void main(String args[]){
-        double x[] = {0, 1, 2, 3, 4, 5};
-        double y[] = {3, 7, 10, 24, 50, 95};
-
-        System.out.println(new ExpRegression(x, y).getFunction());
-
+        //System.out.println(CorrectFunction.addPer("sqrt(2+2^2)"));
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {

@@ -18,8 +18,11 @@
  */
 package functions;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import Program.CorrectFunction;
 import functions.builtin.*;
 
 /**
@@ -31,6 +34,9 @@ public class FunctionStore {
 
     /** Maps string ID's to the function objects */
     private HashMap<String, Function> functions;
+    private HashMap<String, String> rawFunctions;
+
+    private ArrayList<String> idNames = new ArrayList<>();
 
     private FunctionStore() {
         rebuildStore();
@@ -41,6 +47,7 @@ public class FunctionStore {
      */
     public void rebuildStore() {
         functions = new HashMap<String, Function>();
+        rawFunctions = new HashMap<>();
 
         // All the basic functions a calculator needs
         storeFunction("+", new AddFunction());
@@ -85,10 +92,71 @@ public class FunctionStore {
         functions.put(id, f);
     }
 
+
+    /**
+     * By Hunter Wilcox
+     * **/
+    public void storeFunction(String id, String function){
+        if(hasFunction(id)){
+            return;
+        }
+
+        ArrayList<String> vars = new ArrayList<>();
+        vars.add("x");
+        Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(function), vars);
+        functions.put(id, f);
+        idNames.add(id);
+        rawFunctions.put(id, function);
+    }
+
+    /**
+     * By Hunter Wilcox
+     * **/
+    public ArrayList<String> getOperators() {
+        ArrayList<String> op = new ArrayList<>();
+        op.add("sqrt");
+        op.add("cbrt");
+        op.add("sin");
+        op.add("tan");
+        op.add("cos");
+        op.add("ln");
+        op.add("asin");
+        op.add("atan");
+        op.add("acos");
+        op.add("exp");
+        op.add("abs");
+        op.add("!");
+
+        return op;
+    }
+
+    /**
+     * By Hunter Wilcox
+     * **/
+    public void removeFunction(String id){
+        if(idNames.contains(id) && functions.containsKey(id) && rawFunctions.containsKey(id)) {
+            idNames.remove(id);
+            functions.remove(id);
+            rawFunctions.remove(id);
+        }
+    }
+
     /**
      * Returns true if the given id corresponds to a stored function
      */
     public boolean hasFunction(String id) {
         return functions.containsKey(id);
+    }
+
+
+    /**
+     * By Hunter Wilcox
+     * */
+    public ArrayList<String> getRawFunctions(){
+        return idNames;
+    }
+
+    public ArrayList<String> getIdNames() {
+        return idNames;
     }
 }

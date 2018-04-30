@@ -11,7 +11,7 @@ public class GraphWindow {
     public int pixelHeight;
     public double xScale;
     public double yScale;
-    public double resolution = .01;
+    public double resolution = 1;
     public double tableInc;
     public boolean drawLines;
     public FunctionHolder fh;

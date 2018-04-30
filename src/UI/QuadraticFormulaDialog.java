@@ -53,8 +53,9 @@ public class QuadraticFormulaDialog {
         myPanel.add(new JLabel("c:"));
         myPanel.add(cField);
 
+        ImageIcon image = new ImageIcon(getClass().getResource("/Program/QF.png"));
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Quadratic Formula", JOptionPane.OK_CANCEL_OPTION);
+                "Quadratic Formula", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, image);
         if (result == JOptionPane.OK_OPTION) {
             a = Double.parseDouble(aField.getText());
             b = Double.parseDouble(bField.getText());
@@ -71,6 +72,10 @@ public class QuadraticFormulaDialog {
     public String getLineOfSem(){return String.format("Middle: x=%.04f", -b/(2*a));}
     public String getMinMax(){
         double lineOfSem = -b/(2*a);
+
+        if(lineOfSem == Double.NaN)
+            return "Error";
+
         String function = String.format("%.04fx^2%s%.04fx%s%.04f", a, (b > 0) ? "+" : "", b, (c > 0) ? "+" : "", c);
 
         function = function.replaceAll("x", "*(" + lineOfSem + ")");

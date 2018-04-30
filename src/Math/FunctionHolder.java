@@ -19,17 +19,23 @@
 
 package Math;
 
+import functions.FunctionStore;
+
 public class FunctionHolder {
 
 
     public String y1;
     public String y2;
     public String y3;
+    public String y4;
+    public String y5;
 
     public FunctionHolder(String[] functions){
         y1 = functions[0];
         y2 = functions[1];
         y3 = functions[2];
+        //y4 = functions[3];
+        //y5 = functions[4];
     }
 
     public void setY1(String y1){
@@ -44,17 +50,40 @@ public class FunctionHolder {
         this.y3 = y3;
     }
 
+    public void setY4(String y4) {
+        this.y4 = y4;
+    }
+
+    public void setY5(String y5) {
+        this.y5 = y5;
+    }
+
+    public void store(){
+        if(y1 != null){
+            FunctionStore.getStore().storeFunction("y1", y1);
+        }
+
+        if(y2 != null){
+            FunctionStore.getStore().storeFunction("y2", y2);
+        }
+
+        if(y3 != null){
+            FunctionStore.getStore().storeFunction("y3", y3);
+        }
+    }
+
     public String getByIndex(int a){
-        if(a == 0){
-            return y1;
-        }
-
-        if(a == 1){
-            return y2;
-        }
-
-        if(a == 2){
-            return y3;
+        switch (a){
+            case 0:
+                return y1;
+            case 1:
+                return y2;
+            case 2:
+                return y3;
+            case 3:
+                return y4;
+            case 4:
+                return y5;
         }
 
         return null;
@@ -64,6 +93,8 @@ public class FunctionHolder {
         y1 = "";
         y2 = "";
         y3 = "";
+        y4 = "";
+        y5 = "";
     }
 
     public boolean y1Empty(){
@@ -82,6 +113,20 @@ public class FunctionHolder {
 
     public boolean y3Empty(){
         if(y3.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean y4Empty(){
+        if(y4.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean y5Empty(){
+        if(y5.isEmpty()){
             return true;
         }
         return false;

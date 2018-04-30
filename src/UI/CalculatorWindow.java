@@ -5,15 +5,16 @@ import FileIO.Utils;
 import Program.ApplicationInfo;
 import Program.CorrectFunction;
 import Program.GetScatterPlotSave;
+import Program.Variable;
 import functions.Function;
 import functions.FunctionArguments;
+import functions.FunctionStore;
 import functions.TokenizedFunctionFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.ArrayList;
 import Math.SigmaNotation;
 
 public class CalculatorWindow {
@@ -31,11 +32,13 @@ public class CalculatorWindow {
     private JButton btnZoomOut;
     private JButton btnYE;
     private JButton btnQuadradic;
+    private JButton btnStoreFunction;
 
     private JTextArea output;
 
     private GraphWindow window;
     private Graph graph;
+    private Variable variable;
 
     private Font fontWide;
 
@@ -46,6 +49,7 @@ public class CalculatorWindow {
     private JLabel lblVar;
     private JLabel lblExpression;
     private JLabel lblMode;
+
     private JComboBox type;
     private SaveSettings save;
 
@@ -54,7 +58,7 @@ public class CalculatorWindow {
 
     public CalculatorWindow(){
         frame = new JFrame("Calculator [" + ApplicationInfo.VERSION + "]");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
@@ -65,8 +69,11 @@ public class CalculatorWindow {
         fontWide = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
 
         preInit();
+
         graph.repaint2();
         frame.setVisible(true);
+
+        variable = new Variable();
         if(saveUsed)
             writeText("Save found! Using...");
         writeText("Graphing-Calculator v" + ApplicationInfo.VERSION);
@@ -84,24 +91,28 @@ public class CalculatorWindow {
 
         if(new File("data.dat").exists()){
             System.out.println("Save found! Using...");
-            double xMin = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 0), '='));
-            double xMax = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 1), '='));
-            double yMin = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 2), '='));
-            double yMax = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 3), '='));
+            double xMin = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 1), '='));
+            double xMax = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 2), '='));
+            double yMin = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 3), '='));
+            double yMax = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 4), '='));
 
             window.xMax = xMax;
             window.xMin = xMin;
             window.yMax = yMax;
             window.yMin = yMin;
 
-            if(Utils.indexOf(Utils.readLine("data.dat", 4), '=').equals("true")){
-                String y1 = Utils.indexOf(Utils.readLine("data.dat", 5), '=');
-                String y2 = Utils.indexOf(Utils.readLine("data.dat", 6), '=');
-                String y3 = Utils.indexOf(Utils.readLine("data.dat", 7), '=');
+            window.resolution = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 0), '='));
+
+            if(Utils.indexOf(Utils.readLine("data.dat", 5), '=').equals("true")){
+                String y1 = Utils.indexOf(Utils.readLine("data.dat", 6), '=');
+                String y2 = Utils.indexOf(Utils.readLine("data.dat", 7), '=');
+                String y3 = Utils.indexOf(Utils.readLine("data.dat", 8), '=');
 
                 String[] values = {y1, y2, y3};
                 window.setFunction(values);
+                window.fh.store();
             }
+
             GetScatterPlotSave gs = new GetScatterPlotSave("data.dat");
             if(gs.getPoints().size() != 0 && gs.getPoints() != null)
                 graph.points = gs.getPoints();
@@ -111,25 +122,22 @@ public class CalculatorWindow {
 
         graphPanel = graph;
 
-        graphPanel.addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                if(e.getWheelRotation() < 0){
-                    if(window.xMax - 1 < 1)
-                        return;
+        graphPanel.addMouseWheelListener(e -> {
+            if(e.getWheelRotation() < 0){
+                if(window.xMax - 1 < 1)
+                    return;
 
-                    window.xMin++;
-                    window.xMax--;
-                    window.yMin++;
-                    window.yMax--;
-                    graph.repaint2();
-                }else{
-                    window.xMin--;
-                    window.xMax++;
-                    window.yMin--;
-                    window.yMax++;
-                    graph.repaint2();
-                }
+                window.xMin++;
+                window.xMax--;
+                window.yMin++;
+                window.yMax--;
+                graph.repaint2();
+            }else{
+                window.xMin--;
+                window.xMax++;
+                window.yMin--;
+                window.yMax++;
+                graph.repaint2();
             }
         });
 
@@ -200,6 +208,12 @@ public class CalculatorWindow {
         btnQuadradic.setActionCommand("QU");
         btnQuadradic.addActionListener(new Listener());
 
+        btnStoreFunction = new JButton("Def. Function");
+        btnStoreFunction.setBounds(140, 85, 100, 25);
+        btnStoreFunction.setFont(fontWide);
+        btnStoreFunction.setActionCommand("DEF");
+        btnStoreFunction.addActionListener(new Listener());
+
         lblVar = new JLabel("Var:");
         lblVar.setBounds(175, 60, 50, 15);
         lblVar.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
@@ -261,6 +275,7 @@ public class CalculatorWindow {
         frame.getContentPane().add(txtSigmaEnd);
         frame.getContentPane().add(btnYE);
         frame.getContentPane().add(btnQuadradic);
+        frame.getContentPane().add(btnStoreFunction);
     }
 
     private void calculate(){
@@ -268,7 +283,18 @@ public class CalculatorWindow {
         try {
             String eq = expression.getText();
             if(eq.contains("ANS")){
-                eq = eq.replaceAll("ANS", "(" + Double.toString(ANS) + ")");
+                eq = eq.replaceAll("ANS", Double.toString(ANS));
+            }
+            for(String x: Variable.getVars()){
+                if(eq.contains(x)){
+                    eq = eq.replaceAll(x, Double.toString(Variable.getValue(x)));
+                }
+            }
+            if(eq.contains("->")){
+                writeText("Var saved!");
+                Variable.addVarFromString(eq);
+                expression.setText("");
+                return;
             }
             Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(eq), null);
             double answer = f.evaluate(new FunctionArguments(null));
@@ -290,6 +316,28 @@ public class CalculatorWindow {
             final String command = e.getActionCommand();
             if(expression.getText().equals("help")){
                 help();
+                expression.setText("");
+                return;
+            }else if(expression.getText().equals("DEL")){
+                DeleteFunction.showDeleteWindow();
+                expression.setText("");
+                return;
+            }else if(expression.getText().equals("LIST")){
+                writeText("Functions:");
+                for(String x: FunctionStore.getStore().getRawFunctions()){
+                    writeText("> " + x);
+                }
+                expression.setText("");
+                return;
+            }else if(expression.getText().equals("DISABLE")){
+                CorrectFunction.setEnabled(false);
+                writeText("Correcting features disabled");
+                expression.setText("");
+                return;
+            }else if(expression.getText().equals("ENABLE")){
+                CorrectFunction.setEnabled(true);
+                writeText("Correcting features enabled");
+                expression.setText("");
                 return;
             }
             if(command.equals("SOLVE")){
@@ -340,12 +388,25 @@ public class CalculatorWindow {
                 writeText(qf.getZeros());
                 writeText(qf.getLineOfSem());
                 writeText(qf.getMinMax());
+            }else if(command.equals("DEF")){
+                String functionName = JOptionPane.showInputDialog(null, "Function name(eg. f1, f2, f3)", "Function name", JOptionPane.QUESTION_MESSAGE);
+                if(functionName == null) return;
+                if(FunctionStore.getStore().hasFunction(functionName)) writeText("Name taken!");
+
+                String function = JOptionPane.showInputDialog(null, "Function(eg. x^2+3x+2)", "Function", JOptionPane.QUESTION_MESSAGE);
+                if(function == null) return;
+
+                FunctionStore.getStore().storeFunction(functionName, function);
+                writeText(function + " was saved to " + functionName);
             }
         }
     }
 
     private void help(){
         String[] actions = {
+                "DEL - Delete function",
+                "LIST - Get function list",
+                "var->value - Store number in variable(eg. x->2.0)",
                 "'(' and ')' are required",
                 "(sqrt(x)) - Square root",
                 "(cbrt(x)) - Cube root",

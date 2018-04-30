@@ -20,12 +20,11 @@
 package FileIO;
 
 import javax.swing.*;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Utils {
@@ -53,5 +52,19 @@ public class Utils {
             JOptionPane.showMessageDialog(null, "Error:\n" + e, "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<String> combineStringList(ArrayList<String> array1, ArrayList<String> array2){
+        ArrayList<String> newArray = new ArrayList<>();
+
+        newArray.addAll(array1);
+        newArray.addAll(array2);
+
+        return newArray;
+    }
+
+    public static ArrayList<Integer> sort(ArrayList<Integer> list){
+        list.sort(Integer::compareTo);
+        return list;
     }
 }

@@ -20,6 +20,7 @@
 package UI;
 
 import FileIO.SaveSettings;
+import functions.FunctionStore;
 
 import javax.swing.*;
 import java.awt.*;
@@ -117,6 +118,10 @@ public class YWindow {
                 }
                 String[] fs = new String[]{txtY1.getText(), txtY2.getText(), txtY3.getText()};
                 graphWindow.setFunction(fs);
+                FunctionStore.getStore().storeFunction("y1", graphWindow.fh.y1);
+                FunctionStore.getStore().storeFunction("y2", graphWindow.fh.y2);
+                FunctionStore.getStore().storeFunction("y3", graphWindow.fh.y3);
+
                 frame.dispose();
                 save.update();
             }

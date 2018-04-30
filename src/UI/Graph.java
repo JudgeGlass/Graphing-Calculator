@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import Program.CorrectFunction;
 import functions.*;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 public class Graph extends JPanel {
     private GraphWindow graphWindow;
@@ -172,6 +171,7 @@ public class Graph extends JPanel {
      * Draws the line
      * */
 
+
     private void function(Graphics g){
         if(points.size() != 0){
             for(int i = 0; i < points.size(); i++){
@@ -209,18 +209,21 @@ public class Graph extends JPanel {
 
             arg[1] = graphWindow.xMin;
             double lastY;
-            double adder = graphWindow.resolution; // How many is incremented
+            double adder = graphWindow.resolution / 100; // How many is incremented
             g.setColor(Color.BLACK);
             for(int a = 0; a < f.length; ++a) {
                 try {
                     if (f[a] == null)
                         continue;
-                    if (a == 1) {
-                        g.setColor(Color.BLUE);
+                    switch (a){
+                        case 1:
+                            g.setColor(Color.BLUE);
+                            break;
+                        case 2:
+                            g.setColor(Color.RED);
+                            break;
                     }
-                    if (a == 2) {
-                        g.setColor(Color.RED);
-                    }
+
                     arg[1] = graphWindow.xMin;
                     lastY = f[a].evaluate(new FunctionArguments(arg));
                     lastX = graphWindow.xMin;
