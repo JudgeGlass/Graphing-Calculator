@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class CheckFunction {
     public static boolean isGood(final String function){
+        if(function == null || function.isEmpty()) return false;
         try{
             ArrayList<String> vars = new ArrayList<>();
             vars.add("y");

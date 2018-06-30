@@ -175,14 +175,7 @@ public class Graph extends JPanel {
 
         ArrayList<Function> f = new ArrayList<>();
 
-        boolean y1Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y1));
-        boolean y2Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y2));
-        boolean y3Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y3));
-
-        if(!y1Good) graphWindow.fh.y1 = "";
-        if(!y2Good) graphWindow.fh.y2 = "";
-        if(!y3Good) graphWindow.fh.y3 = "";
-
+        if(graphWindow.fh == null) return;
         f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y1), vars));
         f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars));
         f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars));
