@@ -53,9 +53,9 @@ public class QuadraticFormulaDialog {
         myPanel.add(new JLabel("c:"));
         myPanel.add(cField);
 
-        ImageIcon image = new ImageIcon(getClass().getResource("/Program/QF.png"));
+        //ImageIcon image = new ImageIcon(getClass().getResource("/Program/QF.png"));
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Quadratic Formula", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, image);
+                "Quadratic Formula", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             a = Double.parseDouble(aField.getText());
             b = Double.parseDouble(bField.getText());

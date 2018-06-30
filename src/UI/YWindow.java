@@ -20,6 +20,7 @@
 package UI;
 
 import FileIO.SaveSettings;
+import Program.CorrectFunction;
 import functions.FunctionStore;
 
 import javax.swing.*;
@@ -118,6 +119,15 @@ public class YWindow {
                 }
                 String[] fs = new String[]{txtY1.getText(), txtY2.getText(), txtY3.getText()};
                 graphWindow.setFunction(fs);
+
+                boolean y1Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y1));
+                boolean y2Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y2));
+                boolean y3Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y3));
+
+                if(!y1Good) graphWindow.fh.y1 = "";
+                if(!y2Good) graphWindow.fh.y2 = "";
+                if(!y3Good) graphWindow.fh.y3 = "";
+
                 FunctionStore.getStore().storeFunction("y1", graphWindow.fh.y1);
                 FunctionStore.getStore().storeFunction("y2", graphWindow.fh.y2);
                 FunctionStore.getStore().storeFunction("y3", graphWindow.fh.y3);

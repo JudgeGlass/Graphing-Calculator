@@ -9,6 +9,12 @@ import java.util.ArrayList;
 public class SigmaNotation {
     private String expression;
 
+
+    /**
+     * @param expression the function(eg. n^2)
+     * @param start count start(eg. 0)
+     * @param  end end amount(eg. 5)
+     */
     public double solve(String expression, double start, double end){
         this.expression = expression;
         ArrayList<String> vars = new ArrayList<>();

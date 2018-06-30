@@ -291,8 +291,11 @@ public class CalculatorWindow {
                 }
             }
             if(eq.contains("->")){
-                writeText("Var saved!");
-                Variable.addVarFromString(eq);
+                if(Variable.addVarFromString(eq)){
+                    writeText("sto success!");
+                }else{
+                    writeText("sto failed!");
+                }
                 expression.setText("");
                 return;
             }
@@ -408,18 +411,20 @@ public class CalculatorWindow {
                 "LIST - Get function list",
                 "var->value - Store number in variable(eg. x->2.0)",
                 "'(' and ')' are required",
-                "(sqrt(x)) - Square root",
-                "(cbrt(x)) - Cube root",
-                "(sin(x)) - Sine",
-                "(cos(x)) - Cosine",
-                "(tan(x)) - Tangent",
-                "(asin(x)) - ASine",
-                "(acos(x)) - ACosine",
-                "(atan(x)) - ATangent",
-                "(!(x)) - Factorial",
-                "(ln(x)) - log",
-                "(exp(x))",
-                "(abs(x)) - Absolute value",
+                "sqrt(x) - Square root",
+                "cbrt(x) - Cube root",
+                "sin(x) - Sine",
+                "cos(x) - Cosine",
+                "tan(x) - Tangent",
+                "asin(x) - ASine",
+                "acos(x) - ACosine",
+                "atan(x) - ATangent",
+                "!(x) - Factorial",
+                "ln(x) - log (base 8)",
+                "log(x) - log (base 10)",
+                "exp(x)",
+                "abs(x) - Absolute value",
+                "rand(min,max) - random number",
                 "ANS - Previous answer",
                 "(π) - Pi"
         };

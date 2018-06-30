@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Program.CorrectFunction;
+import UI.CheckFunction;
 import functions.builtin.*;
 
 /**
@@ -71,6 +72,8 @@ public class FunctionStore {
         storeFunction("!", new FactorialFunction()); // Added by Hunter Wilcox
         storeFunction("abs", new AbsFunction()); // Added by Hunter Wilcox
         storeFunction("π", new PiFunction()); // Added by Hunter Wilcox
+        storeFunction("log", new Log10Function()); // Added by Hunter Wilcox
+        storeFunction("rand", new RandomFunction()); // Added by Hunter Wilcox
     }
 
     public static FunctionStore getStore() {
@@ -101,6 +104,9 @@ public class FunctionStore {
             return;
         }
 
+        boolean failed = CheckFunction.isGood(function);
+        if(failed) return;
+
         ArrayList<String> vars = new ArrayList<>();
         vars.add("x");
         Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(function), vars);
@@ -126,6 +132,8 @@ public class FunctionStore {
         op.add("exp");
         op.add("abs");
         op.add("!");
+        op.add("log");
+        op.add("rand");
 
         return op;
     }

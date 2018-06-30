@@ -6,6 +6,10 @@ import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URI;
+
 import Program.ApplicationInfo;
 
 import javax.swing.*;
@@ -41,20 +45,31 @@ public class About {
     }
 
     private void initialize() {
-        ImageIcon image = new ImageIcon(getClass().getResource("/Program/MainIcon.png"));
+        ImageIcon image = new ImageIcon(getClass().getResource("/Program/icons8-square-root-50.png"));
         lblImage = new JLabel();
         lblImage.setIcon(image);
         lblImage.setBounds(5, 5, 64, 64);
         frame.getContentPane().add(lblImage);
 
-        lblApName = new JLabel("Graphing Calculator");
+        lblApName = new JLabel("<html><font color=\"blue\">Graphing Calculator</font></html>");
         lblApName.setFont(new Font(Font.SANS_SERIF, 0, 12));
         lblApName.setBounds(77, 10, 170, 15);
 
         lblApName.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lblApName.setToolTipText("Open: " + ApplicationInfo.SOURCE_URL);
+        lblApName.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(ApplicationInfo.SOURCE_URL));
+                }catch (Exception e1){
+                    e1.printStackTrace();
+                }
+            }
+        });
         frame.getContentPane().add(lblApName);
 
-        lblAuthor = new JLabel("Author: Hunter Wilcox");
+        lblAuthor = new JLabel("Author: " + ApplicationInfo.AUTHOR);
         lblAuthor.setFont(new Font(Font.SANS_SERIF, 0, 12));
         lblAuthor.setBounds(77, 35, 300, 15);
         frame.getContentPane().add(lblAuthor);
@@ -83,7 +98,7 @@ public class About {
         txtPane.setFont(new Font(Font.SANS_SERIF, 0, 12));
         txtPane.setEditable(false);
         txtPane.setBounds(5, 130, 295, 90);
-        txtPane.setText("This is a basic calculator with graphing functionality.\n\nSource:\n" + ApplicationInfo.SOURCE_URL);
+        txtPane.setText("This is a basic calculator with graphing functionality.\n\nLicense: " + ApplicationInfo.LICENSE);
         frame.getContentPane().add(txtPane);
 
         btnOk = new JButton("OK");

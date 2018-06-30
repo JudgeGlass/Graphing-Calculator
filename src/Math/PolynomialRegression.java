@@ -39,7 +39,6 @@ public class PolynomialRegression {
      */
     public PolynomialRegression(double[] x, double[] y, int degree, String variableName) {
         this.degree = degree;
-        System.out.println("Hunter is gay");
         this.variableName = variableName;
 
         int n = x.length;

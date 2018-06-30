@@ -94,16 +94,12 @@ public class Graph extends JPanel {
      * */
 
     private void drawCoords(Graphics g){
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
         g.setColor(Color.RED);
         g.drawString("X: " + String.format("%.2f", mouseX), 0, graphWindow.pixelHeight - 12);
         g.drawString("Y: " + String.format("%.2f", mouseY), 0, graphWindow.pixelHeight);
 
         circle(g, Color.BLUE, false, mouseX, mouseY, 4);
-    }
-
-    private void drawText(Graphics g, final String txt, int x, int y){
-        g.setColor(Color.BLUE);
-        g.drawString(txt, x, y);
     }
 
     /**
@@ -129,8 +125,8 @@ public class Graph extends JPanel {
         //////////////
     }
 
-    private void drawText(Graphics g, Color c, double x, double y, String text){
-        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+    private void drawText(Graphics g, Color c, double x, double y, String text, int textSize){
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, textSize));
         g.setColor(c);
         g.drawString(text, (int)x, (int)y);
     }
@@ -173,9 +169,26 @@ public class Graph extends JPanel {
 
 
     private void function(Graphics g){
+        ArrayList<String> vars = new ArrayList<>();
+        vars.add("y");
+        vars.add("x");
+
+        ArrayList<Function> f = new ArrayList<>();
+
+        boolean y1Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y1));
+        boolean y2Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y2));
+        boolean y3Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y3));
+
+        if(!y1Good) graphWindow.fh.y1 = "";
+        if(!y2Good) graphWindow.fh.y2 = "";
+        if(!y3Good) graphWindow.fh.y3 = "";
+
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y1), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars));
+
         if(points.size() != 0){
             for(int i = 0; i < points.size(); i++){
-                //circle(g, Color.RED, true, points.get(i).x, points.get(i).y, 7);
                 box(g, points.get(i).x, points.get(i).y, 5);
             }
         }
@@ -183,22 +196,18 @@ public class Graph extends JPanel {
         if(graphWindow.fh == null)
             return;
 
-        ArrayList<String> vars = new ArrayList<>();
-        vars.add("y");
-        vars.add("x");
-
-        Function[] f = {TokenizedFunctionFactory.createFunction(
+        /*Function[] f = {TokenizedFunctionFactory.createFunction(
                 CorrectFunction.addMul(graphWindow.fh.y1), vars),
                 TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars),
-                TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars)};
+                TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars)};*/
 
 
         if(graphWindow.fh.y1 != null)
-            drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1);
+            drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1, 12);
         if(graphWindow.fh.y2 != null)
-            drawText(g, Color.BLUE, 5, 25, "f2(x)= " + graphWindow.fh.y2);
+            drawText(g, Color.BLUE, 5, 25, "f2(x)= " + graphWindow.fh.y2, 12);
         if(graphWindow.fh.y3 != null)
-            drawText(g, Color.RED, 5, 38, "f3(x)= " + graphWindow.fh.y3);
+            drawText(g, Color.RED, 5, 38, "f3(x)= " + graphWindow.fh.y3, 12);
 
         double[] arg = new double[2]; // Sets the first arguments
         arg[0] = 0.0;
@@ -211,9 +220,9 @@ public class Graph extends JPanel {
             double lastY;
             double adder = graphWindow.resolution / 100; // How many is incremented
             g.setColor(Color.BLACK);
-            for(int a = 0; a < f.length; ++a) {
+            for(int a = 0; a < f.size(); ++a) {
                 try {
-                    if (f[a] == null)
+                    if (f.get(a) == null)
                         continue;
                     switch (a){
                         case 1:
@@ -225,17 +234,17 @@ public class Graph extends JPanel {
                     }
 
                     arg[1] = graphWindow.xMin;
-                    lastY = f[a].evaluate(new FunctionArguments(arg));
+                    lastY = f.get(a).evaluate(new FunctionArguments(arg));
                     lastX = graphWindow.xMin;
                     for (double i = graphWindow.xMin; i <= graphWindow.xMax; i += adder) {
                         try {
                             arg[1] = i; // Makes arg[1] the value of i
 
-                            double y1 = f[a].evaluate(new FunctionArguments(arg));
+                            double y1 = f.get(a).evaluate(new FunctionArguments(arg));
                             if (Double.isNaN(y1)) {
                                 lastX = i;
                                 arg[1] = i + adder;
-                                lastY = f[a].evaluate(new FunctionArguments(arg));
+                                lastY = f.get(a).evaluate(new FunctionArguments(arg));
                                 continue;
                             }
 
@@ -249,9 +258,6 @@ public class Graph extends JPanel {
                             continue;
                         }
                     }
-                    if (graphWindow.fh.y2.isEmpty())
-                        break;
-
                 }catch (Exception e){
                     continue;
                 }
