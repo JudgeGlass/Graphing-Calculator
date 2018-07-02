@@ -60,15 +60,18 @@ public class FunctionHolder {
 
     public void store(){
         if(y1 != null){
-            FunctionStore.getStore().storeFunction("y1", y1);
+            if(!y1.isEmpty())
+                FunctionStore.getStore().storeFunction("y1", y1);
         }
 
         if(y2 != null){
-            FunctionStore.getStore().storeFunction("y2", y2);
+            if(!y2.isEmpty())
+                FunctionStore.getStore().storeFunction("y2", y2);
         }
 
         if(y3 != null){
-            FunctionStore.getStore().storeFunction("y3", y3);
+            if(!y3.isEmpty())
+                FunctionStore.getStore().storeFunction("y3", y3);
         }
     }
 

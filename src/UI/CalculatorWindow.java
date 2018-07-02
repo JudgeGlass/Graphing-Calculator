@@ -31,8 +31,9 @@ public class CalculatorWindow {
     private JButton btnZoomIn;
     private JButton btnZoomOut;
     private JButton btnYE;
-    private JButton btnQuadradic;
+    private JButton btnQuadratic;
     private JButton btnStoreFunction;
+    private JButton btnSolveFun;
 
     private JTextArea output;
 
@@ -74,10 +75,10 @@ public class CalculatorWindow {
         frame.setVisible(true);
 
         variable = new Variable();
-        if(saveUsed)
-            writeText("Save found! Using...");
-        writeText("Graphing-Calculator v" + ApplicationInfo.VERSION);
-        writeText("Ready. Type \"help\" for a list of operators.");
+
+        writeText("Starting Graphing Calculator v" + ApplicationInfo.VERSION + "...");
+
+        writeText("Ready! For help, type \"help\"");
         save = new SaveSettings("data.dat", window, graph);
     }
 
@@ -91,22 +92,23 @@ public class CalculatorWindow {
 
         if(new File("data.dat").exists()){
             System.out.println("Save found! Using...");
-            double xMin = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 1), '='));
-            double xMax = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 2), '='));
-            double yMin = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 3), '='));
-            double yMax = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 4), '='));
+            final String filename = "data.dat";
+            double xMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 1), '='));
+            double xMax = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 2), '='));
+            double yMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 3), '='));
+            double yMax = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 4), '='));
 
             window.xMax = xMax;
             window.xMin = xMin;
             window.yMax = yMax;
             window.yMin = yMin;
 
-            window.resolution = Double.parseDouble(Utils.indexOf(Utils.readLine("data.dat", 0), '='));
+            window.resolution = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 0), '='));
 
-            if(Utils.indexOf(Utils.readLine("data.dat", 5), '=').equals("true")){
-                String y1 = Utils.indexOf(Utils.readLine("data.dat", 6), '=');
-                String y2 = Utils.indexOf(Utils.readLine("data.dat", 7), '=');
-                String y3 = Utils.indexOf(Utils.readLine("data.dat", 8), '=');
+            if(Utils.indexOf(Utils.readLine(filename, 5), '=').equals("true")){
+                String y1 = Utils.indexOf(Utils.readLine(filename, 6), '=');
+                String y2 = Utils.indexOf(Utils.readLine(filename, 7), '=');
+                String y3 = Utils.indexOf(Utils.readLine(filename, 8), '=');
 
                 String[] values = {y1, y2, y3};
                 window.setFunction(values);
@@ -163,13 +165,13 @@ public class CalculatorWindow {
         expression = new JTextField();
         expression.setBounds(175, 25, 470, 25);
         expression.setFont(fontWide);
-        expression.setActionCommand("SOLVE");
+        expression.setActionCommand("ENTER");
         expression.addActionListener(new Listener());
 
-        btnSolve = new JButton("Solve");
+        btnSolve = new JButton("Enter");
         btnSolve.setBounds(670, 85, 100, 25);
         btnSolve.setFont(fontWide);
-        btnSolve.setActionCommand("SOLVE");
+        btnSolve.setActionCommand("ENTER");
         btnSolve.addActionListener(new Listener());
 
         btnOptions = new JButton("Options");
@@ -202,17 +204,23 @@ public class CalculatorWindow {
         btnYE.setActionCommand("Y");
         btnYE.addActionListener(new Listener());
 
-        btnQuadradic = new JButton("Quadratic");
-        btnQuadradic.setBounds(245, 85, 100, 25);
-        btnQuadradic.setFont(fontWide);
-        btnQuadradic.setActionCommand("QU");
-        btnQuadradic.addActionListener(new Listener());
+        btnQuadratic = new JButton("Quadratic");
+        btnQuadratic.setBounds(245, 85, 100, 25);
+        btnQuadratic.setFont(fontWide);
+        btnQuadratic.setActionCommand("QU");
+        btnQuadratic.addActionListener(new Listener());
 
         btnStoreFunction = new JButton("Def. Function");
         btnStoreFunction.setBounds(140, 85, 100, 25);
         btnStoreFunction.setFont(fontWide);
         btnStoreFunction.setActionCommand("DEF");
         btnStoreFunction.addActionListener(new Listener());
+
+        btnSolveFun = new JButton("Solve");
+        btnSolveFun.setBounds(35, 85, 100, 25);
+        btnSolveFun.setFont(fontWide);
+        btnSolveFun.setActionCommand("SOLVE");
+        btnSolveFun.addActionListener(new Listener());
 
         lblVar = new JLabel("Var:");
         lblVar.setBounds(175, 60, 50, 15);
@@ -274,8 +282,9 @@ public class CalculatorWindow {
         frame.getContentPane().add(lblSigmaEnd);
         frame.getContentPane().add(txtSigmaEnd);
         frame.getContentPane().add(btnYE);
-        frame.getContentPane().add(btnQuadradic);
+        frame.getContentPane().add(btnQuadratic);
         frame.getContentPane().add(btnStoreFunction);
+        frame.getContentPane().add(btnSolveFun);
     }
 
     private void calculate(){
@@ -343,7 +352,7 @@ public class CalculatorWindow {
                 expression.setText("");
                 return;
             }
-            if(command.equals("SOLVE")){
+            if(command.equals("ENTER")){
                 if(type.getSelectedIndex() == 3){
                     double value = new SigmaNotation().solve(expression.getText(), Double.parseDouble(txtVar.getText()),
                             Double.parseDouble(txtSigmaEnd.getText()));
@@ -385,7 +394,7 @@ public class CalculatorWindow {
                 window.yMax++;
                 graph.repaint2();
             }else if(command.equals("Y")){
-                new YWindow(window, save);
+                new YWindow(window, save, output);
             }else if(command.equals("QU")){
                 QuadraticFormulaDialog qf = new QuadraticFormulaDialog();
                 writeText(qf.getZeros());
@@ -394,13 +403,19 @@ public class CalculatorWindow {
             }else if(command.equals("DEF")){
                 String functionName = JOptionPane.showInputDialog(null, "Function name(eg. f1, f2, f3)", "Function name", JOptionPane.QUESTION_MESSAGE);
                 if(functionName == null) return;
-                if(FunctionStore.getStore().hasFunction(functionName)) writeText("Name taken!");
+                if(FunctionStore.getStore().hasFunction(functionName)){
+                    writeText("Name taken!");
+                    return;
+                }
 
                 String function = JOptionPane.showInputDialog(null, "Function(eg. x^2+3x+2)", "Function", JOptionPane.QUESTION_MESSAGE);
                 if(function == null) return;
 
                 FunctionStore.getStore().storeFunction(functionName, function);
+
                 writeText(function + " was saved to " + functionName);
+            }else if(command.equals("SOLVE")){
+                new SolveWindow();
             }
         }
     }
@@ -420,11 +435,11 @@ public class CalculatorWindow {
                 "acos(x) - ACosine",
                 "atan(x) - ATangent",
                 "!(x) - Factorial",
-                "ln(x) - log (base 8)",
-                "log(x) - log (base 10)",
+                "ln(x) - Log (base 8)",
+                "log(x) - Log (base 10)",
                 "exp(x)",
                 "abs(x) - Absolute value",
-                "rand(min,max) - random number",
+                "rand(min,max) - Random number",
                 "ANS - Previous answer",
                 "(π) - Pi"
         };

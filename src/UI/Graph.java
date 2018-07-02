@@ -189,12 +189,6 @@ public class Graph extends JPanel {
         if(graphWindow.fh == null)
             return;
 
-        /*Function[] f = {TokenizedFunctionFactory.createFunction(
-                CorrectFunction.addMul(graphWindow.fh.y1), vars),
-                TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars),
-                TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars)};*/
-
-
         if(graphWindow.fh.y1 != null)
             drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1, 12);
         if(graphWindow.fh.y2 != null)

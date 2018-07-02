@@ -104,9 +104,6 @@ public class FunctionStore {
             return;
         }
 
-        boolean failed = CheckFunction.isGood(function);
-        if(failed) return;
-
         ArrayList<String> vars = new ArrayList<>();
         vars.add("x");
         Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(function), vars);
@@ -163,6 +160,10 @@ public class FunctionStore {
     public ArrayList<String> getRawFunctions(){
         return idNames;
     }
+
+    public HashMap<String, String> getHashFunctions(){return rawFunctions;}
+
+    public String getFunctionsIdByIndex(final int index){return idNames.get(index);}
 
     public ArrayList<String> getIdNames() {
         return idNames;

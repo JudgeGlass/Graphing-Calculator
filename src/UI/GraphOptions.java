@@ -3,6 +3,8 @@ package UI;
 import FileIO.SaveSettings;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -120,6 +122,13 @@ public class GraphOptions {
         frame.getContentPane().add(lblResolution);
 
         slider = new JSlider();
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                window.resolution = (double)slider.getValue();
+                graph.repaint2();
+            }
+        });
         slider.setValue((int)window.resolution);
         slider.setBounds(5, 240, 240, 25);
         slider.setMinimum(1);
@@ -143,6 +152,7 @@ public class GraphOptions {
             txtTableInc.setText("1.0");
 
             chkDrawLines.setSelected(true);
+            slider.setValue(0);
         });
         frame.getContentPane().add(btnDefaults);
 

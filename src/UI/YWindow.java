@@ -44,9 +44,11 @@ public class YWindow {
 
     private GraphWindow graphWindow;
     private SaveSettings save;
+    private JTextArea output;
 
-    public YWindow(GraphWindow window, SaveSettings save){
+    public YWindow(GraphWindow window, SaveSettings save, JTextArea output){
         this.save = save;
+        this.output = output;
         graphWindow = window;
         frame = new JDialog();
         frame.setTitle("Y=");
@@ -124,13 +126,20 @@ public class YWindow {
                 boolean y2Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y2));
                 boolean y3Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y3));
 
-                if(!y1Good) graphWindow.fh.y1 = "";
-                if(!y2Good) graphWindow.fh.y2 = "";
-                if(!y3Good) graphWindow.fh.y3 = "";
+                if(!y1Good && !graphWindow.fh.y1.isEmpty()){
+                    graphWindow.fh.y1 = "";
+                    output.append("Y1: Syntax Error\n");
+                }
+                if(!y2Good && !graphWindow.fh.y2.isEmpty()) {
+                    graphWindow.fh.y2 = "";
+                    output.append("Y2: Syntax Error\n");
+                }
+                if(!y3Good && !graphWindow.fh.y3.isEmpty()){
+                    graphWindow.fh.y3 = "";
+                    output.append("Y3: Syntax Error\n");
+                }
 
-                FunctionStore.getStore().storeFunction("y1", graphWindow.fh.y1);
-                FunctionStore.getStore().storeFunction("y2", graphWindow.fh.y2);
-                FunctionStore.getStore().storeFunction("y3", graphWindow.fh.y3);
+                graphWindow.fh.store();
 
                 frame.dispose();
                 save.update();
