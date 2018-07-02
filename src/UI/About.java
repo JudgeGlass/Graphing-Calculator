@@ -1,6 +1,5 @@
 package UI;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Font;

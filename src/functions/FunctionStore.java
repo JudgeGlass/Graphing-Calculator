@@ -18,12 +18,10 @@
  */
 package functions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import Program.CorrectFunction;
-import UI.CheckFunction;
 import functions.builtin.*;
 
 /**
@@ -69,6 +67,7 @@ public class FunctionStore {
         storeFunction("atan2", new ATangent2Function());
 
         storeFunction("cbrt", new CubeRootFunction()); // Added by Hunter Wilcox
+        storeFunction("nthrt", new NthRootFunction()); // Added by Hunter Wilcox
         storeFunction("!", new FactorialFunction()); // Added by Hunter Wilcox
         storeFunction("abs", new AbsFunction()); // Added by Hunter Wilcox
         storeFunction("π", new PiFunction()); // Added by Hunter Wilcox
@@ -131,6 +130,7 @@ public class FunctionStore {
         op.add("!");
         op.add("log");
         op.add("rand");
+        op.add("nthrt");
 
         return op;
     }

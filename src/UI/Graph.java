@@ -166,8 +166,6 @@ public class Graph extends JPanel {
     /**
      * Draws the line
      * */
-
-
     private void function(Graphics g){
         ArrayList<String> vars = new ArrayList<>();
         vars.add("y");

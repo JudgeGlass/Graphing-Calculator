@@ -19,13 +19,13 @@
 
 package UI;
 
-import functions.Function;
+import FileIO.SaveSettings;
 import functions.FunctionStore;
 
 import javax.swing.*;
 
 public class DeleteFunction {
-    public static void showDeleteWindow(){
+    public static void showDeleteWindow(final SaveSettings save){
         if(FunctionStore.getStore().getRawFunctions().size() == 0){
             JOptionPane.showMessageDialog(null, "No functions to delete!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -35,6 +35,7 @@ public class DeleteFunction {
         if(name == null)return;
 
         FunctionStore.getStore().removeFunction(name);
+        save.update();
     }
 
     private static String functionStoreToString(){

@@ -119,6 +119,9 @@ public class YWindow {
                     JOptionPane.showMessageDialog(null, "Put functions in order!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                FunctionStore.getStore().removeFunction("y1");
+                FunctionStore.getStore().removeFunction("y2");
+                FunctionStore.getStore().removeFunction("y3");
                 String[] fs = new String[]{txtY1.getText(), txtY2.getText(), txtY3.getText()};
                 graphWindow.setFunction(fs);
 

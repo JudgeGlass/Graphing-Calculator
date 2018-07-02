@@ -183,7 +183,6 @@ public class GraphOptions {
                     window.yMin = yMin;
                     window.drawLines = chkDrawLines.isSelected();
                     window.tableInc = Double.parseDouble(txtTableInc.getText());
-                    //window.resolution = (double) slider.getValue() / 15;
                     window.resolution = (double)slider.getValue();
 
                     graph.repaint2();

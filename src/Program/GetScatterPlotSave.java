@@ -27,13 +27,14 @@ import java.util.ArrayList;
 public class GetScatterPlotSave {
     private String filename;
     private ArrayList<PointD> points;
+    private int counter;
 
     public GetScatterPlotSave(String filename){
         this.filename = filename;
 
         points = new ArrayList<>();
 
-        int counter = 10;
+        counter = 10;
         while (!Utils.readLine(filename, counter).equals("## PLOT END ##")){
             String[] split = Utils.readLine(filename, counter).split(",");
             points.add(new PointD(Double.parseDouble(split[0]), Double.parseDouble(split[1])));
@@ -48,6 +49,8 @@ public class GetScatterPlotSave {
     public String getFilename(){
         return filename;
     }
+
+    public int getLastLineIndex(){return counter;}
 
     public String toString(){
         return filename;

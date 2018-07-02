@@ -33,13 +33,12 @@ public class Variable {
     }
 
     public static boolean addVarFromString(String function){
-        int index = 0;
         if(function.contains("->")){
             String[] split = function.split("->");
             String var = split[0];
             double value = Double.parseDouble(split[1]);
             if(FunctionStore.getStore().getRawFunctions().contains(var)){
-                System.out.println("Cannot use varible name");
+                System.out.println("Cannot use variable name");
                 return false;
             }
             addVar(var, value);
@@ -48,7 +47,7 @@ public class Variable {
         return true;
     }
 
-    public static void addVar(String var, double value){
+    private static void addVar(String var, double value){
         vars.add(var);
         values.put(var, value);
     }

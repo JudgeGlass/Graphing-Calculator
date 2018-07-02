@@ -2,10 +2,7 @@ package UI;
 
 import FileIO.SaveSettings;
 import FileIO.Utils;
-import Program.ApplicationInfo;
-import Program.CorrectFunction;
-import Program.GetScatterPlotSave;
-import Program.Variable;
+import Program.*;
 import functions.Function;
 import functions.FunctionArguments;
 import functions.FunctionStore;
@@ -76,9 +73,9 @@ public class CalculatorWindow {
 
         variable = new Variable();
 
-        writeText("Starting Graphing Calculator v" + ApplicationInfo.VERSION + "...");
+        writeText("Graphing Calculator v" + ApplicationInfo.VERSION + "...");
 
-        writeText("Ready! For help, type \"help\"");
+        writeText("For help, type \"help\".");
         save = new SaveSettings("data.dat", window, graph);
     }
 
@@ -118,6 +115,8 @@ public class CalculatorWindow {
             GetScatterPlotSave gs = new GetScatterPlotSave("data.dat");
             if(gs.getPoints().size() != 0 && gs.getPoints() != null)
                 graph.points = gs.getPoints();
+
+            GetDefinedFunctions.store("data.dat", gs.getLastLineIndex());
 
             saveUsed = true;
         }
@@ -331,7 +330,7 @@ public class CalculatorWindow {
                 expression.setText("");
                 return;
             }else if(expression.getText().equals("DEL")){
-                DeleteFunction.showDeleteWindow();
+                DeleteFunction.showDeleteWindow(save);
                 expression.setText("");
                 return;
             }else if(expression.getText().equals("LIST")){
@@ -412,6 +411,7 @@ public class CalculatorWindow {
                 if(function == null) return;
 
                 FunctionStore.getStore().storeFunction(functionName, function);
+                save.update();
 
                 writeText(function + " was saved to " + functionName);
             }else if(command.equals("SOLVE")){
@@ -428,6 +428,7 @@ public class CalculatorWindow {
                 "'(' and ')' are required",
                 "sqrt(x) - Square root",
                 "cbrt(x) - Cube root",
+                "nthrt(num,root) - Nth root",
                 "sin(x) - Sine",
                 "cos(x) - Cosine",
                 "tan(x) - Tangent",

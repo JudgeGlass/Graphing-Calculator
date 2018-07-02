@@ -22,9 +22,9 @@ package FileIO;
 import UI.Graph;
 import UI.GraphWindow;
 import UI.PointD;
+import functions.FunctionStore;
 
 import java.io.File;
-import java.io.IOException;
 
 public class SaveSettings {
     private String filename;
@@ -65,6 +65,13 @@ public class SaveSettings {
            }
            addToConf("## PLOT END ##");
        }
+       addToConf("## DEF FUNCTIONS ##");
+       for(String functionID: FunctionStore.getStore().getIdNames()){
+           if(functionID.equals("y1") || functionID.equals("y2") || functionID.equals("y3")) continue;
+           addToConf(functionID + "=" + FunctionStore.getStore().getHashFunctions().get(functionID));
+       }
+
+       addToConf("## END DEF ##");
 
        writeSave();
     }

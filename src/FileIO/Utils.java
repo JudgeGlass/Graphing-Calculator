@@ -19,20 +19,20 @@
 
 package FileIO;
 
+import com.sun.istack.internal.NotNull;
+
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class Utils {
-    public static String indexOf(String txt, char ch) {
+    public static String indexOf(@NotNull String txt, char ch) {
         return txt.substring(txt.lastIndexOf(ch) + 1);
     }
 
-    public static String readLine(String fileName, int lineNumber) {
+    public static String readLine(@NotNull String fileName, int lineNumber) {
         String line;
         try {
             line = Files.readAllLines(Paths.get(fileName)).get(lineNumber);
@@ -61,10 +61,5 @@ public class Utils {
         newArray.addAll(array2);
 
         return newArray;
-    }
-
-    public static ArrayList<Integer> sort(ArrayList<Integer> list){
-        list.sort(Integer::compareTo);
-        return list;
     }
 }
