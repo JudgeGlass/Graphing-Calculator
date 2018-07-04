@@ -51,11 +51,15 @@ public class SaveSettings {
            addToConf("Y1=" + window.fh.y1);
            addToConf("Y2=" + window.fh.y2);
            addToConf("Y3=" + window.fh.y3);
+           addToConf("Y4=" + window.fh.y4);
+           addToConf("Y5=" + window.fh.y5);
        }else {
            addToConf("YVal=false");
            addToConf("Y1=");
            addToConf("Y2=");
            addToConf("Y3=");
+           addToConf("Y4=");
+           addToConf("Y5=");
        }
 
        if(graph.points.size() != 0 || graph.points != null){

@@ -25,8 +25,6 @@ import functions.FunctionStore;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class YWindow {
     private JDialog frame;
@@ -34,10 +32,14 @@ public class YWindow {
     private JTextField txtY1;
     private JTextField txtY2;
     private JTextField txtY3;
+    private JTextField txtY4;
+    private JTextField txtY5;
 
     private JLabel lblY1;
     private JLabel lblY2;
     private JLabel lblY3;
+    private JLabel lblY4;
+    private JLabel lblY5;
 
     private JButton btnOK;
     private JButton btnCancel;
@@ -54,7 +56,7 @@ public class YWindow {
         frame.setTitle("Y=");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setModal(true);
-        frame.setSize(240, 240);
+        frame.setSize(240, 320);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
@@ -89,64 +91,88 @@ public class YWindow {
         txtY3.setBounds(5, 125, 215, 25);
         frame.getContentPane().add(txtY3);
 
+        lblY4 = new JLabel("Y4= ");
+        lblY4.setBounds(5, 155, 60, 15);
+        frame.getContentPane().add(lblY4);
+
+        txtY4 = new JTextField();
+        txtY4.setBounds(5, 175, 215, 25);
+        frame.getContentPane().add(txtY4);
+
+        lblY5 = new JLabel("Y5= ");
+        lblY5.setBounds(5, 205, 60, 15);
+        frame.getContentPane().add(lblY5);
+
+        txtY5 = new JTextField();
+        txtY5.setBounds(5, 225, 215, 25);
+        frame.getContentPane().add(txtY5);
+
         if(graphWindow.fh != null){
             if(graphWindow.fh.y1 != null){
                 txtY1.setText(graphWindow.fh.y1);
             }
             if(graphWindow.fh.y2 != null){
                 txtY2.setText(graphWindow.fh.y2);
-            }if(graphWindow.fh.y3 != null){
+            }
+            if(graphWindow.fh.y3 != null){
                 txtY3.setText(graphWindow.fh.y3);
+            }
+            if(graphWindow.fh.y4 != null){
+                txtY4.setText(graphWindow.fh.y4);
+            }
+            if(graphWindow.fh.y5 != null){
+                txtY5.setText(graphWindow.fh.y5);
             }
         }
 
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(15, 175, 100, 25);
-        btnCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-            }
-        });
+        btnCancel.setBounds(15, 255, 100, 25);
+        btnCancel.addActionListener(e -> frame.dispose());
         frame.getContentPane().add(btnCancel);
 
         btnOK = new JButton("OK");
-        btnOK.setBounds(120, 175, 100, 25);
-        btnOK.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!isOrder()){
-                    JOptionPane.showMessageDialog(null, "Put functions in order!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                FunctionStore.getStore().removeFunction("y1");
-                FunctionStore.getStore().removeFunction("y2");
-                FunctionStore.getStore().removeFunction("y3");
-                String[] fs = new String[]{txtY1.getText(), txtY2.getText(), txtY3.getText()};
-                graphWindow.setFunction(fs);
+        btnOK.setBounds(120, 255, 100, 25);
+        btnOK.addActionListener(e -> {
+            FunctionStore.getStore().removeFunction("y1");
+            FunctionStore.getStore().removeFunction("y2");
+            FunctionStore.getStore().removeFunction("y3");
+            FunctionStore.getStore().removeFunction("y4");
+            FunctionStore.getStore().removeFunction("y5");
+            String[] fs = new String[]{txtY1.getText(), txtY2.getText(), txtY3.getText(), txtY4.getText(), txtY5.getText()};
+            graphWindow.setFunction(fs);
 
-                boolean y1Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y1));
-                boolean y2Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y2));
-                boolean y3Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y3));
+            boolean y1Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y1));
+            boolean y2Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y2));
+            boolean y3Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y3));
+            boolean y4Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y4));
+            boolean y5Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y5));
 
-                if(!y1Good && !graphWindow.fh.y1.isEmpty()){
-                    graphWindow.fh.y1 = "";
-                    output.append("Y1: Syntax Error\n");
-                }
-                if(!y2Good && !graphWindow.fh.y2.isEmpty()) {
-                    graphWindow.fh.y2 = "";
-                    output.append("Y2: Syntax Error\n");
-                }
-                if(!y3Good && !graphWindow.fh.y3.isEmpty()){
-                    graphWindow.fh.y3 = "";
-                    output.append("Y3: Syntax Error\n");
-                }
 
-                graphWindow.fh.store();
-
-                frame.dispose();
-                save.update();
+            if(!y1Good && !graphWindow.fh.y1.isEmpty()){
+                graphWindow.fh.y1 = "";
+                output.append("Y1: Syntax Error\n");
             }
+            if(!y2Good && !graphWindow.fh.y2.isEmpty()) {
+                graphWindow.fh.y2 = "";
+                output.append("Y2: Syntax Error\n");
+            }
+            if(!y3Good && !graphWindow.fh.y3.isEmpty()){
+                graphWindow.fh.y3 = "";
+                output.append("Y3: Syntax Error\n");
+            }
+            if(!y4Good && !graphWindow.fh.y4.isEmpty()){
+                graphWindow.fh.y4 = "";
+                output.append("Y4: Syntax Error\n");
+            }
+            if(!y5Good && !graphWindow.fh.y5.isEmpty()){
+                graphWindow.fh.y5 = "";
+                output.append("Y5: Syntax Error\n");
+            }
+
+            graphWindow.fh.store();
+
+            frame.dispose();
+            save.update();
         });
         frame.getContentPane().add(btnOK);
     }

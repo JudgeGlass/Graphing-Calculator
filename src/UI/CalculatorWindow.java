@@ -1,3 +1,22 @@
+/*
+ * Copyright 2018 Hunter Wilcox
+ *
+ * This file is part of GraphingCalculator.
+ *
+ * GraphingCalculator is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GraphingCalculator is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GraphingCalculator.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package UI;
 
 import FileIO.SaveSettings;
@@ -102,23 +121,34 @@ public class CalculatorWindow {
 
             window.resolution = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 0), '='));
 
+            boolean contin = true;
             if(Utils.indexOf(Utils.readLine(filename, 5), '=').equals("true")){
                 String y1 = Utils.indexOf(Utils.readLine(filename, 6), '=');
                 String y2 = Utils.indexOf(Utils.readLine(filename, 7), '=');
                 String y3 = Utils.indexOf(Utils.readLine(filename, 8), '=');
+                String y4 = Utils.indexOf(Utils.readLine(filename, 9), '=');
+                String y5 = Utils.indexOf(Utils.readLine(filename, 10), '=');
 
-                String[] values = {y1, y2, y3};
-                window.setFunction(values);
-                window.fh.store();
+                if(!Utils.readLine(filename, 9).contains("Y4")){ // For data files below v1.0.0
+                    new File(filename).delete();
+                    JOptionPane.showMessageDialog(null, "Old save was deleted due to incompatibility!", "Save Deleted", JOptionPane.INFORMATION_MESSAGE);
+                    contin = false;
+                }else {
+                    String[] values = {y1, y2, y3, y4, y5};
+                    window.setFunction(values);
+                    window.fh.store();
+                }
             }
 
-            GetScatterPlotSave gs = new GetScatterPlotSave("data.dat");
-            if(gs.getPoints().size() != 0 && gs.getPoints() != null)
-                graph.points = gs.getPoints();
+            if(contin) {
+                GetScatterPlotSave gs = new GetScatterPlotSave("data.dat");
+                if (gs.getPoints().size() != 0 && gs.getPoints() != null)
+                    graph.points = gs.getPoints();
 
-            GetDefinedFunctions.store("data.dat", gs.getLastLineIndex());
+                GetDefinedFunctions.store("data.dat", gs.getLastLineIndex());
 
-            saveUsed = true;
+                saveUsed = true;
+            }
         }
 
         graphPanel = graph;

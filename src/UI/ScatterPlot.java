@@ -1,6 +1,26 @@
+/*
+ * Copyright 2018 Hunter Wilcox
+ *
+ * This file is part of GraphingCalculator.
+ *
+ * GraphingCalculator is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GraphingCalculator is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GraphingCalculator.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package UI;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,7 +32,7 @@ import Math.PolynomialRegression;
 import Math.ExpRegression;
 
 public class ScatterPlot {
-    private JFrame frame;
+    private JDialog frame;
     private JPanel panel;
 
     private JList xList;
@@ -49,13 +69,14 @@ public class ScatterPlot {
         this.save = save;
         this.holder = holder;
 
-        frame = new JFrame();
+        frame = new JDialog();
         frame.setTitle("Scatter Plot");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(225, 420);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
+        frame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         panel = new JPanel();
         frame.add(panel);

@@ -1,3 +1,22 @@
+/*
+ * Copyright 2018 Hunter Wilcox
+ *
+ * This file is part of GraphingCalculator.
+ *
+ * GraphingCalculator is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GraphingCalculator is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GraphingCalculator.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package UI;
 
 import Program.CorrectFunction;
@@ -7,10 +26,11 @@ import functions.FunctionStore;
 import functions.TokenizedFunctionFactory;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class SolveWindow {
-    private JFrame frame;
+    private JDialog frame;
     private JPanel panel;
 
     private JLabel lblValue;
@@ -21,12 +41,14 @@ public class SolveWindow {
     private JButton btnOK;
 
     public SolveWindow(){
-        frame = new JFrame("Solve");
+        frame = new JDialog();
+        frame.setTitle("Solve");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setResizable(false);
         frame.setSize(300, 220);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
+        frame.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         panel = new JPanel();
         frame.add(panel);

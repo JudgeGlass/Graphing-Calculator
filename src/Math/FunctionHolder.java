@@ -34,28 +34,8 @@ public class FunctionHolder {
         y1 = functions[0];
         y2 = functions[1];
         y3 = functions[2];
-        //y4 = functions[3];
-        //y5 = functions[4];
-    }
-
-    public void setY1(String y1){
-        this.y1 = y1;
-    }
-
-    public void setY2(String y2) {
-        this.y2 = y2;
-    }
-
-    public void setY3(String y3) {
-        this.y3 = y3;
-    }
-
-    public void setY4(String y4) {
-        this.y4 = y4;
-    }
-
-    public void setY5(String y5) {
-        this.y5 = y5;
+        y4 = functions[3];
+        y5 = functions[4];
     }
 
     public void store(){
@@ -72,6 +52,16 @@ public class FunctionHolder {
         if(y3 != null){
             if(!y3.isEmpty())
                 FunctionStore.getStore().storeFunction("y3", y3);
+        }
+
+        if(y4 != null){
+            if(!y4.isEmpty())
+                FunctionStore.getStore().storeFunction("y4", y4);
+        }
+
+        if(y5 != null){
+            if(!y5.isEmpty())
+                FunctionStore.getStore().storeFunction("y5", y5);
         }
     }
 
@@ -101,37 +91,22 @@ public class FunctionHolder {
     }
 
     public boolean y1Empty(){
-        if(y1.isEmpty()){
-            return true;
-        }
-        return false;
+        return y1.isEmpty();
     }
 
     public boolean y2Empty(){
-        if(y2.isEmpty()){
-            return true;
-        }
-        return false;
+        return y2.isEmpty();
     }
 
     public boolean y3Empty(){
-        if(y3.isEmpty()){
-            return true;
-        }
-        return false;
+        return y3.isEmpty();
     }
 
     public boolean y4Empty(){
-        if(y4.isEmpty()){
-            return true;
-        }
-        return false;
+        return y4.isEmpty();
     }
 
     public boolean y5Empty(){
-        if(y5.isEmpty()){
-            return true;
-        }
-        return false;
+        return y5.isEmpty();
     }
 }

@@ -237,6 +237,7 @@ public class CorrectFunction {
                 }
             }
         }
+
         opI.sort(Integer::compareTo);
         return opI;
     }
@@ -287,6 +288,15 @@ public class CorrectFunction {
         for(int i = 0; i<allOP.size();i++){
             for(int x = nf.indexOf(allOP.get(i), 0); x<nf.length();x++) {
                 if (nf.indexOf(allOP.get(i), x) >= 0 && !opI.contains(nf.indexOf(allOP.get(i),x))) {
+                    final String op = allOP.get(i);
+                    if(op.equals("sin") || op.equals("cos") || op.equals("tan")){
+                        int index = (function.indexOf(allOP.get(i), x)-1 > 0) ? function.indexOf(allOP.get(i), x)-1 :
+                                function.indexOf(allOP.get(i), x);
+                        if(index > 0)
+                            if(function.charAt(index-1) == 'a'){continue;}
+                        else
+                            if(function.charAt(index) == 'a'){continue;}
+                    }
                     opI.add(nf.indexOf(allOP.get(i), x));
                 }
             }
@@ -296,7 +306,6 @@ public class CorrectFunction {
         for(int i = 0; i<opI.size();i++){
             nf = insertNeg(opI.get(i)+i, nf);
         }
-
         //System.out.println("FUNCTION: " + nf);
         return nf;
     }

@@ -118,13 +118,13 @@ public class FunctionStore {
         ArrayList<String> op = new ArrayList<>();
         op.add("sqrt");
         op.add("cbrt");
+        op.add("asin");
+        op.add("atan");
+        op.add("acos");
         op.add("sin");
         op.add("tan");
         op.add("cos");
         op.add("ln");
-        op.add("asin");
-        op.add("atan");
-        op.add("acos");
         op.add("exp");
         op.add("abs");
         op.add("!");

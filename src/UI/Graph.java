@@ -12,10 +12,10 @@ import functions.*;
 public class Graph extends JPanel {
     private GraphWindow graphWindow;
 
-    public double mouseX = 0;
-    public double mouseY = 0;
-    public double realMouseX;
-    public double realMouseY;
+    private double mouseX = 0;
+    private double mouseY = 0;
+    private double realMouseX;
+    private double realMouseY;
 
     public ArrayList<PointD> points;
 
@@ -177,6 +177,8 @@ public class Graph extends JPanel {
         f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y1), vars));
         f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars));
         f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y4), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y5), vars));
 
         if(points.size() != 0){
             for(int i = 0; i < points.size(); i++){
@@ -193,6 +195,10 @@ public class Graph extends JPanel {
             drawText(g, Color.BLUE, 5, 25, "f2(x)= " + graphWindow.fh.y2, 12);
         if(graphWindow.fh.y3 != null)
             drawText(g, Color.RED, 5, 38, "f3(x)= " + graphWindow.fh.y3, 12);
+        if(graphWindow.fh.y4 != null)
+            drawText(g, Color.ORANGE, 5, 51, "f4(x)= " + graphWindow.fh.y4, 12);
+        if(graphWindow.fh.y5 != null)
+            drawText(g, Color.MAGENTA, 5, 64, "f5(x)= " + graphWindow.fh.y5, 12);
 
         double[] arg = new double[2]; // Sets the first arguments
         arg[0] = 0.0;
@@ -215,6 +221,12 @@ public class Graph extends JPanel {
                             break;
                         case 2:
                             g.setColor(Color.RED);
+                            break;
+                        case 3:
+                            g.setColor(Color.ORANGE);
+                            break;
+                        case 4:
+                            g.setColor(Color.MAGENTA);
                             break;
                     }
 
