@@ -29,7 +29,7 @@ public class GetScatterPlotSave {
     private ArrayList<PointD> points;
     private int counter;
 
-    public GetScatterPlotSave(String filename){
+    public GetScatterPlotSave(final String filename){
         this.filename = filename;
 
         points = new ArrayList<>();

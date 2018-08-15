@@ -34,7 +34,7 @@ public class SigmaNotation {
      * @param start count start(eg. 0)
      * @param  end end amount(eg. 5)
      */
-    public double solve(String expression, double start, double end){
+    public double solve(final String expression, final double start, final double end){
         this.expression = expression;
         ArrayList<String> vars = new ArrayList<>();
         vars.add("y");

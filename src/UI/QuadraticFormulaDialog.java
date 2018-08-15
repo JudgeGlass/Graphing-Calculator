@@ -35,7 +35,7 @@ public class QuadraticFormulaDialog {
     private double b = 0;
     private double c = 0;
 
-    QuadraticFormulaDialog(){
+    public QuadraticFormulaDialog(){
         JTextField aField = new JTextField(5);
         JTextField bField = new JTextField(5);
         JTextField cField = new JTextField(5);

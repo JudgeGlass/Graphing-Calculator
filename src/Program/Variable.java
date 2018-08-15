@@ -32,7 +32,7 @@ public class Variable {
         vars = new ArrayList<>();
     }
 
-    public static boolean addVarFromString(String function){
+    public static boolean addVarFromString(final String function){
         if(function.contains("->")){
             String[] split = function.split("->");
             String var = split[0];
@@ -47,7 +47,7 @@ public class Variable {
         return true;
     }
 
-    private static void addVar(String var, double value){
+    private static void addVar(final String var, final double value){
         vars.add(var);
         values.put(var, value);
     }

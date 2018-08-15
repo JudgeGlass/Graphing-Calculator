@@ -2,8 +2,7 @@ package UI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import Program.CorrectFunction;
@@ -18,12 +17,14 @@ public class Graph extends JPanel {
     private double realMouseY;
 
     public ArrayList<PointD> points;
+    public ArrayList<PointD> triLines;
 
     private JTextArea area;
 
     public Graph(GraphWindow window, JTextArea area){
         graphWindow = window;
         points = new ArrayList<>();
+        triLines = new ArrayList<>();
         this.area = area;
 
         this.addMouseMotionListener(new MouseAdapter() {
@@ -34,6 +35,13 @@ public class Graph extends JPanel {
                 realMouseY = e.getY();
                 mouseX = e.getX() * graphWindow.xScale + graphWindow.xMin; // Gets the mouse X
                 mouseY = (graphWindow.pixelHeight - e.getY()) * graphWindow.yScale + graphWindow.yMin; // Gets the mouse Y
+            }
+        });
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
             }
         });
     }
@@ -154,7 +162,6 @@ public class Graph extends JPanel {
      * */
 
     private void drawLine(Graphics g, double x1, double y1, double x2, double y2){
-        //g.setColor(Color.BLACK);
         int xG = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
         int yG = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
 
@@ -163,9 +170,42 @@ public class Graph extends JPanel {
         g.drawLine(xG, yG, xx, yy);
     }
 
+    private void drawLineWithPoint(Graphics g, double x1, double y1, double x2, double y2){
+        g.setColor(Color.RED);
+
+        int cx1 = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
+        int cy1 = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
+        g.drawOval(cx1-2, cy1-2, 5, 5);
+        g.fillOval(cx1-2, cy1-2, 5, 5);
+
+        int cx2 = (int)((x2 - graphWindow.xMin) / graphWindow.xScale);
+        int cy2 = graphWindow.pixelHeight - (int)((y2 - graphWindow.yMin) / graphWindow.yScale);
+        g.drawOval(cx2-2, cy2-2, 5, 5);
+        g.fillOval(cx2-2, cy2-2, 5, 5);
+
+        g.drawLine(cx1, cy1, cx2, cy2);
+    }
+
+    private void circleMouse(Graphics g, double x1, double y1, double mx, double my){
+        int cx1 = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
+        int cy1 = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
+
+        int cx2 = (int)((mx - graphWindow.xMin) / graphWindow.xScale);
+        int cy2 = graphWindow.pixelHeight - (int)((my - graphWindow.yMin) / graphWindow.yScale);
+
+        g.drawOval(cx1 - (cx2/2), cy1 - (cy2 / 2), cx2, cy2);
+    }
+
+    private void drawTriangle(Graphics g, PointD point1, PointD point2, PointD point3){
+        drawLineWithPoint(g, point1.x, point1.y, point2.x, point2.y);
+        drawLineWithPoint(g, point2.x, point2.y, point3.x, point3.y);
+        drawLineWithPoint(g, point1.x, point1.y, point3.x, point3.y);
+    }
+
     /**
      * Draws the line
      * */
+
     private void function(Graphics g){
         ArrayList<String> vars = new ArrayList<>();
         vars.add("y");
@@ -184,6 +224,10 @@ public class Graph extends JPanel {
             for(int i = 0; i < points.size(); i++){
                 box(g, points.get(i).x, points.get(i).y, 5);
             }
+        }
+
+        if(triLines != null && triLines.size() != 0){
+            drawTriangle(g, triLines.get(0), triLines.get(1), triLines.get(2));
         }
 
         if(graphWindow.fh == null)

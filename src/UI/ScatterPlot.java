@@ -269,11 +269,11 @@ public class ScatterPlot {
         yModel.addElement(point.y);
     }
 
-    private void addX(double x){
+    private void addX(final double x){
         this.x.add(x);
     }
 
-    private void addY(double y){
+    private void addY(final double y){
         this.y.add(y);
     }
 }

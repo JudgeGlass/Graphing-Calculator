@@ -31,7 +31,7 @@ public class CorrectFunction {
         enable = b;
     }
 
-    public static String addMul(String function){
+    public static String addMul(final String function){
         String nf1 = addMulLeft(function.replaceAll("\\s", ""));
 
         if(enable)

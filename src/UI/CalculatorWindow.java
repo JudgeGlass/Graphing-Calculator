@@ -55,7 +55,8 @@ public class CalculatorWindow {
 
     private GraphWindow window;
     private Graph graph;
-    private Variable variable;
+    private ShapeDrawer shapeDrawer;
+    private final Variable variable;
 
     private Font fontWide;
 
@@ -68,7 +69,9 @@ public class CalculatorWindow {
     private JLabel lblMode;
 
     private JComboBox type;
+    private JComboBox shape;
     private SaveSettings save;
+    private TriangleWIndow triWindow;
 
     private boolean saveUsed = false;
     private double ANS = 0.0;
@@ -92,10 +95,18 @@ public class CalculatorWindow {
 
         variable = new Variable();
 
-        writeText("Graphing Calculator v" + ApplicationInfo.VERSION + "...");
+        writeText("Graphing Calculator v" + ApplicationInfo.VERSION);
 
         writeText("For help, type \"help\".");
         save = new SaveSettings("data.dat", window, graph);
+        triWindow = new TriangleWIndow(false, graph);
+
+        if(ApplicationInfo.UNSTABLE_BUILD){
+            writeText("\n***************** Warning! *****************");
+            writeText("This is a debug version: " + ApplicationInfo.VERSION);
+            writeText("This may contain errors.");
+            writeText("***********************************************");
+        }
     }
 
     private void preInit(){
@@ -105,6 +116,7 @@ public class CalculatorWindow {
 
         window = new GraphWindow(-10, 10, -10, 10, 770, 450);
         graph = new Graph(window, output);
+
 
         if(new File("data.dat").exists()){
             System.out.println("Save found! Using...");
@@ -155,8 +167,9 @@ public class CalculatorWindow {
 
         graphPanel.addMouseWheelListener(e -> {
             if(e.getWheelRotation() < 0){
-                if(window.xMax - 1 < 1)
+                if(window.xMax - 1 < 1) {
                     return;
+                }
 
                 window.xMin++;
                 window.xMax--;
@@ -289,6 +302,17 @@ public class CalculatorWindow {
         type.addItem("Scatter Plot");
         type.addItem("Sigma \u03A3");
 
+        shape = new JComboBox();
+        shape.setBounds(5, 53, 150, 25);
+        shape.addItem("Triangle");
+        shape.addItem("Circle");
+        shape.addItem("Square");
+        shape.addItem("Other");
+        shape.addItem("Label");
+
+        shapeDrawer = new ShapeDrawer(new GraphWindow(-10, 10, -10, 10,770, 450), shape);
+        tabs.addTab("Shape Drawer", shapeDrawer);
+
         addToFrame();
     }
 
@@ -296,6 +320,7 @@ public class CalculatorWindow {
         frame.getContentPane().add(tabs);
         frame.getContentPane().add(lblMode);
         frame.getContentPane().add(type);
+        frame.getContentPane().add(shape);
         frame.getContentPane().add(lblExpression);
         frame.getContentPane().add(expression);
         frame.getContentPane().add(btnSolve);
@@ -359,6 +384,10 @@ public class CalculatorWindow {
                 help();
                 expression.setText("");
                 return;
+            }else if(expression.getText().equals("TW")){
+                triWindow.show();
+                expression.setText("");
+                return;
             }else if(expression.getText().equals("DEL")){
                 DeleteFunction.showDeleteWindow(save);
                 expression.setText("");
@@ -402,6 +431,7 @@ public class CalculatorWindow {
                     int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the graph?", "Clear?", JOptionPane.YES_NO_OPTION);
                     if(clear == JOptionPane.YES_OPTION) {
                         window.fh.clearFunctionHolder();
+                        graph.triLines.clear();
                     }
                 }
             }else if(command.equals("TABLE")){
@@ -476,7 +506,7 @@ public class CalculatorWindow {
         };
         writeText("<~~~~~~~~>");
         writeText("Help");
-        for(String x: actions){
+        for(final String x: actions){
             writeText(x);
         }
         writeText("<~~~~~~~~>");

@@ -72,6 +72,12 @@ public class Table {
             if(!window.fh.y3.isEmpty()){
                 functionIndex.addItem("Y3= " + window.fh.y3);
             }
+            if(!window.fh.y4.isEmpty()){
+                functionIndex.addItem("Y4= " + window.fh.y4);
+            }if(!window.fh.y5.isEmpty()){
+                functionIndex.addItem("Y5= " + window.fh.y5);
+            }
+
         }
         functionIndex.addItemListener(new ModeChange());
 
@@ -127,6 +133,15 @@ public class Table {
             }else if(at.contains("Y3")){
                 model.clear();
                 function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y3), vars);
+                makeLists(model);
+            }else if(at.contains("Y4")){
+                model.clear();
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y4), vars);
+                makeLists(model);
+            }
+            else if(at.contains("Y5")){
+                model.clear();
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y5), vars);
                 makeLists(model);
             }
         }
