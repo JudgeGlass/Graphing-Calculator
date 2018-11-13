@@ -18,11 +18,16 @@
  */
 package functions.builtin;
 
+import Program.ApplicationInfo;
 import functions.Function;
 import functions.FunctionArguments;
 
 public class ATangent2Function implements Function {
     public double evaluate(FunctionArguments args) {
+        if(ApplicationInfo.useDegrees){
+            return Math.atan2(Math.toRadians(args.getArg(0)), Math.toRadians(args.getArg(1)));
+        }
+
         return Math.atan2(args.getArg(0), args.getArg(1));
     }
 

@@ -18,12 +18,17 @@
  */
 package functions.builtin;
 
+import Program.ApplicationInfo;
 import functions.Function;
 import functions.FunctionArguments;
 
 public class CosineFunction implements Function {
 
     public double evaluate(FunctionArguments args) {
+        if(ApplicationInfo.useDegrees){
+            return Math.cos(Math.toRadians(args.getArg(0)));
+        }
+
         return Math.cos(args.getArg(0));
     }
 

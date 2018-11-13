@@ -20,6 +20,7 @@
 package UI;
 
 import FileIO.SaveSettings;
+import Program.ApplicationInfo;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -51,6 +52,7 @@ public class GraphOptions {
     private JButton btnDefaults;
 
     private JCheckBox chkDrawLines;
+    private JCheckBox chkDegrees;
     private JSlider slider;
 
     private Graph graph;
@@ -159,7 +161,12 @@ public class GraphOptions {
         chkDrawLines.setBounds(5, 345, 150, 15);
         chkDrawLines.setSelected(window.drawLines);
 
+        chkDegrees = new JCheckBox("Degrees");
+        chkDegrees.setBounds(170, 345, 150, 15);
+        chkDegrees.setSelected(ApplicationInfo.useDegrees);
+
         frame.getContentPane().add(chkDrawLines);
+        frame.getContentPane().add(chkDegrees);
 
         btnDefaults = new JButton("Defaults");
         btnDefaults.setBounds(5, 315, 100, 25);
@@ -203,6 +210,8 @@ public class GraphOptions {
                     window.drawLines = chkDrawLines.isSelected();
                     window.tableInc = Double.parseDouble(txtTableInc.getText());
                     window.resolution = (double)slider.getValue();
+
+                    ApplicationInfo.useDegrees = chkDegrees.isSelected();
 
                     graph.repaint2();
 

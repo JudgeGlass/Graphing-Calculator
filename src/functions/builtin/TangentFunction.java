@@ -18,11 +18,16 @@
  */
 package functions.builtin;
 
+import Program.ApplicationInfo;
 import functions.Function;
 import functions.FunctionArguments;
 
 public class TangentFunction implements Function {
     public double evaluate(FunctionArguments args) {
+        if(ApplicationInfo.useDegrees){
+            return Math.tan(Math.toRadians(args.getArg(0)));
+        }
+
         return Math.tan(args.getArg(0));
     }
 

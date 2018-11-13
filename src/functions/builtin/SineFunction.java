@@ -18,11 +18,16 @@
  */
 package functions.builtin;
 
+import Program.ApplicationInfo;
 import functions.Function;
 import functions.FunctionArguments;
 
 public class SineFunction implements Function {
     public double evaluate(FunctionArguments args) {
+        if(ApplicationInfo.useDegrees){
+            return Math.sin(Math.toRadians(args.getArg(0)));
+        }
+
         return Math.sin(args.getArg(0));
     }
 

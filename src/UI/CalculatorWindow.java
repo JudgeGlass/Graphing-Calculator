@@ -32,6 +32,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import Math.SigmaNotation;
+import Math.RootSimp;
 
 public class CalculatorWindow {
     private JFrame frame;
@@ -79,7 +80,7 @@ public class CalculatorWindow {
     public CalculatorWindow(){
         frame = new JFrame("Calculator [" + ApplicationInfo.VERSION + "]");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(800, 800);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setResizable(false);
@@ -186,7 +187,7 @@ public class CalculatorWindow {
         });
 
         tabs = new JTabbedPane();
-        tabs.setBounds(5, 110, frame.getWidth() - 20, 450);
+        tabs.setBounds(5, 110, frame.getWidth() - 20, 650);
 
         tabs.addTab("Calculator", new JScrollPane(output));
         tabs.addTab("Graph", null,graphPanel,null);
@@ -304,13 +305,15 @@ public class CalculatorWindow {
 
         shape = new JComboBox();
         shape.setBounds(5, 53, 150, 25);
+        shape.addItemListener(new ShapeType());
         shape.addItem("Triangle");
         shape.addItem("Circle");
         shape.addItem("Square");
-        shape.addItem("Other");
+        shape.addItem("Segment");
         shape.addItem("Label");
 
-        shapeDrawer = new ShapeDrawer(new GraphWindow(-10, 10, -10, 10,770, 450), shape);
+        shapeDrawer = new ShapeDrawer(new GraphWindow(-10, 10, -10, 10,770, 620), shape);
+
         tabs.addTab("Shape Drawer", shapeDrawer);
 
         addToFrame();
@@ -391,6 +394,10 @@ public class CalculatorWindow {
             }else if(expression.getText().equals("DEL")){
                 DeleteFunction.showDeleteWindow(save);
                 expression.setText("");
+                return;
+            }else if(expression.getText().equals("SIMP")){
+                int value = Integer.parseInt(JOptionPane.showInputDialog("Enter number to simplify:"));
+                writeText(RootSimp.simplify(value));
                 return;
             }else if(expression.getText().equals("LIST")){
                 writeText("Functions:");
@@ -485,6 +492,7 @@ public class CalculatorWindow {
                 "DEL - Delete function",
                 "LIST - Get function list",
                 "var->value - Store number in variable(eg. x->2.0)",
+                "SIMP - Square root simplifier",
                 "'(' and ')' are required",
                 "sqrt(x) - Square root",
                 "cbrt(x) - Cube root",
@@ -492,9 +500,9 @@ public class CalculatorWindow {
                 "sin(x) - Sine",
                 "cos(x) - Cosine",
                 "tan(x) - Tangent",
-                "asin(x) - ASine",
-                "acos(x) - ACosine",
-                "atan(x) - ATangent",
+                "asin(x) - Inverse Sine",
+                "acos(x) - Inverse Cosine",
+                "atan(x) - Inverse Tangent",
                 "!(x) - Factorial",
                 "ln(x) - Log (base 8)",
                 "log(x) - Log (base 10)",
@@ -513,8 +521,8 @@ public class CalculatorWindow {
     }
 
     private class ModeChange implements ItemListener{
-        public void itemStateChanged(ItemEvent e){
-            if(type.getSelectedIndex() != 1){
+        public void itemStateChanged(ItemEvent e) {
+            if (type.getSelectedIndex() != 1) {
                 lblExpression.setText("Expression");
                 lblExpression.setFont(fontWide);
                 lblVar.setVisible(false);
@@ -523,25 +531,49 @@ public class CalculatorWindow {
                 txtSigmaEnd.setVisible(false);
             }
 
-            if(type.getSelectedIndex() != 2){
+            if (type.getSelectedIndex() != 2) {
                 lblVar.setVisible(false);
                 txtVar.setVisible(false);
                 lblSigmaEnd.setVisible(false);
                 txtSigmaEnd.setVisible(false);
             }
 
-            if(type.getSelectedIndex() == 3){
+            if (type.getSelectedIndex() == 3) {
                 lblVar.setVisible(true);
                 lblVar.setText("n = ");
                 lblSigmaEnd.setVisible(true);
                 txtVar.setVisible(true);
                 txtVar.setText("");
                 txtSigmaEnd.setVisible(true);
-            }else if(type.getSelectedIndex() != 3){
+            } else if (type.getSelectedIndex() != 3) {
                 lblVar.setVisible(false);
                 lblSigmaEnd.setVisible(false);
                 txtVar.setVisible(false);
                 txtSigmaEnd.setVisible(false);
+            }
+        }
+    }
+
+    private class ShapeType implements ItemListener{
+        public void itemStateChanged(ItemEvent e){
+            int currentIndex = shape.getSelectedIndex();
+
+            switch (currentIndex){
+                case 0: //T //C // S
+                    ApplicationInfo.currentShape = ApplicationInfo.Shape.TRIANGLE;
+                    break;
+                case 1:
+                    ApplicationInfo.currentShape = ApplicationInfo.Shape.CIRCLE;
+                    break;
+                case 2:
+                    ApplicationInfo.currentShape = ApplicationInfo.Shape.SQUARE;
+                    break;
+                case 3:
+                    ApplicationInfo.currentShape = ApplicationInfo.Shape.SEGMENT;
+                    break;
+                case 4:
+                    ApplicationInfo.currentShape = ApplicationInfo.Shape.LABEL;
+
             }
         }
     }

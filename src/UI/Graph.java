@@ -13,9 +13,6 @@ public class Graph extends JPanel {
 
     private double mouseX = 0;
     private double mouseY = 0;
-    private double realMouseX;
-    private double realMouseY;
-
     public ArrayList<PointD> points;
     public ArrayList<PointD> triLines;
 
@@ -31,17 +28,8 @@ public class Graph extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) {
                 repaint2();
-                realMouseX = e.getX();
-                realMouseY = e.getY();
                 mouseX = e.getX() * graphWindow.xScale + graphWindow.xMin; // Gets the mouse X
                 mouseY = (graphWindow.pixelHeight - e.getY()) * graphWindow.yScale + graphWindow.yMin; // Gets the mouse Y
-            }
-        });
-
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
             }
         });
     }
@@ -184,16 +172,6 @@ public class Graph extends JPanel {
         g.fillOval(cx2-2, cy2-2, 5, 5);
 
         g.drawLine(cx1, cy1, cx2, cy2);
-    }
-
-    private void circleMouse(Graphics g, double x1, double y1, double mx, double my){
-        int cx1 = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
-        int cy1 = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
-
-        int cx2 = (int)((mx - graphWindow.xMin) / graphWindow.xScale);
-        int cy2 = graphWindow.pixelHeight - (int)((my - graphWindow.yMin) / graphWindow.yScale);
-
-        g.drawOval(cx1 - (cx2/2), cy1 - (cy2 / 2), cx2, cy2);
     }
 
     private void drawTriangle(Graphics g, PointD point1, PointD point2, PointD point3){

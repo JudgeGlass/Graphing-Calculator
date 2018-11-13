@@ -18,11 +18,15 @@
  */
 package functions.builtin;
 
+import Program.ApplicationInfo;
 import functions.Function;
 import functions.FunctionArguments;
 
 public class ACosineFunction implements Function {
     public double evaluate(FunctionArguments args) {
+        if(ApplicationInfo.useDegrees){
+            return Math.acos(Math.toRadians(args.getArg(0)));
+        }
         return Math.acos(args.getArg(0));
     }
 
