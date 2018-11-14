@@ -22,6 +22,14 @@ package UI;
 import Math.FunctionHolder;
 
 public class GraphWindow {
+    enum DrawType{
+        SOLD_TOP,
+        SOLD_BOTTOM,
+        LINE,
+        CIRCLE
+    }
+
+
     public double xMin;
     public double xMax;
     public double yMin;
@@ -33,6 +41,7 @@ public class GraphWindow {
     public double resolution = 1;
     public double tableInc;
     public boolean drawLines;
+    public DrawType currentDrawType = DrawType.LINE;
     public FunctionHolder fh;
 
     public GraphWindow(int xMin, int xMax, int yMin, int yMax, int pixelWidth, int pixelHeight){

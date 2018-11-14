@@ -232,6 +232,11 @@ public class Graph extends JPanel {
             arg[1] = graphWindow.xMin;
             double lastY;
             double adder = graphWindow.resolution / 100; // How many is incremented
+
+            if(graphWindow.currentDrawType == GraphWindow.DrawType.SOLD_BOTTOM || graphWindow.currentDrawType == GraphWindow.DrawType.SOLD_TOP){
+                adder = 0.04;
+            }
+
             g.setColor(Color.BLACK);
             for(int a = 0; a < f.size(); ++a) {
                 try {
@@ -267,7 +272,21 @@ public class Graph extends JPanel {
                                 continue;
                             }
 
-                            drawLine(g, lastX, lastY, i, y1); // Draws the line
+                            switch (graphWindow.currentDrawType){
+                                case LINE:
+                                    drawLine(g, lastX, lastY, i, y1); // Draws the line
+                                    break;
+                                case CIRCLE:
+                                    circle(g, Color.BLACK, true, i, y1, 3);
+                                    break;
+                                case SOLD_TOP:
+                                    drawLine(g, lastX, graphWindow.yMax, i, y1);
+                                    break;
+                                case SOLD_BOTTOM:
+                                    drawLine(g, lastX, graphWindow.yMin, i, y1);
+                                    break;
+                            }
+
                             lastX = i; // Sets lastX as i
                             lastY = y1; // Sets lastY as the function of i
 

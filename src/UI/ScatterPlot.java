@@ -249,7 +249,7 @@ public class ScatterPlot {
     }
 
     private void graphRegression(String function){
-        if(holder.y1Empty() || holder.y2Empty() || holder.y3Empty()){
+        if(holder.y1Empty() || holder.y2Empty() || holder.y3Empty() || holder.y4Empty() || holder.y5Empty()){
             int ans = JOptionPane.showConfirmDialog(null, "Would you like to graph?", "Graph", JOptionPane.YES_NO_OPTION);
             if(ans == JOptionPane.YES_OPTION){
                 if(holder.y1Empty()){

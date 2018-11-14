@@ -100,6 +100,7 @@ public class CalculatorWindow {
 
         writeText("For help, type \"help\".");
         save = new SaveSettings("data.dat", window, graph);
+        ApplicationInfo.STATIC_SAVE = save;
         triWindow = new TriangleWIndow(false, graph);
 
         if(ApplicationInfo.UNSTABLE_BUILD){
@@ -117,50 +118,61 @@ public class CalculatorWindow {
 
         window = new GraphWindow(-10, 10, -10, 10, 770, 450);
         graph = new Graph(window, output);
-
+        boolean contin = true;
 
         if(new File("data.dat").exists()){
             System.out.println("Save found! Using...");
             final String filename = "data.dat";
-            double xMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 1), '='));
-            double xMax = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 2), '='));
-            double yMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 3), '='));
-            double yMax = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 4), '='));
 
-            window.xMax = xMax;
-            window.xMin = xMin;
-            window.yMax = yMax;
-            window.yMin = yMin;
-
-            window.resolution = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 0), '='));
-
-            boolean contin = true;
-            if(Utils.indexOf(Utils.readLine(filename, 5), '=').equals("true")){
-                String y1 = Utils.indexOf(Utils.readLine(filename, 6), '=');
-                String y2 = Utils.indexOf(Utils.readLine(filename, 7), '=');
-                String y3 = Utils.indexOf(Utils.readLine(filename, 8), '=');
-                String y4 = Utils.indexOf(Utils.readLine(filename, 9), '=');
-                String y5 = Utils.indexOf(Utils.readLine(filename, 10), '=');
-
-                if(!Utils.readLine(filename, 9).contains("Y4")){ // For data files below v1.0.0
-                    new File(filename).delete();
-                    JOptionPane.showMessageDialog(null, "Old save was deleted due to incompatibility!", "Save Deleted", JOptionPane.INFORMATION_MESSAGE);
-                    contin = false;
-                }else {
-                    String[] values = {y1, y2, y3, y4, y5};
-                    window.setFunction(values);
-                    window.fh.store();
-                }
+            if(!Utils.indexOf(Utils.readLine(filename, 0), '=').equals(ApplicationInfo.VERSION)){
+                new File(filename).delete();
+                JOptionPane.showMessageDialog(null, "Old save was deleted due to being an older version.",
+                        "Old Save", JOptionPane.WARNING_MESSAGE);
+                contin = false;
             }
 
             if(contin) {
-                GetScatterPlotSave gs = new GetScatterPlotSave("data.dat");
-                if (gs.getPoints().size() != 0 && gs.getPoints() != null)
-                    graph.points = gs.getPoints();
+                double xMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 2), '='));
+                double xMax = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 3), '='));
+                double yMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 4), '='));
+                double yMax = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 5), '='));
+                String deg = (Utils.indexOf(Utils.readLine(filename, 12), '='));
 
-                GetDefinedFunctions.store("data.dat", gs.getLastLineIndex());
+                if (deg.equals("true")) ApplicationInfo.useDegrees = true;
 
-                saveUsed = true;
+                window.xMax = xMax;
+                window.xMin = xMin;
+                window.yMax = yMax;
+                window.yMin = yMin;
+
+                window.resolution = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 1), '='));
+
+
+                if (Utils.indexOf(Utils.readLine(filename, 6), '=').equals("true")) {
+                    String y1 = Utils.indexOf(Utils.readLine(filename, 7), '=');
+                    String y2 = Utils.indexOf(Utils.readLine(filename, 8), '=');
+                    String y3 = Utils.indexOf(Utils.readLine(filename, 9), '=');
+                    String y4 = Utils.indexOf(Utils.readLine(filename, 10), '=');
+                    String y5 = Utils.indexOf(Utils.readLine(filename, 11), '=');
+
+
+                    String[] values = {y1, y2, y3, y4, y5};
+                    window.setFunction(values);
+                    window.fh.store();
+
+                }
+
+                if (contin) {
+                    GetScatterPlotSave gs = new GetScatterPlotSave("data.dat");
+                    if (gs.getPoints().size() != 0 && gs.getPoints() != null)
+                        graph.points = gs.getPoints();
+
+                    GetDefinedFunctions.store("data.dat", gs.getLastLineIndex());
+                    GetShapeSave.store("data.dat", GetDefinedFunctions.getLastIndex());
+
+
+                    saveUsed = true;
+                }
             }
         }
 
@@ -389,6 +401,10 @@ public class CalculatorWindow {
                 return;
             }else if(expression.getText().equals("TW")){
                 triWindow.show();
+                expression.setText("");
+                return;
+            }else if(expression.getText().equals("MGR")){
+                new VariableManager();
                 expression.setText("");
                 return;
             }else if(expression.getText().equals("DEL")){

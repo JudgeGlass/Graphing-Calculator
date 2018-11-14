@@ -28,4 +28,18 @@ public class CircleInfo {
     public String getName(){ return name; }
 
     public Color getColor(){ return color; }
+
+    public String getColorString(){
+        if(color == Color.BLACK){
+            return "black";
+        }else if(color == Color.BLUE){
+            return "blue";
+        }else if(color == Color.RED){
+            return "red";
+        }else if(color == Color.GREEN){
+            return "green";
+        }
+
+        return "NONE";
+    }
 }

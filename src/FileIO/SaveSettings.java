@@ -19,9 +19,8 @@
 
 package FileIO;
 
-import UI.Graph;
-import UI.GraphWindow;
-import UI.PointD;
+import Program.ApplicationInfo;
+import UI.*;
 import functions.FunctionStore;
 
 import java.io.File;
@@ -40,6 +39,7 @@ public class SaveSettings {
 
     public void update(){
         conf = "";
+        addToConf("version=" + ApplicationInfo.VERSION);
         addToConf("qal="  + window.resolution);
        addToConf("xmin=" + window.xMin);
        addToConf("xmax=" + window.xMax);
@@ -53,6 +53,7 @@ public class SaveSettings {
            addToConf("Y3=" + window.fh.y3);
            addToConf("Y4=" + window.fh.y4);
            addToConf("Y5=" + window.fh.y5);
+           addToConf("deg=" + ApplicationInfo.useDegrees);
        }else {
            addToConf("YVal=false");
            addToConf("Y1=");
@@ -60,6 +61,7 @@ public class SaveSettings {
            addToConf("Y3=");
            addToConf("Y4=");
            addToConf("Y5=");
+           addToConf("deg=false");
        }
 
        if(graph.points.size() != 0 || graph.points != null){
@@ -76,6 +78,22 @@ public class SaveSettings {
        }
 
        addToConf("## END DEF ##");
+
+       addToConf("## SHAPE START ##");
+       for (final CircleInfo info: ShapeDrawer.circleInfo){
+           addToConf("CIR;" + info.getName() + ";" + info.getCenter().x + ";" + info.getCenter().y + ";"
+           + info.getRadius() + ";" + info.getColorString());
+       }
+
+        for (final SegmentInfo info: ShapeDrawer.segmentInfo){
+            addToConf("SEG;" + info.getPos1().x + ";" + info.getPos1().y + ";" + info.getPos2().x + ";" + info.getPos2().y);
+        }
+
+        for (final LabelInfo info: ShapeDrawer.labelInfo){
+            addToConf("LBL;" + info.getText() + ";" + info.getX() + ";" + info.getY());
+        }
+
+        addToConf("## END SHAPE ##");
 
        writeSave();
     }

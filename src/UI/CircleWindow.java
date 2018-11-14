@@ -125,6 +125,8 @@ public class CircleWindow {
                 }
 
                 ShapeDrawer.circleInfo.add(new CircleInfo(txtName.getText(), new PointD(x, y), r, c));
+                ApplicationInfo.STATIC_SAVE.update();
+
                 frame.dispose();
             }catch (Exception e){
                 e.printStackTrace();

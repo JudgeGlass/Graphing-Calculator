@@ -43,7 +43,5 @@ public class GetDefinedFunctions {
         }
     }
 
-    public static String getFilename(){return filename;}
-
-    public static ArrayList<String> getKeys(){return keys;}
+    public static int getLastIndex(){return counter;}
 }

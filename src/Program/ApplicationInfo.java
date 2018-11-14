@@ -19,11 +19,13 @@
 
 package Program;
 
+import FileIO.SaveSettings;
+
 public class ApplicationInfo {
     public static final String PRODUCT_NAME = "Graphing Calculator";
-    public static final String VERSION = "1.1.0 ALPHA 0.2a";
-    public static final String BUILD_DATE = "WIP";
-    public static final boolean UNSTABLE_BUILD = true;
+    public static final String VERSION = "1.1.0";
+    public static final String BUILD_DATE = "11/13/18";
+    public static final boolean UNSTABLE_BUILD = false;
     public static final String SOURCE_URL = "https://github.com/JudgeGlass/Graphing-Calculator";
     public static final String AUTHOR = "Hunter Wilcox";
     public static final String TESTED_JRES = "[8, 9, 10]";
@@ -39,4 +41,6 @@ public class ApplicationInfo {
 
     public static Shape currentShape = Shape.CIRCLE;
     public static boolean useDegrees = false;
+
+    public static SaveSettings STATIC_SAVE = null;
 }

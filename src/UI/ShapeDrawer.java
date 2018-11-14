@@ -152,13 +152,14 @@ public class ShapeDrawer extends JComponent {
         g.drawRect(0, 0, this.getWidth(), this.getHeight());
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        drawCoords(g);
-        makeAxis(g);
-        drawGrid(g);
         circle(g, Color.RED, false, mouseX, mouseY, 5);
         drawCustomCircle(g);
         drawLabels(g);
         drawSegments(g);
+
+        drawCoords(g);
+        makeAxis(g);
+        drawGrid(g);
     }
 
     //Draw custom circle
@@ -210,6 +211,7 @@ public class ShapeDrawer extends JComponent {
             String text = JOptionPane.showInputDialog(null, "Text:");
             if(text == null) return;
             labelInfo.add(new LabelInfo(text, mouseX, mouseY));
+            ApplicationInfo.STATIC_SAVE.update();
         }catch (Exception e){
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -232,6 +234,8 @@ public class ShapeDrawer extends JComponent {
 
             seg1 = null;
             seg2 = null;
+
+            ApplicationInfo.STATIC_SAVE.update();
         }catch (Exception e){
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

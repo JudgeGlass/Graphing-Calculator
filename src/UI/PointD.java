@@ -33,6 +33,6 @@ public class PointD {
      * By Hunter Wilcox
      * */
     public String toString(){
-        return String.format("X:%f Y:%f", x, y);
+        return String.format("X:%.2f Y:%.2f", x, y);
     }
 }

@@ -40,6 +40,7 @@ public class GraphOptions {
     private JLabel lblYMin;
     private JLabel lblTableInc;
     private JLabel lblResolution;
+    private JLabel lblLineType;
 
     private JTextField txtXMax;
     private JTextField txtXMin;
@@ -54,6 +55,7 @@ public class GraphOptions {
     private JCheckBox chkDrawLines;
     private JCheckBox chkDegrees;
     private JSlider slider;
+    private JComboBox lineType;
 
     private Graph graph;
     private SaveSettings save;
@@ -96,35 +98,47 @@ public class GraphOptions {
         frame.getContentPane().add(txtXMax);
 
         lblXMin = new JLabel("X Min:");
-        lblXMin.setBounds(5, 70, 50, 15);
+        lblXMin.setBounds(5, 50, 50, 15);
 
         frame.getContentPane().add(lblXMin);
 
         txtXMin = new JTextField();
-        txtXMin.setBounds(60, 65, 180, 25);
+        txtXMin.setBounds(60, 50, 180, 25);
         txtXMin.setText(Double.toString(window.xMin));
 
         frame.getContentPane().add(txtXMin);
 
         lblYMax = new JLabel("Y Max:");
-        lblYMax.setBounds(5, 130, 50, 15);
+        lblYMax.setBounds(5, 100, 50, 15);
 
         frame.getContentPane().add(lblYMax);
 
         txtYMax = new JTextField();
-        txtYMax.setBounds(60, 130, 180, 25);
+        txtYMax.setBounds(60, 95, 180, 25);
         txtYMax.setText(Double.toString(window.yMax));
 
         frame.getContentPane().add(txtYMax);
 
         lblYMin = new JLabel("Y Min:");
-        lblYMin.setBounds(5, 185, 50, 15);
+        lblYMin.setBounds(5, 145, 50, 15);
 
         frame.getContentPane().add(lblYMin);
 
         txtYMin = new JTextField();
-        txtYMin.setBounds(60, 185, 180, 25);
+        txtYMin.setBounds(60, 140, 180, 25);
         txtYMin.setText(Double.toString(window.yMin));
+
+        lblLineType = new JLabel("Line Type:");
+        lblLineType.setBounds(5, 170, 150, 15);
+        frame.getContentPane().add(lblLineType);
+
+        lineType = new JComboBox();
+        lineType.addItem("Line");
+        lineType.addItem("Circle");
+        lineType.addItem("Filled (top)");
+        lineType.addItem("Filled (bottom)");
+        lineType.setBounds(5, 190, 240, 25);
+        frame.getContentPane().add(lineType);
 
         frame.getContentPane().add(txtYMin);
 
@@ -212,6 +226,21 @@ public class GraphOptions {
                     window.resolution = (double)slider.getValue();
 
                     ApplicationInfo.useDegrees = chkDegrees.isSelected();
+
+                    switch (lineType.getSelectedIndex()){
+                        case 0:
+                            window.currentDrawType = GraphWindow.DrawType.LINE;
+                            break;
+                        case 1:
+                            window.currentDrawType = GraphWindow.DrawType.CIRCLE;
+                            break;
+                        case 2:
+                            window.currentDrawType = GraphWindow.DrawType.SOLD_TOP;
+                            break;
+                        case 3:
+                            window.currentDrawType = GraphWindow.DrawType.SOLD_BOTTOM;
+                            break;
+                    }
 
                     graph.repaint2();
 

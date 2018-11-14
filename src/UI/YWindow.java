@@ -67,7 +67,7 @@ public class YWindow {
     }
 
     private void init(){
-        lblY1 = new JLabel("Y1= ");
+        lblY1 = new JLabel("f1(x)= ");
         lblY1.setBounds(5, 5, 70, 15);
         frame.getContentPane().add(lblY1);
 
@@ -75,7 +75,7 @@ public class YWindow {
         txtY1.setBounds(5, 25, 215, 25);
         frame.getContentPane().add(txtY1);
 
-        lblY2 = new JLabel("Y2= ");
+        lblY2 = new JLabel("f2(x)= ");
         lblY2.setBounds(5, 55, 60, 15);
         frame.getContentPane().add(lblY2);
 
@@ -83,7 +83,7 @@ public class YWindow {
         txtY2.setBounds(5, 75, 215, 25);
         frame.getContentPane().add(txtY2);
 
-        lblY3 = new JLabel("Y3= ");
+        lblY3 = new JLabel("f3(x)= ");
         lblY3.setBounds(5, 105, 60, 15);
         frame.getContentPane().add(lblY3);
 
@@ -91,7 +91,7 @@ public class YWindow {
         txtY3.setBounds(5, 125, 215, 25);
         frame.getContentPane().add(txtY3);
 
-        lblY4 = new JLabel("Y4= ");
+        lblY4 = new JLabel("f4(x)= ");
         lblY4.setBounds(5, 155, 60, 15);
         frame.getContentPane().add(lblY4);
 
@@ -99,7 +99,7 @@ public class YWindow {
         txtY4.setBounds(5, 175, 215, 25);
         frame.getContentPane().add(txtY4);
 
-        lblY5 = new JLabel("Y5= ");
+        lblY5 = new JLabel("f5(x)= ");
         lblY5.setBounds(5, 205, 60, 15);
         frame.getContentPane().add(lblY5);
 
