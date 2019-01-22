@@ -29,6 +29,13 @@ public class GetDefinedFunctions {
     private static ArrayList<String> keys;
     private static int counter;
 
+    /***
+     * Gets all the saved functions in the save file.
+     *
+     * @param filename The save file path.
+     * @param lastIndex Continues off the last read index.
+     * */
+
     public static void store(final String filename, final int lastIndex){
         GetDefinedFunctions.filename = filename;
         keys = new ArrayList<>();

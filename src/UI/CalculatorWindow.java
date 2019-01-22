@@ -22,12 +22,10 @@ package UI;
 import FileIO.SaveSettings;
 import FileIO.Utils;
 import Program.*;
-import functions.Function;
-import functions.FunctionArguments;
-import functions.FunctionStore;
-import functions.TokenizedFunctionFactory;
+import functions.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -57,7 +55,6 @@ public class CalculatorWindow {
     private GraphWindow window;
     private Graph graph;
     private ShapeDrawer shapeDrawer;
-    private final Variable variable;
 
     private Font fontWide;
 
@@ -72,36 +69,61 @@ public class CalculatorWindow {
     private JComboBox type;
     private JComboBox shape;
     private SaveSettings save;
-    private TriangleWIndow triWindow;
+
+    private JPanel menuPanel;
 
     private boolean saveUsed = false;
     private double ANS = 0.0;
 
+    private int windowWidth = 800;
+    private int windowHeight = 800;
+
     public CalculatorWindow(){
         frame = new JFrame("Calculator [" + ApplicationInfo.VERSION + "]");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                windowWidth = frame.getWidth();
+                windowHeight = frame.getHeight();
+
+                if(window != null){
+                    window.pixelWidth = windowWidth - 30;
+                    window.pixelHeight = windowHeight - 360;
+                }
+
+                if(shapeDrawer != null){
+                    shapeDrawer.window.pixelWidth = windowWidth - 30;
+                    shapeDrawer.window.pixelHeight = windowHeight - 180;
+                }
+            }
+        });
+
+
         frame.setSize(800, 800);
         frame.setLocationRelativeTo(null);
-        frame.setLayout(null);
-        frame.setResizable(false);
+        //frame.setLayout(null);
+        frame.setResizable(true);
         ImageIcon image = new ImageIcon(getClass().getResource("/Program/icons8-square-root-50.png"));
         frame.setIconImage(image.getImage());
 
         fontWide = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
+
+        Variable.initVar();
 
         preInit();
 
         graph.repaint2();
         frame.setVisible(true);
 
-        variable = new Variable();
+        //variable = new Variable();
 
         writeText("Graphing Calculator v" + ApplicationInfo.VERSION);
 
         writeText("For help, type \"help\".");
         save = new SaveSettings("data.dat", window, graph);
         ApplicationInfo.STATIC_SAVE = save;
-        triWindow = new TriangleWIndow(false, graph);
 
         if(ApplicationInfo.UNSTABLE_BUILD){
             writeText("\n***************** Warning! *****************");
@@ -158,7 +180,13 @@ public class CalculatorWindow {
 
                     String[] values = {y1, y2, y3, y4, y5};
                     window.setFunction(values);
-                    window.fh.store();
+
+                    try {
+                        window.fh.store();
+                    }catch (MalformedFunctionException e){
+                        ErrorCodes.errorDialog(ErrorCodes.READ_ERROR, "Please delete the 'data.dat' file!");
+                        System.exit(-1);
+                    }
 
                 }
 
@@ -180,21 +208,9 @@ public class CalculatorWindow {
 
         graphPanel.addMouseWheelListener(e -> {
             if(e.getWheelRotation() < 0){
-                if(window.xMax - 1 < 1) {
-                    return;
-                }
-
-                window.xMin++;
-                window.xMax--;
-                window.yMin++;
-                window.yMax--;
-                graph.repaint2();
+                zoomIn();
             }else{
-                window.xMin--;
-                window.xMax++;
-                window.yMin--;
-                window.yMax++;
-                graph.repaint2();
+                zoomOut();
             }
         });
 
@@ -202,7 +218,12 @@ public class CalculatorWindow {
         tabs.setBounds(5, 110, frame.getWidth() - 20, 650);
 
         tabs.addTab("Calculator", new JScrollPane(output));
-        tabs.addTab("Graph", null,graphPanel,null);
+        tabs.addTab("Graph", null, graphPanel,null);
+
+
+        menuPanel = new JPanel();
+
+
 
         lblMode = new JLabel("Mode:");
         lblMode.setBounds(5, 5, 60, 15);
@@ -332,28 +353,34 @@ public class CalculatorWindow {
     }
 
     private void addToFrame(){
-        frame.getContentPane().add(tabs);
-        frame.getContentPane().add(lblMode);
-        frame.getContentPane().add(type);
-        frame.getContentPane().add(shape);
-        frame.getContentPane().add(lblExpression);
-        frame.getContentPane().add(expression);
-        frame.getContentPane().add(btnSolve);
-        frame.getContentPane().add(btnOptions);
-        frame.getContentPane().add(btnAbout);
-        frame.getContentPane().add(btnClear);
-        frame.getContentPane().add(btnTable);
-        frame.getContentPane().add(btnScatter);
-        frame.getContentPane().add(lblVar);
-        frame.getContentPane().add(txtVar);
-        frame.getContentPane().add(btnZoomIn);
-        frame.getContentPane().add(btnZoomOut);
-        frame.getContentPane().add(lblSigmaEnd);
-        frame.getContentPane().add(txtSigmaEnd);
-        frame.getContentPane().add(btnYE);
-        frame.getContentPane().add(btnQuadratic);
-        frame.getContentPane().add(btnStoreFunction);
-        frame.getContentPane().add(btnSolveFun);
+        menuPanel.setLayout(null);
+        menuPanel.setPreferredSize(new Dimension(700, 120));
+        //menuPanel.setBounds(0, 0, 750, 300);
+
+        frame.add(tabs, BorderLayout.CENTER);
+        menuPanel.add(lblMode);
+        menuPanel.add(type);
+        menuPanel.add(shape);
+        menuPanel.add(lblExpression);
+        menuPanel.add(expression);
+        menuPanel.add(btnSolve);
+        menuPanel.add(btnOptions);
+        menuPanel.add(btnAbout);
+        menuPanel.add(btnClear);
+        menuPanel.add(btnTable);
+        menuPanel.add(btnScatter);
+        menuPanel.add(lblVar);
+        menuPanel.add(txtVar);
+        menuPanel.add(btnZoomIn);
+        menuPanel.add(btnZoomOut);
+        menuPanel.add(lblSigmaEnd);
+        menuPanel.add(txtSigmaEnd);
+        menuPanel.add(btnYE);
+        menuPanel.add(btnQuadratic);
+        menuPanel.add(btnStoreFunction);
+        menuPanel.add(btnSolveFun);
+
+        frame.getContentPane().add(menuPanel, BorderLayout.PAGE_START);
     }
 
     private void calculate(){
@@ -377,7 +404,7 @@ public class CalculatorWindow {
                 expression.setText("");
                 return;
             }
-            Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(eq), null);
+            Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(eq), null);
             double answer = f.evaluate(new FunctionArguments(null));
             writeText("ANS: " + Double.toString(answer));
             ANS = answer;
@@ -399,12 +426,8 @@ public class CalculatorWindow {
                 help();
                 expression.setText("");
                 return;
-            }else if(expression.getText().equals("TW")){
-                triWindow.show();
-                expression.setText("");
-                return;
-            }else if(expression.getText().equals("MGR")){
-                new VariableManager();
+            }else if(expression.getText().equals("MEM")){
+                new MEM(save);
                 expression.setText("");
                 return;
             }else if(expression.getText().equals("DEL")){
@@ -454,7 +477,6 @@ public class CalculatorWindow {
                     int clear = JOptionPane.showConfirmDialog(null, "Do you really want to clear the graph?", "Clear?", JOptionPane.YES_NO_OPTION);
                     if(clear == JOptionPane.YES_OPTION) {
                         window.fh.clearFunctionHolder();
-                        graph.triLines.clear();
                     }
                 }
             }else if(command.equals("TABLE")){
@@ -462,19 +484,9 @@ public class CalculatorWindow {
             }else if(command.equals("SCATTER")){
                 new ScatterPlot(graph.points, graph, window.fh, save);
             }else if(command.equals("ZOOM_IN")){
-                if(window.xMax - 1 < 1)
-                    return;
-                window.xMin++;
-                window.xMax--;
-                window.yMin++;
-                window.yMax--;
-                graph.repaint2();
+                zoomIn();
             }else if(command.equals("ZOOM_OUT")){
-                window.xMin--;
-                window.xMax++;
-                window.yMin--;
-                window.yMax++;
-                graph.repaint2();
+                zoomOut();
             }else if(command.equals("Y")){
                 new YWindow(window, save, output);
             }else if(command.equals("QU")){
@@ -506,6 +518,7 @@ public class CalculatorWindow {
     private void help(){
         String[] actions = {
                 "DEL - Delete function",
+                "MEM - Memory Manager",
                 "LIST - Get function list",
                 "var->value - Store number in variable(eg. x->2.0)",
                 "SIMP - Square root simplifier",
@@ -525,6 +538,7 @@ public class CalculatorWindow {
                 "exp(x)",
                 "abs(x) - Absolute value",
                 "rand(min,max) - Random number",
+                "round(x) - Rounds a number up or down",
                 "ANS - Previous answer",
                 "(π) - Pi"
         };
@@ -534,6 +548,24 @@ public class CalculatorWindow {
             writeText(x);
         }
         writeText("<~~~~~~~~>");
+    }
+
+    private void zoomOut(){
+        window.xMin--;
+        window.xMax++;
+        window.yMin--;
+        window.yMax++;
+        graph.repaint2();
+    }
+
+    private void zoomIn(){
+        if(window.xMax - 1 < 1)
+            return;
+        window.xMin++;
+        window.xMax--;
+        window.yMin++;
+        window.yMax--;
+        graph.repaint2();
     }
 
     private class ModeChange implements ItemListener{
@@ -570,11 +602,11 @@ public class CalculatorWindow {
         }
     }
 
-    private class ShapeType implements ItemListener{
-        public void itemStateChanged(ItemEvent e){
+    private class ShapeType implements ItemListener {
+        public void itemStateChanged(ItemEvent e) {
             int currentIndex = shape.getSelectedIndex();
 
-            switch (currentIndex){
+            switch (currentIndex) {
                 case 0: //T //C // S
                     ApplicationInfo.currentShape = ApplicationInfo.Shape.TRIANGLE;
                     break;

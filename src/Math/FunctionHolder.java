@@ -38,6 +38,10 @@ public class FunctionHolder {
         y5 = functions[4];
     }
 
+    /***
+     * Stores the values of the functions into the function store.
+     * */
+
     public void store(){
         if(y1 != null){
             if(!y1.isEmpty())
@@ -65,22 +69,9 @@ public class FunctionHolder {
         }
     }
 
-    public String getByIndex(int a){
-        switch (a){
-            case 0:
-                return y1;
-            case 1:
-                return y2;
-            case 2:
-                return y3;
-            case 3:
-                return y4;
-            case 4:
-                return y5;
-        }
-
-        return null;
-    }
+    /***
+     * Clears the function data (Not from FunctionStore).
+     * */
 
     public void clearFunctionHolder(){
         y1 = "";

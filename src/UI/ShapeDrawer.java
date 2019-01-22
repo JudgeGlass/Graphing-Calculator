@@ -18,7 +18,7 @@ public class ShapeDrawer extends JComponent {
     public static ArrayList<LabelInfo> labelInfo = new ArrayList<>();
     public static ArrayList<SegmentInfo> segmentInfo = new ArrayList<>();
 
-    private GraphWindow window;
+    public GraphWindow window;
     private JComboBox combox;
 
     private PointD circleCenter = new PointD(0, 0);

@@ -31,11 +31,24 @@ public class SaveSettings {
     private GraphWindow window;
     private Graph graph;
 
+
+    /***
+     * Initialization of the save data handler
+     *
+     * @param filename The save file location and name.
+     * @param window The graph window
+     * @param graph The main graph
+     * */
+
     public SaveSettings(String filename, GraphWindow window, Graph graph){
         this.filename = filename;
         this.window = window;
         this.graph = graph;
     }
+
+    /***
+     * The function that is called every time a piece of data changes.
+     * */
 
     public void update(){
         conf = "";
@@ -73,7 +86,7 @@ public class SaveSettings {
        }
        addToConf("## DEF FUNCTIONS ##");
        for(String functionID: FunctionStore.getStore().getIdNames()){
-           if(functionID.equals("y1") || functionID.equals("y2") || functionID.equals("y3")) continue;
+           if(functionID.equals("y1") || functionID.equals("y2") || functionID.equals("y3") || functionID.equals("y4") || functionID.equals("y5")) continue;
            addToConf(functionID + "=" + FunctionStore.getStore().getHashFunctions().get(functionID));
        }
 
@@ -101,6 +114,10 @@ public class SaveSettings {
     private void addToConf(String text){
         conf += text + "\n";
     }
+
+    /***
+     * Writes the save file every time a piece of data changes.
+     * */
 
     private void writeSave(){
         if(new File(filename).exists()){

@@ -1,3 +1,22 @@
+/*
+ * Copyright 2018 Hunter Wilcox
+ *
+ * This file is part of GraphingCalculator.
+ *
+ * GraphingCalculator is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * GraphingCalculator is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with GraphingCalculator.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package UI;
 
 import javax.swing.*;
@@ -6,6 +25,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 import Program.CorrectFunction;
+import Program.ErrorCodes;
 import functions.*;
 
 public class Graph extends JPanel {
@@ -14,14 +34,15 @@ public class Graph extends JPanel {
     private double mouseX = 0;
     private double mouseY = 0;
     public ArrayList<PointD> points;
-    public ArrayList<PointD> triLines;
+
+    private ArrayList<String> vars;
+    private ArrayList<Function> f;
 
     private JTextArea area;
 
     public Graph(GraphWindow window, JTextArea area){
         graphWindow = window;
         points = new ArrayList<>();
-        triLines = new ArrayList<>();
         this.area = area;
 
         this.addMouseMotionListener(new MouseAdapter() {
@@ -32,6 +53,12 @@ public class Graph extends JPanel {
                 mouseY = (graphWindow.pixelHeight - e.getY()) * graphWindow.yScale + graphWindow.yMin; // Gets the mouse Y
             }
         });
+
+        vars = new ArrayList<>();
+        vars.add("y");
+        vars.add("x");
+
+        f = new ArrayList<>();
     }
 
     public void paintComponent(Graphics g){
@@ -49,6 +76,7 @@ public class Graph extends JPanel {
 
         makeAxis(g);
         function(g);
+        f.clear();
         drawCoords(g);
     }
 
@@ -158,58 +186,24 @@ public class Graph extends JPanel {
         g.drawLine(xG, yG, xx, yy);
     }
 
-    private void drawLineWithPoint(Graphics g, double x1, double y1, double x2, double y2){
-        g.setColor(Color.RED);
-
-        int cx1 = (int)((x1 - graphWindow.xMin) / graphWindow.xScale);
-        int cy1 = graphWindow.pixelHeight - (int)((y1 - graphWindow.yMin) / graphWindow.yScale);
-        g.drawOval(cx1-2, cy1-2, 5, 5);
-        g.fillOval(cx1-2, cy1-2, 5, 5);
-
-        int cx2 = (int)((x2 - graphWindow.xMin) / graphWindow.xScale);
-        int cy2 = graphWindow.pixelHeight - (int)((y2 - graphWindow.yMin) / graphWindow.yScale);
-        g.drawOval(cx2-2, cy2-2, 5, 5);
-        g.fillOval(cx2-2, cy2-2, 5, 5);
-
-        g.drawLine(cx1, cy1, cx2, cy2);
-    }
-
-    private void drawTriangle(Graphics g, PointD point1, PointD point2, PointD point3){
-        drawLineWithPoint(g, point1.x, point1.y, point2.x, point2.y);
-        drawLineWithPoint(g, point2.x, point2.y, point3.x, point3.y);
-        drawLineWithPoint(g, point1.x, point1.y, point3.x, point3.y);
-    }
-
     /**
      * Draws the line
      * */
 
     private void function(Graphics g){
-        ArrayList<String> vars = new ArrayList<>();
-        vars.add("y");
-        vars.add("x");
-
-        ArrayList<Function> f = new ArrayList<>();
 
         if(graphWindow.fh == null) return;
-        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y1), vars));
-        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y2), vars));
-        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y3), vars));
-        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y4), vars));
-        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(graphWindow.fh.y5), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.fix(graphWindow.fh.y1), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.fix(graphWindow.fh.y2), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.fix(graphWindow.fh.y3), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.fix(graphWindow.fh.y4), vars));
+        f.add(TokenizedFunctionFactory.createFunction(CorrectFunction.fix(graphWindow.fh.y5), vars));
 
         if(points.size() != 0){
             for(int i = 0; i < points.size(); i++){
                 box(g, points.get(i).x, points.get(i).y, 5);
             }
         }
-
-        if(triLines != null && triLines.size() != 0){
-            drawTriangle(g, triLines.get(0), triLines.get(1), triLines.get(2));
-        }
-
-        if(graphWindow.fh == null)
-            return;
 
         if(graphWindow.fh.y1 != null)
             drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1, 12);
@@ -291,6 +285,7 @@ public class Graph extends JPanel {
                             lastY = y1; // Sets lastY as the function of i
 
                         }catch (RuntimeException e) {
+                            ErrorCodes.errorDialog(ErrorCodes.FUNCTION_ERROR, e.getMessage());
                             if(!area.getText().contains(e.getMessage()))
                                 area.append("Graph Error: " + e.getMessage() + "\n");
                             continue;
@@ -301,6 +296,18 @@ public class Graph extends JPanel {
                 }
             }
         }
+    }
+
+    public double getMouseX(){
+        return mouseX;
+    }
+
+    public double getMouseY(){
+        return mouseY;
+    }
+
+    public void addFunction(final Function function){
+        f.add(function);
     }
 
     public void repaint2(){

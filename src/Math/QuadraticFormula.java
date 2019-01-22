@@ -20,17 +20,31 @@
 package Math;
 
 public class QuadraticFormula {
-    public static double plus(final double a, final double b, final double c){
+    /***
+    *  Returns the possible positive value of the quadratic formula
+    *
+    * @param a Constant A.
+    * @param b Constant B.
+    * @param c Constant C.
+    * */
+    public static double plus(double a, double b, double c){
         double top = -b + Math.sqrt((b*b)-4*a*c);
         double bottom = 2 * a;
-
         return top/bottom;
     }
 
-    public static double minus(final double a, final double b, final double c){
-        double top = -b - Math.sqrt((b*b)-4*a*c);
-        double bottom = 2 * a;
 
-        return top/bottom;
-    }
+    /***
+     *  Returns the possible negative value of the quadratic formula
+     *
+     * @param a Constant A.
+     * @param b Constant B.
+     * @param c Constant C.
+     * */
+     public static double minus(double a, double b, double c){
+         double top = -b - Math.sqrt((b*b)-4*a*c);
+         double bottom = 2 * a;
+         return top/bottom;
+     }
 }
+

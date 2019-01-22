@@ -33,6 +33,7 @@ public class SigmaNotation {
      * @param expression the function(eg. n^2)
      * @param start count start(eg. 0)
      * @param  end end amount(eg. 5)
+     * @return
      */
     public double solve(final String expression, final double start, final double end){
         this.expression = expression;

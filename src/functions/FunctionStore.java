@@ -73,6 +73,7 @@ public class FunctionStore {
         storeFunction("π", new PiFunction()); // Added by Hunter Wilcox
         storeFunction("log", new Log10Function()); // Added by Hunter Wilcox
         storeFunction("rand", new RandomFunction()); // Added by Hunter Wilcox
+        storeFunction("round", new RoundFunction()); // Added by Hunter Wilcox
     }
 
     public static FunctionStore getStore() {
@@ -105,7 +106,7 @@ public class FunctionStore {
 
         ArrayList<String> vars = new ArrayList<>();
         vars.add("x");
-        Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(function), vars);
+        Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(function), vars);
         functions.put(id, f);
         idNames.add(id);
         rawFunctions.put(id, function);

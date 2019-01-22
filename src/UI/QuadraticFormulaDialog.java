@@ -80,7 +80,7 @@ public class QuadraticFormulaDialog {
 
         function = function.replaceAll("x", "*(" + lineOfSem + ")");
 
-        Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(function), null);
+        Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(function), null);
         double ans = f.evaluate(new FunctionArguments(null));
 
         if(a > 0){

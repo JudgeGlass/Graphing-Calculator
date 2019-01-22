@@ -29,6 +29,12 @@ public class GetScatterPlotSave {
     private ArrayList<PointD> points;
     private int counter;
 
+    /***
+     * Gets the scatter plot data from the save file.
+     *
+     * @param filename The save file path.
+     * */
+
     public GetScatterPlotSave(final String filename){
         this.filename = filename;
 

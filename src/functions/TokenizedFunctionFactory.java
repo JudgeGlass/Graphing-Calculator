@@ -18,6 +18,8 @@
  */
 package functions;
 
+import Program.ErrorCodes;
+
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 

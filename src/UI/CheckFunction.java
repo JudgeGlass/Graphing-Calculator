@@ -20,6 +20,7 @@
 package UI;
 
 import Program.CorrectFunction;
+import Program.ErrorCodes;
 import functions.Function;
 import functions.MalformedFunctionException;
 import functions.TokenizedFunctionFactory;
@@ -33,8 +34,9 @@ public class CheckFunction {
             ArrayList<String> vars = new ArrayList<>();
             vars.add("y");
             vars.add("x");
-            Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(function), vars);
+            Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(function), vars);
         }catch (MalformedFunctionException e){
+            ErrorCodes.printErrorCode(ErrorCodes.FUNCTION_ERROR);
             return false;
         }
         return true;

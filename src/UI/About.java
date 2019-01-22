@@ -96,7 +96,7 @@ public class About {
         lblVersion.setBounds(77, 60, 300, 15);
         frame.getContentPane().add(lblVersion);
 
-        lblCopyright = new JLabel("Copyright \u00a9 2018 Hunter Wilcox");
+        lblCopyright = new JLabel("Copyright \u00a9 2018-2019 Hunter Wilcox");
         lblCopyright.setFont(new Font(Font.SANS_SERIF, 0, 12));
         lblCopyright.setBounds(77, 85, 300, 15);
         frame.getContentPane().add(lblCopyright);

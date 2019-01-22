@@ -28,9 +28,24 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Utils {
+
+    /***
+     * Allows you to get the characters after a certain character.
+     *
+     * @param txt A String
+     * @param ch The character separator.
+     * */
+
     public static String indexOf(@NotNull String txt, char ch) {
         return txt.substring(txt.lastIndexOf(ch) + 1);
     }
+
+    /***
+     * Allows you to read any line in a given file.
+     *
+     * @param fileName The file name / path.
+     * @param lineNumber The you want to read.
+     * */
 
     public static String readLine(@NotNull String fileName, int lineNumber) {
         String line;
@@ -42,6 +57,13 @@ public class Utils {
         }
         return line;
     }
+
+    /***
+     * Write any type of string data to a file.
+     *
+     * @param fileName The file name / path.
+     * @param txt The file content.
+     * */
 
     public static void writeFile(String fileName, String txt) {
         try {

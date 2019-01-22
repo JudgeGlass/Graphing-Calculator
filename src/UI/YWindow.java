@@ -141,11 +141,11 @@ public class YWindow {
             String[] fs = new String[]{txtY1.getText(), txtY2.getText(), txtY3.getText(), txtY4.getText(), txtY5.getText()};
             graphWindow.setFunction(fs);
 
-            boolean y1Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y1));
-            boolean y2Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y2));
-            boolean y3Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y3));
-            boolean y4Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y4));
-            boolean y5Good = CheckFunction.isGood(CorrectFunction.addMul(graphWindow.fh.y5));
+            boolean y1Good = CheckFunction.isGood(CorrectFunction.fix(graphWindow.fh.y1));
+            boolean y2Good = CheckFunction.isGood(CorrectFunction.fix(graphWindow.fh.y2));
+            boolean y3Good = CheckFunction.isGood(CorrectFunction.fix(graphWindow.fh.y3));
+            boolean y4Good = CheckFunction.isGood(CorrectFunction.fix(graphWindow.fh.y4));
+            boolean y5Good = CheckFunction.isGood(CorrectFunction.fix(graphWindow.fh.y5));
 
 
             if(!y1Good && !graphWindow.fh.y1.isEmpty()){

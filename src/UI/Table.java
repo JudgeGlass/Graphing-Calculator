@@ -124,24 +124,24 @@ public class Table {
             String at = functionIndex.getItemAt(functionIndex.getSelectedIndex()).toString();
             if(at.contains("Y1")){
                 model.clear();
-                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y1), vars);
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(window.fh.y1), vars);
                 makeLists(model);
             }else if(at.contains("Y2")){
                 model.clear();
-                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y2), vars);
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(window.fh.y2), vars);
                 makeLists(model);
             }else if(at.contains("Y3")){
                 model.clear();
-                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y3), vars);
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(window.fh.y3), vars);
                 makeLists(model);
             }else if(at.contains("Y4")){
                 model.clear();
-                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y4), vars);
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(window.fh.y4), vars);
                 makeLists(model);
             }
             else if(at.contains("Y5")){
                 model.clear();
-                function = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(window.fh.y5), vars);
+                function = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(window.fh.y5), vars);
                 makeLists(model);
             }
         }

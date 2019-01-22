@@ -92,7 +92,7 @@ public class SolveWindow {
                 ArrayList<String> vars = new ArrayList<>();
                 vars.add("y");
                 vars.add("x");
-                Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.addMul(FunctionStore.getStore().getHashFunctions()
+                Function f = TokenizedFunctionFactory.createFunction(CorrectFunction.fix(FunctionStore.getStore().getHashFunctions()
                         .get(selectedFunction)), vars);
 
                 double[] args = new double[2];

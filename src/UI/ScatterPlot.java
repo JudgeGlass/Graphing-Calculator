@@ -129,6 +129,11 @@ public class ScatterPlot {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if(xModel.getSize() >= 11){
+                        JOptionPane.showMessageDialog(null, "Max: 11 plots", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
                     double x = Double.parseDouble(txtX.getText());
                     double y = Double.parseDouble(txtY.getText());
                     addX(x);

@@ -31,7 +31,11 @@ public class CorrectFunction {
         enable = b;
     }
 
-    public static String addMul(final String function){
+    /***
+     * Fixes functions
+     * */
+
+    public static String fix(final String function){
         String nf1 = addMulLeft(function.replaceAll("\\s", ""));
 
         if(enable)
@@ -39,6 +43,12 @@ public class CorrectFunction {
         return function;
     }
 
+    /***
+     * Adds a '*' to the left of x in a function.
+     * e.g. 3x -> 3*x
+     *
+     * @param function The function.
+     * */
 
     private static String addMulLeft(String function){
         boolean continueF = false;
@@ -91,6 +101,12 @@ public class CorrectFunction {
         return nf.toString();
     }
 
+    /***
+     * Adds a '*' to the right of x in a function.
+     * e.g. x3 -> x*3
+     *
+     * @param function The function.
+     * */
 
     private static String addMulRight(String function){
         ArrayList<Integer> posXs = new ArrayList<>();
@@ -164,6 +180,13 @@ public class CorrectFunction {
         return nf.toString();
     }
 
+    /***
+     * Adds a '0' to the left of a decimal point.
+     * e.g. .3 -> 0.3
+     *
+     * @param function The function.
+     * */
+
     private static String addZeros(String function){
         boolean continueF = false;
         ArrayList<Integer> dotI = new ArrayList<>();
@@ -227,6 +250,12 @@ public class CorrectFunction {
         return nf.toString();
     }
 
+    /***
+     * Gets the indexes of an operator such as sqrt, sin, cbrt, etc...
+     *
+     * @param function The function.
+     * */
+
     private static ArrayList<Integer> opIndexes(String function){
         ArrayList<String> allOP = Utils.combineStringList(FunctionStore.getStore().getOperators(), FunctionStore.getStore().getIdNames());
         ArrayList<Integer> opI = new ArrayList<>();
@@ -241,6 +270,13 @@ public class CorrectFunction {
         opI.sort(Integer::compareTo);
         return opI;
     }
+
+    /***
+     * Adds Parenthesis to an operator like sqrt, cos, sin, etc.. due to a bug in the function library.
+     * e.g. 4 + sqrt(x) -> 4 + (sqrt(x))
+     *
+     * @param function The function.
+     * */
 
     private static String addPer(String function){
         ArrayList<Integer> avoid = new ArrayList<>();
@@ -310,6 +346,13 @@ public class CorrectFunction {
         return nf;
     }
 
+    /***
+     * Inserts the left Parenthesis on a operator.
+     *
+     * @param index The operator index.
+     * @param function The function.
+     * */
+
     private static String insertPos(int index, String function){
         StringBuilder sb = new StringBuilder(function);
 
@@ -317,6 +360,13 @@ public class CorrectFunction {
 
         return sb.toString();
     }
+
+    /***
+     * Inserts the right Parenthesis on a operator.
+     *
+     * @param index The operator index.
+     * @param function The function.
+     * */
 
     private static String insertNeg(int index, String function){
         StringBuilder sb = new StringBuilder(function);

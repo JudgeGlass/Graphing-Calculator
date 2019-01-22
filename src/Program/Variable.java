@@ -27,10 +27,17 @@ public class Variable {
     private static HashMap<String, Double> values;
     private static ArrayList<String> vars;
 
-    public Variable(){
+    public static void initVar(){
         values = new HashMap<>();
         vars = new ArrayList<>();
     }
+
+    /***
+     * Stores a numeric value into a letter variable
+     * e.g. x->9; x=9
+     *
+     * @param function The string data
+     * */
 
     public static boolean addVarFromString(final String function){
         if(function.contains("->")){
@@ -46,6 +53,13 @@ public class Variable {
         }
         return true;
     }
+
+    /***
+     * Stores the variable.
+     *
+     * @param var The variable name
+     * @param value The variable value
+     * */
 
     private static void addVar(final String var, final double value){
         vars.add(var);
