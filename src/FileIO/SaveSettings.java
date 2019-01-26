@@ -61,8 +61,7 @@ public class SaveSettings {
 
        if(window.fh != null) {
            addToConf("YVal=true");
-           addToConf("Y1=" + window.fh.y1);
-           addToConf("Y2=" + window.fh.y2);
+           addToConf("Y1=" + window.fh.y1);           addToConf("Y2=" + window.fh.y2);
            addToConf("Y3=" + window.fh.y3);
            addToConf("Y4=" + window.fh.y4);
            addToConf("Y5=" + window.fh.y5);

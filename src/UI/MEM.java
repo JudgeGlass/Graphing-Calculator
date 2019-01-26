@@ -94,7 +94,7 @@ public class MEM {
     private void addCircleInfo(){
         if(ShapeDrawer.circleInfo != null){
             for(final CircleInfo info: ShapeDrawer.circleInfo){
-                modelList.addElement(info.getName() + " - " + info.getCenter().toString() + " R:" + info.getRadius() + " C:" + info.getColorString());
+                modelList.addElement("\"" + info.getName() + "\" - " + info.getCenter().toString() + " R:" + info.getRadius() + " C:" + info.getColorString());
             }
         }
     }
@@ -102,7 +102,7 @@ public class MEM {
     private void addSegmentData(){
         if(ShapeDrawer.segmentInfo != null){
             for(final SegmentInfo info: ShapeDrawer.segmentInfo){
-                modelList.addElement(info.getPos1().toString() + " - " + info.getPos2().toString());
+                modelList.addElement("\"" + info.getPos1().toString() + "\" - " + info.getPos2().toString());
             }
         }
     }
@@ -110,7 +110,7 @@ public class MEM {
     private void addLabelData(){
         if(ShapeDrawer.labelInfo != null){
             for(final LabelInfo info: ShapeDrawer.labelInfo){
-                modelList.addElement(info.getText() + " - " + new PointD(info.getX(), info.getY()).toString());
+                modelList.addElement("\"" + info.getText() + "\" - " + new PointD(info.getX(), info.getY()).toString());
             }
         }
     }

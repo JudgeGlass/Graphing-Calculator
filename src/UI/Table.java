@@ -36,7 +36,7 @@ public class Table {
     private JScrollPane scroll;
     private JList list;
     private JComboBox functionIndex;
-    private double orginIndex;
+    private double originIndex;
 
     private Function function;
     private GraphWindow window;
@@ -55,7 +55,7 @@ public class Table {
 
         init();
         frame.setVisible(true);
-        list.ensureIndexIsVisible((int)orginIndex);
+        list.ensureIndexIsVisible((int)originIndex);
     }
 
     private void init(){
@@ -101,7 +101,7 @@ public class Table {
             arg[1] = i;
             if(i == 0.0){
                 System.out.println("Orgin is at: " + i);
-                orginIndex = i;
+                originIndex = i;
             }
 
             double y = function.evaluate(new FunctionArguments(arg));

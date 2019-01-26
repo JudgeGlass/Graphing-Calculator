@@ -84,7 +84,7 @@ public class SolveWindow {
         txtAns.setBounds(0, 110, 295, 30);
         frame.getContentPane().add(txtAns);
 
-        btnOK = new JButton("OK");
+        btnOK = new JButton("Enter");
         btnOK.setBounds(100, 145, 100, 30);
         btnOK.addActionListener((ActionEvent) ->{
             try {

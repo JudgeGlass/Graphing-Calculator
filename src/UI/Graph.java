@@ -206,15 +206,15 @@ public class Graph extends JPanel {
         }
 
         if(graphWindow.fh.y1 != null)
-            drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1, 12);
+            drawText(g, Color.BLACK, 5, 12, "f1(x)= " + graphWindow.fh.y1, 15);
         if(graphWindow.fh.y2 != null)
-            drawText(g, Color.BLUE, 5, 25, "f2(x)= " + graphWindow.fh.y2, 12);
+            drawText(g, Color.BLUE, 5, 25, "f2(x)= " + graphWindow.fh.y2, 15);
         if(graphWindow.fh.y3 != null)
-            drawText(g, Color.RED, 5, 38, "f3(x)= " + graphWindow.fh.y3, 12);
+            drawText(g, Color.RED, 5, 38, "f3(x)= " + graphWindow.fh.y3, 15);
         if(graphWindow.fh.y4 != null)
-            drawText(g, Color.ORANGE, 5, 51, "f4(x)= " + graphWindow.fh.y4, 12);
+            drawText(g, Color.ORANGE, 5, 51, "f4(x)= " + graphWindow.fh.y4, 15);
         if(graphWindow.fh.y5 != null)
-            drawText(g, Color.MAGENTA, 5, 64, "f5(x)= " + graphWindow.fh.y5, 12);
+            drawText(g, Color.MAGENTA, 5, 64, "f5(x)= " + graphWindow.fh.y5, 15);
 
         double[] arg = new double[2]; // Sets the first arguments
         arg[0] = 0.0;

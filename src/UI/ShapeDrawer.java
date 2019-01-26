@@ -21,11 +21,6 @@ public class ShapeDrawer extends JComponent {
     public GraphWindow window;
     private JComboBox combox;
 
-    private PointD circleCenter = new PointD(0, 0);
-
-    private boolean label = false;
-    private String message = "";
-
     private PointD seg1;
     private PointD seg2;
 
@@ -97,7 +92,7 @@ public class ShapeDrawer extends JComponent {
 
     private void drawCoords(Graphics g){
         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
-        g.setColor(Color.BLACK);
+        g.setColor(Color.BLUE);
         g.drawString("X: " + String.format("%.2f", mouseX), 5, this.getHeight() - 20);
         g.drawString("Y: " + String.format("%.2f", mouseY), 5, this.getHeight() - 5);
     }
@@ -153,13 +148,13 @@ public class ShapeDrawer extends JComponent {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         circle(g, Color.RED, false, mouseX, mouseY, 5);
+        drawGrid(g);
         drawCustomCircle(g);
-        drawLabels(g);
         drawSegments(g);
 
         drawCoords(g);
         makeAxis(g);
-        drawGrid(g);
+        drawLabels(g);
     }
 
     //Draw custom circle
@@ -240,5 +235,9 @@ public class ShapeDrawer extends JComponent {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void redraw2(){
+        repaint();
     }
 }

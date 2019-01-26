@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class Algebra {
 
-    // TODO Make a method of finding a line intersection.
+    // TODO: Make a method of finding a line intersection.
     public static ArrayList<PointD> linearIntersection(final String f1, final String f2){
         double y2 = calc(f1, 0); // Y-interc.
         double y1 = calc(f1, 3);

@@ -193,6 +193,8 @@ public class GraphOptions {
 
             chkDrawLines.setSelected(true);
             slider.setValue(0);
+            chkDegrees.setSelected(false);
+            lineType.setSelectedIndex(0);
         });
         frame.getContentPane().add(btnDefaults);
 

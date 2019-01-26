@@ -25,7 +25,6 @@ import Program.*;
 import functions.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -96,6 +95,8 @@ public class CalculatorWindow {
                 if(shapeDrawer != null){
                     shapeDrawer.window.pixelWidth = windowWidth - 30;
                     shapeDrawer.window.pixelHeight = windowHeight - 180;
+                    shapeDrawer.window.rescale();
+                    shapeDrawer.redraw2();
                 }
             }
         });
@@ -345,7 +346,7 @@ public class CalculatorWindow {
         shape.addItem("Segment");
         shape.addItem("Label");
 
-        shapeDrawer = new ShapeDrawer(new GraphWindow(-10, 10, -10, 10,770, 620), shape);
+        shapeDrawer = new ShapeDrawer(new GraphWindow(-10, 10, -10, 10,770, 450), shape);
 
         tabs.addTab("Shape Drawer", shapeDrawer);
 
