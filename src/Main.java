@@ -17,17 +17,20 @@
  * along with GraphingCalculator.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Program.ApplicationInfo;
+import Program.Log;
 import UI.CalculatorWindow;
-
-import javax.swing.*;
 
 public class Main {
     public static void main(String args[]){
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Log.info("OS Name:\t\t" + System.getProperty("os.name"));
+        Log.info("OS Version:\t\t" + System.getProperty("os.version"));
+        Log.info("OS Arch:\t\t" + System.getProperty("os.arch"));
+        Log.info("Java Version:\t" + System.getProperty("java.version"));
+        Log.info("Program Version:\t" + ApplicationInfo.VERSION);
+
+        Log.info("Starting....");
+
         new CalculatorWindow();
     }
 }

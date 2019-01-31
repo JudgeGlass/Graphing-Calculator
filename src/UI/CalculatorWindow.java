@@ -54,6 +54,7 @@ public class CalculatorWindow {
     private GraphWindow window;
     private Graph graph;
     private ShapeDrawer shapeDrawer;
+    private ListManager listManager;
 
     private Font fontWide;
 
@@ -123,7 +124,7 @@ public class CalculatorWindow {
         writeText("Graphing Calculator v" + ApplicationInfo.VERSION);
 
         writeText("For help, type \"help\".");
-        save = new SaveSettings("data.dat", window, graph);
+        save = new SaveSettings("data.dat", window, graph, listManager);
         ApplicationInfo.STATIC_SAVE = save;
 
         if(ApplicationInfo.UNSTABLE_BUILD){
@@ -141,13 +142,15 @@ public class CalculatorWindow {
 
         window = new GraphWindow(-10, 10, -10, 10, 770, 450);
         graph = new Graph(window, output);
+        listManager = new ListManager();
         boolean contin = true;
 
         if(new File("data.dat").exists()){
-            System.out.println("Save found! Using...");
+            Log.info("Save found! Using...");
             final String filename = "data.dat";
 
             if(!Utils.indexOf(Utils.readLine(filename, 0), '=').equals(ApplicationInfo.VERSION)){
+                Log.warn("Old save found. This will be deleted");
                 new File(filename).delete();
                 JOptionPane.showMessageDialog(null, "Old save was deleted due to being an older version.",
                         "Old Save", JOptionPane.WARNING_MESSAGE);
@@ -155,6 +158,7 @@ public class CalculatorWindow {
             }
 
             if(contin) {
+                Log.info("Getting program settings...");
                 double xMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 2), '='));
                 double xMax = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 3), '='));
                 double yMin = Double.parseDouble(Utils.indexOf(Utils.readLine(filename, 4), '='));
@@ -162,6 +166,31 @@ public class CalculatorWindow {
                 String deg = (Utils.indexOf(Utils.readLine(filename, 12), '='));
 
                 if (deg.equals("true")) ApplicationInfo.useDegrees = true;
+
+                listManager.stringToList(Utils.indexOf(Utils.readLine(filename, 13), '='), ListManager.Lists.L1);
+                listManager.stringToList(Utils.indexOf(Utils.readLine(filename, 14), '='), ListManager.Lists.L2);
+                listManager.stringToList(Utils.indexOf(Utils.readLine(filename, 15), '='), ListManager.Lists.L3);
+
+                String xList = Utils.indexOf(Utils.readLine(filename, 16), '=');
+                String yList = Utils.indexOf(Utils.readLine(filename, 17), '=');
+
+                if(xList.equals("L1")){
+                    listManager.xList = ListManager.Lists.L1;
+                }else if(xList.equals("L2")){
+                    listManager.xList = ListManager.Lists.L2;
+                }else{
+                    listManager.xList = ListManager.Lists.L3;
+                }
+
+                if(yList.equals("L1")){
+                    listManager.yList = ListManager.Lists.L1;
+                }else if(yList.equals("L2")){
+                    listManager.yList = ListManager.Lists.L2;
+                }else{
+                    listManager.yList = ListManager.Lists.L3;
+                }
+
+
 
                 window.xMax = xMax;
                 window.xMin = xMin;
@@ -185,6 +214,7 @@ public class CalculatorWindow {
                     try {
                         window.fh.store();
                     }catch (MalformedFunctionException e){
+                        Log.error("Failed to write functions.");
                         ErrorCodes.errorDialog(ErrorCodes.READ_ERROR, "Please delete the 'data.dat' file!");
                         System.exit(-1);
                     }
@@ -192,18 +222,28 @@ public class CalculatorWindow {
                 }
 
                 if (contin) {
-                    GetScatterPlotSave gs = new GetScatterPlotSave("data.dat");
-                    if (gs.getPoints().size() != 0 && gs.getPoints() != null)
-                        graph.points = gs.getPoints();
+                    Log.info("Checking / getting scatter plot data");
 
-                    GetDefinedFunctions.store("data.dat", gs.getLastLineIndex());
+                    Log.info("Getting user defined functions");
+                    GetDefinedFunctions.store("data.dat", 19);
+                    Log.info("Getting shape data");
                     GetShapeSave.store("data.dat", GetDefinedFunctions.getLastIndex());
+
+
+                    for(int i = 0; i < listManager.getLargestDataList(); i++){
+                        if(i > listManager.getXList().size() || i > listManager.getYList().size()){break;}
+                        if(listManager.getXList().get(i) != null && listManager.getYList().get(i) != null){
+                            graph.points.add(new PointD(listManager.getXList().get(i), listManager.getYList().get(i)));
+                        }
+                    }
 
 
                     saveUsed = true;
                 }
             }
         }
+
+        Log.info("Setting up panel items...");
 
         graphPanel = graph;
 
@@ -354,6 +394,7 @@ public class CalculatorWindow {
     }
 
     private void addToFrame(){
+        Log.info("Adding panel items to frame");
         menuPanel.setLayout(null);
         menuPanel.setPreferredSize(new Dimension(700, 120));
         //menuPanel.setBounds(0, 0, 750, 300);
@@ -418,6 +459,7 @@ public class CalculatorWindow {
 
     private void writeText(final String text){
         output.append(text + "\n");
+        output.setCaretPosition(output.getDocument().getLength());
     }
 
     private class Listener implements ActionListener{
@@ -429,10 +471,6 @@ public class CalculatorWindow {
                 return;
             }else if(expression.getText().equals("MEM")){
                 new MEM(save);
-                expression.setText("");
-                return;
-            }else if(expression.getText().equals("DEL")){
-                DeleteFunction.showDeleteWindow(save);
                 expression.setText("");
                 return;
             }else if(expression.getText().equals("SIMP")){
@@ -483,7 +521,7 @@ public class CalculatorWindow {
             }else if(command.equals("TABLE")){
                 new Table(window);
             }else if(command.equals("SCATTER")){
-                new ScatterPlot(graph.points, graph, window.fh, save);
+                new ScatterPlot(graph, window.fh, save, listManager, graph.points);
             }else if(command.equals("ZOOM_IN")){
                 zoomIn();
             }else if(command.equals("ZOOM_OUT")){

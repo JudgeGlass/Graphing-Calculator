@@ -19,6 +19,7 @@
 
 package FileIO;
 
+import Program.Log;
 import com.sun.istack.internal.NotNull;
 
 import javax.swing.*;
@@ -53,6 +54,7 @@ public class Utils {
             line = Files.readAllLines(Paths.get(fileName)).get(lineNumber);
         } catch (Exception e) {
             e.printStackTrace();
+            Log.error("Failed to read line " + lineNumber + " in " + fileName);
             return null;
         }
         return line;
@@ -71,6 +73,7 @@ public class Utils {
             writer.print(txt);
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            Log.error("Could not write file: " + fileName);
             JOptionPane.showMessageDialog(null, "Error:\n" + e, "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }

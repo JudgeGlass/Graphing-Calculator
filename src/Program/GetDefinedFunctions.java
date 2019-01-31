@@ -39,7 +39,7 @@ public class GetDefinedFunctions {
     public static void store(final String filename, final int lastIndex){
         GetDefinedFunctions.filename = filename;
         keys = new ArrayList<>();
-        counter = lastIndex + 2;
+        counter = lastIndex;
         while(!Utils.readLine(filename, counter).equals("## END DEF ##")){
             final String function = Utils.readLine(filename, counter);
             String split[] = function.split("=");

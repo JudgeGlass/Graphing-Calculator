@@ -40,7 +40,7 @@ public class GetScatterPlotSave {
 
         points = new ArrayList<>();
 
-        counter = 14;
+        counter = 17;
         while (!Utils.readLine(filename, counter).equals("## PLOT END ##")){
             String[] split = Utils.readLine(filename, counter).split(",");
             points.add(new PointD(Double.parseDouble(split[0]), Double.parseDouble(split[1])));

@@ -20,6 +20,7 @@
 package FileIO;
 
 import Program.ApplicationInfo;
+import Program.Log;
 import UI.*;
 import functions.FunctionStore;
 
@@ -30,6 +31,7 @@ public class SaveSettings {
     private String conf = "";
     private GraphWindow window;
     private Graph graph;
+    private ListManager listManager;
 
 
     /***
@@ -40,10 +42,11 @@ public class SaveSettings {
      * @param graph The main graph
      * */
 
-    public SaveSettings(String filename, GraphWindow window, Graph graph){
+    public SaveSettings(String filename, GraphWindow window, Graph graph, ListManager listManager){
         this.filename = filename;
         this.window = window;
         this.graph = graph;
+        this.listManager = listManager;
     }
 
     /***
@@ -51,6 +54,7 @@ public class SaveSettings {
      * */
 
     public void update(){
+        Log.info("Adding graph settings to save...");
         conf = "";
         addToConf("version=" + ApplicationInfo.VERSION);
         addToConf("qal="  + window.resolution);
@@ -60,13 +64,16 @@ public class SaveSettings {
        addToConf("ymax=" + window.yMax);
 
        if(window.fh != null) {
+           Log.info("Functions found. Adding to save...");
            addToConf("YVal=true");
-           addToConf("Y1=" + window.fh.y1);           addToConf("Y2=" + window.fh.y2);
+           addToConf("Y1=" + window.fh.y1);
+           addToConf("Y2=" + window.fh.y2);
            addToConf("Y3=" + window.fh.y3);
            addToConf("Y4=" + window.fh.y4);
            addToConf("Y5=" + window.fh.y5);
            addToConf("deg=" + ApplicationInfo.useDegrees);
        }else {
+           Log.info("No functions found");
            addToConf("YVal=false");
            addToConf("Y1=");
            addToConf("Y2=");
@@ -76,13 +83,15 @@ public class SaveSettings {
            addToConf("deg=false");
        }
 
-       if(graph.points.size() != 0 || graph.points != null){
-           addToConf("## PLOT ##");
-           for(PointD d: graph.points){
-               addToConf(Double.toString(d.x)+","+Double.toString(d.y));
-           }
-           addToConf("## PLOT END ##");
-       }
+       Log.info("Adding list data to save...");
+       addToConf("L1=" + listManager.toString(ListManager.Lists.L1));
+       addToConf("L2=" + listManager.toString(ListManager.Lists.L2));
+       addToConf("L3=" + listManager.toString(ListManager.Lists.L3));
+
+       addToConf("xList=" + listManager.xList);
+       addToConf("YList=" + listManager.yList);
+
+       Log.info("Adding user defined functions to save...");
        addToConf("## DEF FUNCTIONS ##");
        for(String functionID: FunctionStore.getStore().getIdNames()){
            if(functionID.equals("y1") || functionID.equals("y2") || functionID.equals("y3") || functionID.equals("y4") || functionID.equals("y5")) continue;
@@ -91,6 +100,7 @@ public class SaveSettings {
 
        addToConf("## END DEF ##");
 
+       Log.info("Adding shape data to save...");
        addToConf("## SHAPE START ##");
        for (final CircleInfo info: ShapeDrawer.circleInfo){
            addToConf("CIR;" + info.getName() + ";" + info.getCenter().x + ";" + info.getCenter().y + ";"
@@ -106,6 +116,8 @@ public class SaveSettings {
         }
 
         addToConf("## END SHAPE ##");
+
+        Log.info("Writing save file...");
 
        writeSave();
     }

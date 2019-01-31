@@ -75,7 +75,8 @@ public class MEM {
         }else if(cIndex == 3){
             ShapeDrawer.labelInfo.remove(index);
         }else if(cIndex == 0){
-            FunctionStore.getStore().removeFunction(modelList.get(index).toString());
+            String[] t = modelList.get(index).toString().split("\\(");
+            FunctionStore.getStore().removeFunction(t[0]);
         }
 
         save.update();

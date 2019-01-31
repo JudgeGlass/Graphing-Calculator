@@ -298,18 +298,6 @@ public class Graph extends JPanel {
         }
     }
 
-    public double getMouseX(){
-        return mouseX;
-    }
-
-    public double getMouseY(){
-        return mouseY;
-    }
-
-    public void addFunction(final Function function){
-        f.add(function);
-    }
-
     public void repaint2(){
         repaint();
     }

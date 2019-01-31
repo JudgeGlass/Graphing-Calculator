@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Program.CorrectFunction;
+import Program.Log;
 import functions.builtin.*;
 
 /**
@@ -141,6 +142,7 @@ public class FunctionStore {
      * **/
     public void removeFunction(String id){
         if(idNames.contains(id) && functions.containsKey(id) && rawFunctions.containsKey(id)) {
+            Log.info("Removed function: " + id);
             idNames.remove(id);
             functions.remove(id);
             rawFunctions.remove(id);
