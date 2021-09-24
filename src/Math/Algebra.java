@@ -21,7 +21,6 @@ package Math;
 
 import Program.CorrectFunction;
 import UI.PointD;
-import com.sun.istack.internal.NotNull;
 import functions.Function;
 import functions.FunctionArguments;
 import functions.TokenizedFunctionFactory;
@@ -61,7 +60,7 @@ public class Algebra {
      * @param x The x-value
      * */
 
-    public static double calc(@NotNull final String func, double x){
+    public static double calc(final String func, double x){
         ArrayList<String> vars = new ArrayList<>();
         vars.add("y");
         vars.add("x");

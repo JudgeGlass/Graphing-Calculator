@@ -20,7 +20,6 @@
 package FileIO;
 
 import Program.Log;
-import com.sun.istack.internal.NotNull;
 
 import javax.swing.*;
 import java.io.*;
@@ -37,7 +36,7 @@ public class Utils {
      * @param ch The character separator.
      * */
 
-    public static String indexOf(@NotNull String txt, char ch) {
+    public static String indexOf(String txt, char ch) {
         return txt.substring(txt.lastIndexOf(ch) + 1);
     }
 
@@ -48,7 +47,7 @@ public class Utils {
      * @param lineNumber The you want to read.
      * */
 
-    public static String readLine(@NotNull String fileName, int lineNumber) {
+    public static String readLine(String fileName, int lineNumber) {
         String line;
         try {
             line = Files.readAllLines(Paths.get(fileName)).get(lineNumber);

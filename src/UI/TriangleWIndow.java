@@ -81,9 +81,7 @@ public class TriangleWIndow {
                 return;
             }
 
-            graph.triLines.add(point1);
-            graph.triLines.add(point2);
-            graph.triLines.add(point3);
+
         });
 
         frame.add(btnGraph);
